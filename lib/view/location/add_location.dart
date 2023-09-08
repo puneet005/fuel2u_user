@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/bottom_bar_controller.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
+import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
@@ -11,11 +12,25 @@ import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 
-class AddLocation extends GetView<VehicleController>{
+class AddLocation extends StatefulWidget {
+  const AddLocation({super.key});
+
   @override
+  State<AddLocation> createState() => _AddLocationState();
+}
+
+class _AddLocationState extends State<AddLocation> {
+  @override
+  void initState() {
+    super.initState();
+       VehicleController controller = Get.find<VehicleController>(); 
+     controller.GetStateList();
+    controller.getCurrentPosition();
+  }
+   VehicleController controller = Get.find<VehicleController>(); 
+     
   Widget build(BuildContext context) {
-     VehicleController controller = Get.find<VehicleController>(); 
-   
+    
     // TODO: implement build
     return GetBuilder<VehicleController>(
       init: VehicleController(),
@@ -30,7 +45,14 @@ class AddLocation extends GetView<VehicleController>{
                   horizontal: 15.h,
                 
                 ),
-                child: Column(
+                child: controller.isLoading.value ? SizedBox(
+                  height: Get.height,
+                  child: Center(
+                    child:  CircularProgressIndicator(),
+                  )
+                       
+                  
+                ):Column(
                   children: [
                     SizedBox(height: 20.h,),
                     ImageLogoWithRigthIcon(
@@ -78,12 +100,22 @@ class AddLocation extends GetView<VehicleController>{
               vertical: 10.h, 
               horizontal: 10.h
             ),
-            child: Row(              
-            children: [
-              SvgPicture.asset("assets/icons/location_icon.svg",height: 30.h,  color: ColorCode.orange),
-              SizedBox(width: 10.h,),
-              Text("Use Your Current Location", style: HeadingRobotoBold(color: ColorCode.orange, size: 16),)
-            ],
+            child: GestureDetector(
+              onTap: (){
+                controller.getAddressFromLatLng(controller.currentPosition!);
+              },
+              child: controller.usecurrentLoading.value ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator()
+                ],
+              ): Row(              
+              children: [
+                SvgPicture.asset("assets/icons/location_icon.svg",height: 30.h,  color: ColorCode.orange),
+                SizedBox(width: 10.h,),
+                Text("Use Your Current Location", style: HeadingRobotoBold(color: ColorCode.orange, size: 16),)
+              ],
+              ),
             ),
           ),
 
@@ -166,27 +198,80 @@ class AddLocation extends GetView<VehicleController>{
                 // Add State
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: TextFormField(
-                    style: TextFieldStyle(),
-                    controller: controller.stateCtrl,
-                    autocorrect: true,
-                    keyboardType: TextInputType.name,
-                    // validator: (val) {},
-                     onChanged: (val){
-                      controller.addressFormCheck();
+                  child: 
+                  DropdownButtonFormField<StateListModelData>( 
+                                padding: EdgeInsets.zero,
+                                                      
+                                                onChanged: (newValue){
+                                              
+                                                controller.stateCodeValue = newValue;
+                                                controller.update();
 
-                    },
-                    decoration:  InputDecoration(
-                      hintText: "State",
-                       hintStyle: TextStyle(
-                    color: ColorCode.ligthGray,
-                    fontWeight: FontWeight.bold
-                  ),
-                      focusedBorder: MainBorder(),
-                      border: MainBorder(),
-                      enabledBorder: MainBorder(),
-                    ),
-                  ),
+                                                  controller.addressFormCheck();
+                                               
+                                                // controller.selectedIndex = newValue.toString(); 
+                                                // log(newValue.toString());
+                                                controller.update();     
+                                                //  controller.checkFormValied();                                           
+                                                },
+                                                  validator: (value) {                                                     
+                                                    if(value == null){                                                    
+                                                        return  'Please Select State';
+                                                    }
+                                                    else{
+                                                      //  controller.stateAndZipCodeHeight = 55;
+                                                    // controller.update();
+                                                        return  null;
+                                                    } },
+                                                value: controller.stateCodeValue ??  null,
+                                                hint: Text("State",  style: TextStyle(
+                                        fontSize: 16.sp,                                        
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorCode.ligthGray),),
+                                                isExpanded: true,
+                                                items:controller.stateList!.isNotEmpty ? [
+                            for(var value in controller.stateList! )
+                              DropdownMenuItem(
+                                  child: new Text(
+                                    value.name!,
+                                    style: TextStyle(
+                                      color: ColorCode.darkGray,
+                                       fontSize: 16.sp,
+                                    ),
+                                  ),
+                              value: value,
+                              ),
+                                                ]: [],
+                                                decoration:   InputDecoration(
+                            fillColor: Colors.transparent,
+                                    labelStyle: TextStyle(
+                                      color: ColorCode.red
+                                    ),
+                                        border:MainBorder(),
+                                         enabledBorder: MainBorder(),
+                                      ),              
+                                              ),    
+                  // TextFormField(
+                  //   style: TextFieldStyle(),
+                  //   controller: controller.stateCtrl,
+                  //   autocorrect: true,
+                  //   keyboardType: TextInputType.name,
+                  //   // validator: (val) {},
+                  //    onChanged: (val){
+                  //     controller.addressFormCheck();
+
+                  //   },
+                  //   decoration:  InputDecoration(
+                  //     hintText: "State",
+                  //      hintStyle: TextStyle(
+                  //   color: ColorCode.ligthGray,
+                  //   fontWeight: FontWeight.bold
+                  // ),
+                  //     focusedBorder: MainBorder(),
+                  //     border: MainBorder(),
+                  //     enabledBorder: MainBorder(),
+                  //   ),
+                  // ),
                 ),
                  // Add Zip Code
                 Padding(
@@ -225,10 +310,15 @@ class AddLocation extends GetView<VehicleController>{
                          padding:  EdgeInsets.symmetric(
                     horizontal: 10.h,
                    ),
-                        child: FillBtn(ontap: (){
-                          if(controller.addressFormValid.value){
-                            Get.toNamed(Routes.HOME);
-                            Get.find<BottomBarController>().onItemTapped(1);
+                        child: FillBtn(ontap: () async{
+                          if(controller.addressFormValid.value) {
+                           bool res = await controller.AddLocationApi(context);
+                            if(res){
+                              Navigator.pop(context);
+                            }
+
+                            // Get.toNamed(Routes.HOME);
+                            // Get.find<BottomBarController>().onItemTapped(1);
                           }                        
                         }, text: "Save",  Bgcolor:  controller.addressFormValid.value ? ColorCode.orange : ColorCode.ligthGray, ),
                       ),
@@ -243,7 +333,14 @@ class AddLocation extends GetView<VehicleController>{
               
       },
     );
-
   }
-
 }
+
+
+// class AddLocation extends GetView<VehicleController>{
+//   @override
+ 
+
+//   }
+
+// }

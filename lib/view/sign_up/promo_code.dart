@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuel2u_user/controller/not_available_area_controller.dart';
+
+import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -10,7 +11,7 @@ import 'package:get/get.dart';
 
 import '../../routes/app_pages.dart';
 
-class PromoCode extends GetView<NotAvailableAreaController> {
+class PromoCode extends GetView<SignUpController> {
   const PromoCode({super.key});
 
   @override
@@ -19,13 +20,12 @@ class PromoCode extends GetView<NotAvailableAreaController> {
     return Scaffold(
       body: SingleChildScrollView(
         child: GetBuilder(
-            init: NotAvailableAreaController(),
+            init: SignUpController(),
             initState: (_) {},
             builder: (_) {
               return Container(
                 height: Get.height,
                 child: Form(
-                  // key: controller.promoCodeFormKey,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15.h),
                     child: Column(
@@ -84,13 +84,7 @@ class PromoCode extends GetView<NotAvailableAreaController> {
                                                             ),
                                                           ),
                                                           SizedBox(width: 10.h,),
-                                  // Radio(
-                                  //     value: 1,
-                                  //     groupValue:
-                                  //         controller.promodeYesOrNo.value,
-                                  //     onChanged: (value) {
-                                  //       controller.setYesOrNo(value);
-                                  //     }),
+                             
                                   Text(
                                     "Yes",
                                     style: Heading2(),
@@ -189,7 +183,8 @@ class PromoCode extends GetView<NotAvailableAreaController> {
                                 ),
                                 child: FillBtn(
                                     ontap: () {
-                                      Get.toNamed(Routes.SELECTPLAN);
+                                      controller.PromoCodeAPi(context);
+                                      // 
                                     },
                                     text: "Next"),
                               ),
@@ -207,7 +202,9 @@ class PromoCode extends GetView<NotAvailableAreaController> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.h),
-                          child: BorderBtn(ontap: () {}, text: "SKIP FOR NOW"),
+                          child: BorderBtn(ontap: () {
+                            Get.toNamed(Routes.SELECTPLAN);
+                          }, text: "SKIP FOR NOW"),
                         ),
                         SizedBox(
                           height: 40.h,

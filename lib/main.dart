@@ -1,12 +1,27 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fuel2u_user/resources/firebase_service.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:get/get.dart';
 import 'dependencies.dart' as de;
+
+String fcmToken = "";
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await de.init();
+  try {
+    fcmToken = await FirebaseMessaging.instance.getToken() ?? "FcmToken";
+    print('FireBase FCM token=>' + fcmToken.toString());
+  } catch (e) {
+    print("FireBase FCM toke exception====> " + e.toString());
+  }
+  initMessaging();
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
   
@@ -26,7 +41,6 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: '2U Fuel',
-
           theme: ThemeData(brightness: Brightness.light,
           fontFamily: 'Roboto',
         scaffoldBackgroundColor: ColorCode.white,

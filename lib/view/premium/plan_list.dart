@@ -19,6 +19,7 @@ class SelectPlan extends GetView {
   @override
   Widget build(BuildContext context) {
     PremiunController controller = Get.find<PremiunController>();
+
     // TODO: implement build
     return Scaffold(
       body: GetBuilder<PremiunController>(
@@ -51,9 +52,14 @@ class SelectPlan extends GetView {
               SizedBox(
                 height: 5.h,
               ),
+              controller.isLoading.value ?  Container(
+                
+                child: CircularProgressIndicator(),
+                color: Colors.transparent,
+              ) :
               ListView(
                 shrinkWrap: true,
-                children: List.generate(controller.planList.length,
+                children: List.generate(controller.plansList!.length,
                     (index) => 
                     Padding(
                       padding:  EdgeInsets.symmetric(
@@ -63,8 +69,7 @@ class SelectPlan extends GetView {
                       child: Column(
                                   children: [
                                     InkWell(
-                                      onTap: (){
-                                       
+                                      onTap: (){                                       
                                       },
                                       child: Padding(
                                         padding:  EdgeInsets.symmetric(
@@ -96,14 +101,14 @@ class SelectPlan extends GetView {
                                                             //     }),
                                                             SizedBox(width: 10.h,),
                                                             Text(
-                                                              controller.planList[index]['name'],
+                                                              controller.plansList![index].name.toString(),
                                                               style: Heading2(color: ColorCode.darkGray),
                                                             ),
                                                             Spacer(),
                                                             GestureDetector(
                                                               onTap: (){
-                                                                 controller.showPlanIndex.value = index;
-                                        Get.toNamed(Routes.PLANDETAILS);
+                                                                controller.showPlanIndex.value = index;
+                                                                Get.toNamed(Routes.PLANDETAILS);
                                                               },
                                                               child: SvgPicture.asset("assets/icons/rightarrow.svg", width: 25.h,))
                                                           ],
@@ -127,12 +132,13 @@ class SelectPlan extends GetView {
                  ),
                  child: FillBtn(ontap: (){
                   // print(controller.planList[controller.selectPlan.value]);
-                      if(controller.planList[controller.selectPlan.value]['name'] == "Business"){
-                          Get.toNamed(Routes.BUSINESSFORM);
-                      }
-                      else{
-                       
-                      }
+                      // if(controller.plansList![controller.selectPlan.value].name == "Business"){
+                          controller.GetPlan(context);
+                         
+                      // }
+                      // else{
+                        
+                      // }
                        
                          }, text: "Save"
                     ),
@@ -145,7 +151,9 @@ class SelectPlan extends GetView {
                  padding:  EdgeInsets.symmetric(
                   horizontal: 10.h
                  ),
-                    child: BorderBtn(ontap: () {}, text: "SKIP FOR NOW"),
+                    child: BorderBtn(ontap: () {    
+                      Get.toNamed(Routes.ADDVEHICLE);
+                    }, text: "SKIP FOR NOW"),
                   ),
         
                   SizedBox(
@@ -181,7 +189,7 @@ class SelectPlan extends GetView {
                         }),
                     Text(
                       "Pay as you go",
-                      style: Heading3(color: ColorCode.darkGray),
+                      style: Heading3Medium(color: ColorCode.darkGray),
                     ),
                     Spacer(),
                     SvgPicture.asset("assets/icons/rightarrow.svg")

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "999252841091",
+    "project_id": "ufuel-d7ce4",
+    "storage_bucket": "ufuel-d7ce4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999252841091:android:593f1b42d65fed688781b6",
+        "android_client_info": {
+          "package_name": "com.fuel2u.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999252841091-78mjq53qegl0tjcvt2r9gt9dsnqbaovg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd8Y9-rx-gKxGhEURZ7xypbnslP9zavdM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999252841091-78mjq53qegl0tjcvt2r9gt9dsnqbaovg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "999252841091-5hisb5423brt2d1a7t0g76c7uv8tm0gc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.2ufuel.user"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

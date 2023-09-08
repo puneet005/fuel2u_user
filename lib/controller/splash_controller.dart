@@ -1,14 +1,18 @@
+import 'dart:developer';
+
+import 'package:fuel2u_user/resources/session_manager.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class SplashController extends GetxController {
 
     @override
   void onInit() {
     super.onInit();
-    // moveScreen();
-    print("Get Ready");
-    Future.delayed(Duration(seconds: 3), () =>  Get.offAllNamed(Routes.WELCOME) );
+    moveScreen();
+    // print("Get Ready");
+    // Future.delayed(Duration(seconds: 3), () =>  Get.offAllNamed(Routes.WELCOME) );
    
   }
 
@@ -29,11 +33,24 @@ class SplashController extends GetxController {
   }
   
   void moveScreen() async{
-     await Future.delayed(Duration(seconds: 5), (){
+     SessionManager pref = SessionManager();
+      String? token = await pref.getAccessToken();    
+    log(token.toString()); 
+    if(token == null || token == ""){
       Get.offAllNamed(Routes.WELCOME);
-        print("Get Ready");
-    });
+    }
+    else{
+       Get.offAllNamed(Routes.HOME);
+    }
+    //  await Future.delayed(Duration(seconds: 3), (){
+      // if(token != null || token != ""){
+      //    Get.offAllNamed(Routes.HOME);
+      // }
+      // else{
+      //   Get.offAllNamed(Routes.WELCOME);
+      // }
+    // });
   }
   
 
-}
+} 

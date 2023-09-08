@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fuel2u_user/routes/app_pages.dart';
+// import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/order/select_payment_method.dart';
@@ -155,9 +155,9 @@ class SelectLocation extends GetView<OrderController>{
                 // vertical: 0.h
               ),
                         child: FillBtn(
-                        Bgcolor:  controller.selectAddress == -1 ?  ColorCode.ligthGray :ColorCode.orange ,
+                        Bgcolor:  controller.selectVehicleIndex == -1 ?  ColorCode.ligthGray :ColorCode.orange ,
                         ontap: () {
-                        if(controller.selectVehicle != -1 ){
+                        if(controller.selectVehicleIndex != -1 ){
                             PersistentNavBarNavigator
                                                         .pushNewScreen(
                                                       context,

@@ -5,13 +5,13 @@ import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/order/select_plan.dart';
-import 'package:fuel2u_user/view/premium/plan_list.dart';
+// import 'package:fuel2u_user/view/premium/plan_list.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-import '../../routes/app_pages.dart';
+// import '../../routes/app_pages.dart';
 
 class FuelType extends  GetView<OrderController>{
   const FuelType({super.key});
@@ -54,10 +54,18 @@ class FuelType extends  GetView<OrderController>{
                       ],
                       ),
                       SizedBox(height: 30.h,),
-                    GridView.builder(
+                    controller.fuelLoaidng.value ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator()
+
+                      ],
+                    ):
+                   GridView.builder(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.zero,
-                    itemCount: controller.fuelTypeList.length,
+                    itemCount: controller.fuelTypeList!.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 10,
@@ -74,7 +82,9 @@ class FuelType extends  GetView<OrderController>{
                         InkWell(
                           onTap: () {
                             controller.selectFuelType = index;
+                            controller.selectfuelTypeId = controller.fuelTypeList![index].id;
                             controller.update();
+
                           },
                           child: Container(
                             width: Get.width/4,
@@ -96,8 +106,9 @@ class FuelType extends  GetView<OrderController>{
                                 SvgPicture.asset("assets/icons/fuel_icon.svg",
                                 color : controller.selectFuelType == index ? ColorCode.white :  ColorCode.orange ),
                                 SizedBox(height: 10.h,),
-                                Text("${controller.fuelTypeList[index]}", style: Heading5Medium(
-                                  
+                                Text("${controller.fuelTypeList![index].type}",
+                                textAlign: TextAlign.center,
+                                 style: Heading5Medium(                                  
                                   color : controller.selectFuelType == index ? ColorCode.white :  ColorCode.black 
                                 ),),
                                 
@@ -105,7 +116,8 @@ class FuelType extends  GetView<OrderController>{
                           ),
                         ),
                         SizedBox(height: 10.h,),
-                        Text("\$X.XX / gal", style: Heading3Medium(),)
+                        Text("\$${controller.fuelTypeList![index].price}/ gal",
+                         textAlign: TextAlign.center, style: Heading3Medium(),)
                       ],
                     ),
                     );
@@ -135,6 +147,8 @@ class FuelType extends  GetView<OrderController>{
                       children: [
                         GestureDetector(
                                                             onTap: (){
+                                                              controller.fuelQuantity = "I only want \$20 of fuel";
+                                                              controller.update();
                                                               controller.changeFuelAmount(1);
                                                               // controller.changePlan(index);
                                                             },
@@ -162,6 +176,8 @@ class FuelType extends  GetView<OrderController>{
                       children: [
                         GestureDetector(
                                                             onTap: (){
+                                                            controller.fuelQuantity = "Fill the tank";
+                                                            controller.update();
                                                               controller.changeFuelAmount(2);
                                                               // controller.changePlan(index);
                                                             },
@@ -177,7 +193,7 @@ class FuelType extends  GetView<OrderController>{
                                                           ),
                                                            SizedBox(width: 10.h,),
                         
-                                                            Text("Fill the tank                  ", 
+                                                            Text("Fill the tank                   ", 
                                                             style: Heading5(
                         color: ColorCode.black,
                         fbold:  FontWeight.w600

@@ -7,7 +7,7 @@ import 'package:fuel2u_user/controller/vehicel_controller.dart';
 import 'package:get/get.dart';
 
 import 'controller/deliveryzipcode_controller.dart';
-import 'controller/not_available_area_controller.dart';
+// import 'controller/not_available_area_controller.dart';
 import 'controller/premiun_controller.dart';
 import 'controller/sign_up_controller.dart';
 import 'controller/splash_controller.dart';
@@ -15,7 +15,7 @@ import 'controller/splash_controller.dart';
 Future<void> init() async{
 
   Get.lazyPut<SplashController>(() => SplashController(), fenix: true);
-  Get.lazyPut<NotAvailableAreaController>(() => NotAvailableAreaController(), fenix: true);
+  // Get.lazyPut<NotAvailableAreaController>(() => NotAvailableAreaController(), fenix: true);
   Get.lazyPut<SignUpController>(() => SignUpController(), fenix: true);
   Get.lazyPut<DeliveryZipCodeController>(() => DeliveryZipCodeController(), fenix: true);
   Get.lazyPut<PremiunController>(() => PremiunController(), fenix: true);

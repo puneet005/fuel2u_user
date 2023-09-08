@@ -51,7 +51,6 @@ class AppPages{
   AppPages._();
 
   static const INITIAL = Routes.SPLASH;
-  // static const INITIAL = Routes.HOME;
   static const HOME =  Routes.WELCOME;
   // Routes.HOME;
 
@@ -113,7 +112,7 @@ class AppPages{
       name: _Paths.VIEWCARIMAGE,
       page: () => const ViewCarImage(),
     ),
-    GetPage(
+    GetPage(              
       name: _Paths.HOME,
       page: () => const HomeView(),
     ),
@@ -188,18 +187,18 @@ class AppPages{
       name: _Paths.ADDVEHICLEINVEHICLEVIEW,
       page: () => AddVehicleInVehicleView(),
     ),
-    GetPage(
-      name: _Paths.EDITVEHICLEDETAILS,
-      page: () => EditVehicleDetails(),
-    ),
+    // GetPage(
+    //   name: _Paths.EDITVEHICLEDETAILS,
+    //   page: () => EditVehicleDetails(),
+    // ),
     GetPage(
       name: _Paths.ADDLOCATION,
       page: () => AddLocation(),
     ),
-    GetPage(
-      name: _Paths.EDITLOCATION,
-      page: () => EditLoaction(),
-    ),
+    // GetPage(
+    //   name: _Paths.EDITLOCATION,
+    //   page: () => EditLoaction(),
+    // ),
 
       GetPage(
       name: _Paths.PERSONALDETAILS,

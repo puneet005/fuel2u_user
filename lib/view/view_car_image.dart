@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/add_vehicle_controller.dart';
@@ -19,60 +20,110 @@ class ViewCarImage extends GetView{
   Widget build(BuildContext context) {
     // TODO: implement build
      AddVehicleController controller = Get.find<AddVehicleController>(); 
+     
     // TODO: implement build
     return Scaffold(
       body: SafeArea(
        
-          child: Padding(
-            padding:  EdgeInsets.symmetric(
-              horizontal: 25.h,
-              vertical: 10.h
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20.h,
-                ),
-                ImageLogo(),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Upload your profile photo",
-                      style: Heading1(color: ColorCode.darkGray),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Container(
-                  height: 150.h,
-                  width: 300.w,
-                  child: Image.file(File(controller.imagePath)),
+          child: GetBuilder(
+            init: AddVehicleController(),
+            initState: (_) {},
+            builder: (_) {
+              return Padding(
+                      padding:  EdgeInsets.symmetric(
+                        horizontal: 25.h,
+                        vertical: 10.h
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          ImageLogo(),
+                          SizedBox(
+                            height: 40.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Upload your profile photo",
+                                style: Heading1(color: ColorCode.darkGray),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Container(
+                            height: 150.h,
+                            width: 300.w,
+                            child: Image.file(File(controller.imagePath)),
           
                 ),
                 Spacer(),
                 FillBtn(ontap: (){
-                  Get.offAllNamed(Routes.HOME);
+                 Get.back();
                 }, text: "SAve",
                 ),
                   
                   SizedBox(
                     height: 20.h,
                   ),
-                  BorderBtn(ontap: () {}, text: "edit"),
+                  BorderBtn(ontap: () {
+                    _addPictureSheet(context);
+                  }, text: "edit"),
 
                   SizedBox(
                     height: 20.h,
                   ),
           
               ]),
+          ); 
+            },
           )));
   }
-
+void _addPictureSheet(BuildContext context) {
+    AddVehicleController controller = Get.find<AddVehicleController>();
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: const Text('Add Picture', style: TextStyle(
+          fontWeight: FontWeight.w700,
+        ),),
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Cancel',
+            style: HeadingCustom(color: Colors.blue),
+          ),
+        ),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+               Navigator.pop(context);
+              controller.getImage(false);
+              //
+            },
+            child: Text(
+              'Choose Form Gallery',
+              style: HeadingCustom(color: Colors.blue),
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+               Navigator.pop(context);
+              controller.getImage(true);
+              //
+            },
+            child: Text('Take a Picture',
+                style: HeadingCustom(color: Colors.blue)),
+          ),
+        ],
+      ),
+    );
+  }
 }
 // 00008130-001568AA3633C02E

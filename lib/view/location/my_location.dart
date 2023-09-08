@@ -2,19 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
+import 'package:fuel2u_user/model/location_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/location/add_location.dart';
 import 'package:fuel2u_user/view/location/edit_location.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
+import 'package:fuel2u_user/widgets/loading_widget.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
+// import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class MyLocation extends GetView<VehicleController>{
   @override
   Widget build(BuildContext context) {
+   VehicleController controller = Get.find<VehicleController>(); 
+     
+  controller.GetLocationListApi();
  return Scaffold(
       body: SafeArea(
         child:GetBuilder<VehicleController>(
@@ -44,7 +50,13 @@ class MyLocation extends GetView<VehicleController>{
                   ),
                   SizedBox(height: 20.h,),
                   //  EmptyUi()
-                  controller.emptyVehicleList.value ? EmptyUi() : LocationList(context)
+                  controller.isLocationLoading.value ? ListView(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                children: List.generate(
+                                    5, (index) => ShimmerLoading()),
+                              )
+                            : LocationList(context, controller.locationListData)
                   ])));}),
                   
                   ),
@@ -57,8 +69,8 @@ class MyLocation extends GetView<VehicleController>{
                             horizontal: 15.h
                           ),
                           child: FillBtn(ontap: (){
-                              PersistentNavBarNavigator
-                                                        .pushNewScreen(
+                            controller.cleanAllData();
+                              PersistentNavBarNavigator.pushNewScreen(
                                                       context,
                                                       screen: AddLocation(),
                                                       withNavBar:
@@ -116,12 +128,12 @@ class MyLocation extends GetView<VehicleController>{
     );
   }
 
-  LocationList(BuildContext context){
-       VehicleController controller = Get.put(VehicleController());
-    return ListView(
+  LocationList(BuildContext context, List<LocationListModelData>? data ){
+      //  VehicleController controller = Get.put(VehicleController());      
+    return data!.isEmpty  || data == null  ? EmptyUi() : ListView(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      children: List.generate(controller.vehicleList.length, (index) {
+      children: List.generate(data.length, (index) {
         return  Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: 10.h,
@@ -157,20 +169,23 @@ class MyLocation extends GetView<VehicleController>{
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(controller.addressType[index], style: Heading4Medium(),),
+                            Text(data[index].name ?? "", style: Heading4Medium(),),
                             InkWell(
                               onTap: (){
+                                 controller.cleanAllData();
                                  PersistentNavBarNavigator
                                                         .pushNewScreen(
                                                       context,
-                                                      screen: EditLoaction(),
+                                                      screen: EditLocation(
+                                                    locationDetails: data[index],
+                                                      ),
                                                       withNavBar:
                                                       true, // OPTIONAL VALUE. True by default.
                                                       pageTransitionAnimation:
                                                       PageTransitionAnimation
                                                           .cupertino,
-                                                    );
-                                                                                    // Get.toNamed(Routes.EDITLOCATION);
+                                                    ); 
+                                                    // Get.toNamed(Routes.EDITLOCATION);
                               },
                                child: Image.asset("assets/icons/edit_icon.png"),
                               // child: 
@@ -178,7 +193,7 @@ class MyLocation extends GetView<VehicleController>{
                               )
                           ],
                         ),
-                        Text("Address", style: Heading5(fbold:  FontWeight.normal),)
+                        Text(data[index].address!, style: Heading5(fbold:  FontWeight.normal),)
                     ],
                                   ),
                   ))

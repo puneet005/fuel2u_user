@@ -25,7 +25,7 @@ class PlanDetails extends GetView{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "${controller.planList[controller.showPlanIndex.value]['name']}",
+                      "${controller.plansList![controller.showPlanIndex.value].name}",
                       style: Heading1()
                     )
                   ],
@@ -35,20 +35,23 @@ class PlanDetails extends GetView{
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                 Text("\$${controller.planList[controller.showPlanIndex.value]['price']}", style: HeadingCustomFamliy(
+                controller.plansList![controller.showPlanIndex.value].monthlyFee != 0 ?
+                 Text("\$${controller.plansList![controller.showPlanIndex.value].monthlyFee }", style: HeadingCustomFamliy(
+                  size: 75.sp,
+                  color: ColorCode.darkGray,
+                  fbold: FontWeight.bold
+                 ),):  Text("\$${controller.plansList![controller.showPlanIndex.value].deliveryFee }", style: HeadingCustomFamliy(
                   size: 75.sp,
                   color: ColorCode.darkGray,
                   fbold: FontWeight.bold
                  ),)
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                 Text("${controller.planList[controller.showPlanIndex.value]['duration']}", style: HeadingCustomFamliy(
-                  
-
+                 Text( controller.plansList![controller.showPlanIndex.value].monthlyFee == 0 ? "Delivery Fee" :"Per Month"
+                   , style: HeadingCustomFamliy(                
                   size: 22.sp, 
                   family: "RobotoRagular"                
                  ),)
@@ -63,7 +66,7 @@ class PlanDetails extends GetView{
                 child: ListView(
                   shrinkWrap: true,
                    physics: const NeverScrollableScrollPhysics(),
-                 children : List.generate(controller.planList[controller.showPlanIndex.value]['featureList'].length, (index) => Padding(
+                 children : List.generate(controller.plansList![controller.showPlanIndex.value].features!.length, (index) => Padding(
                    padding: const EdgeInsets.all(8.0),
                    child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,12 +78,10 @@ class PlanDetails extends GetView{
                       ),
                       Expanded(
                         child: Text(
-                    controller.planList[controller.showPlanIndex.value]['featureList'][index],
+                    controller.plansList![controller.showPlanIndex.value].features![index].name.toString(),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     style:HeadingCustomFamliy(
-                  
-
                   size: 22.sp, 
                   family: "RobotoRagular"                
                  ),

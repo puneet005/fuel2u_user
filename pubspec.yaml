@@ -47,11 +47,22 @@ dependencies:
   flutter_credit_card: 
     path: ./flutter_credit_card
   persistent_bottom_nav_bar: ^5.0.2
+  http: ^1.1.0
+  shared_preferences: ^2.2.0
+  fluttertoast: ^8.2.2
+  firebase_core: ^2.15.1
+  flutter_local_notifications: ^15.1.1
+  firebase_messaging: ^14.6.7
+  shimmer: ^3.0.0
+  geolocator: ^10.0.1
+  geocoding: ^2.1.0
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.13.1"
+  change_app_package_name: ^1.1.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

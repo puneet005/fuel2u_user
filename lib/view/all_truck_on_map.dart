@@ -72,7 +72,7 @@ class NearYourTruck extends GetView<OrderController>{
                     //   child: Text("Your driver is <X.X> miles away", style: Heading3(),),
                     // ),
                     Container(
-                      child: Text("Truck is <X.X> miles away Fuel type: <Octane 87>", style: Heading3(),),
+                      child: Text("Truck is <X.X> miles away Fuel type: <Octane 87>", style: Heading4Medium(),),
                     ),
                     
                   ],)

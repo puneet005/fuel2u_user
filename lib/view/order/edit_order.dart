@@ -225,7 +225,7 @@ class EditOrder extends GetView<OrderController> {
                             GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: controller.fuelTypeList.length,
+                                itemCount: controller.staticfuelTypeList.length,
                                 padding: EdgeInsets.zero,
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
@@ -283,7 +283,7 @@ class EditOrder extends GetView<OrderController> {
                                                     height: 10.h,
                                                   ),
                                                   Text(
-                                                    "${controller.fuelTypeList[index]}",
+                                                    "${controller.staticfuelTypeList[index]}",
                                                     style: Heading5Medium(
                                                         color: controller
                                                                     .selectFuelType ==

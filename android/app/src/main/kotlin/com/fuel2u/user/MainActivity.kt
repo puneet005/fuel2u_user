@@ -1,4 +1,4 @@
-package com.example.fuel2u_user
+package com.fuel2u.user
 
 import io.flutter.embedding.android.FlutterActivity
 

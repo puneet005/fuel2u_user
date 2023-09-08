@@ -1,16 +1,27 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fuel2u_user/model/order/fuel_type_model.dart';
+import 'package:fuel2u_user/model/order_model.dart';
+import 'package:fuel2u_user/model/vehicle/vehicle_list_model.dart';
+import 'package:fuel2u_user/resources/session_manager.dart';
+import 'package:fuel2u_user/utils/color.dart';
+import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../utils/api_constant.dart';
+import 'package:http/http.dart' as http;
 
 class OrderController extends GetxController{
    
     final emptyOrder = true.obs;
     final confirmNextBth = false.obs;    
-    late int selectVehicle;
+    late int selectVehicleIndex;
     late int selectPlan;
     late int selectAddress;
     late int selectPaymentMethod;
@@ -24,7 +35,7 @@ class OrderController extends GetxController{
    final rateStar = 0.obs;
    final submitRateing = false.obs;
 
-    List fuelTypeList = ["87 Octane", "89 Octane", "Diesel"];
+    List staticfuelTypeList = ["87 Octane", "89 Octane", "Diesel"];
     List dateList = [
       {"day" : "Mon","date" : "24"},
       {"day" : "Tue","date" : "25"},
@@ -57,8 +68,8 @@ Completer<GoogleMapController> mapController = Completer();
   @override
   void onInit() {
     super.onInit();
-    // getVaild();
-    selectVehicle = -1;
+    getOrder();
+    selectVehicleIndex = -1;
     selectFuelType = -1;
     selectPlan = -1;
     selectAddress = -1;
@@ -155,7 +166,7 @@ Completer<GoogleMapController> mapController = Completer();
   }
 
   void setVehicle(int index) {
-    selectVehicle = index;
+    selectVehicleIndex = index;
     update();
   }
   
@@ -183,8 +194,136 @@ Completer<GoogleMapController> mapController = Completer();
    update();
   }
 
+// Api Calling Block
 
 
+
+
+// Only 10 order show 
+ SessionManager pref = SessionManager();
+ final isLoading = true.obs;
+ List<dynamic>? orderList;
+List<FuelTypeModelData>? fuelTypeList;
+final fuelLoaidng = true.obs;
+Future<void>  getOrder() async{
+   try {
+       String? token = await pref.getAccessToken();      
+      // var map = <String, dynamic>{};
+      log(ApiUrls.orders + "?limit=10&page=1");
+      // log(map.toString());
+      http.Response response = await http.get(
+      Uri.parse(ApiUrls.make),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      log(response.body);
+      if (response.statusCode == 200) {
+      log("Make Api Response=>> " +
+        (response.body).toString());
+        isLoading.value = false;
+         OrderModel res = OrderModel.fromJson(json.decode(response.body));
+         orderList = res.data;
+         update();     
+      } 
+      else{
+          isLoading.value = false;
+          update();
+        //  hideLoader(loader);
+
+      }
+  } catch (e) {
+     isLoading.value = false;
+         update();
+     log(e.toString());
     
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+   }
 
+// List Of Vehicle
+final vehicleListLoading = true.obs;
+List<VehicleListModelData>? vehicleList;
+var selectVehicleId;
+var selectfuelTypeId;
+var fuelQuantity;
+Future<void> GetVehicleList() async{
+   try {
+      String? token = await pref.getAccessToken();      
+      log(ApiUrls.vehicles + "?limit=10&page=1");     
+      http.Response response = await http.get(
+      Uri.parse(ApiUrls.vehicles),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      log(response.body);
+      if (response.statusCode == 200) {
+        vehicleListLoading.value = false;
+        update();
+      log("vehicles?limit=10&page=1 Response=>> " +
+        (response.body).toString());
+          isLoading.value = false;
+         VehicleListModel res = VehicleListModel.fromJson(json.decode(response.body));
+         vehicleList = res.data;
+         update();     
+      } 
+      else{
+        vehicleListLoading.value = false;
+        update();       
+      }
+  } catch (e) {
+     vehicleListLoading.value = false;
+        update();
+     log(e.toString());
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+   }
+// Fuel Type Api
+Future<void> fuelTypeApi() async{
+   try{
+      String? token = await pref.getAccessToken();      
+      log(ApiUrls.fuelType + "?limit=10&page=1");     
+      http.Response response = await http.get(
+      Uri.parse(ApiUrls.fuelType+ "?limit=10&page=1"),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      log(response.body);
+      if (response.statusCode == 200) {
+        fuelLoaidng.value = false;
+        update();
+      log("fuel-Type?limit=10&page=1 Response=>> " +
+        (response.body).toString());
+          fuelLoaidng.value = false;  
+         FuelTypeModel res = FuelTypeModel.fromJson(json.decode(response.body));
+         fuelTypeList = res.data;
+         update();     
+      } 
+      else{
+        fuelLoaidng.value = false;
+        update();       
+      }
+  } catch (e) {
+     fuelLoaidng.value = false;
+        update();
+     log(e.toString());
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+   }
 }

@@ -12,7 +12,7 @@ import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-import '../../routes/app_pages.dart';
+// import '../../routes/app_pages.dart';
 
 class ReviewOrder extends GetView {
   const ReviewOrder({super.key});

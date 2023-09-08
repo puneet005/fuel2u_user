@@ -8,7 +8,7 @@ import 'package:fuel2u_user/controller/vehicel_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
-import 'package:fuel2u_user/widgets/border_button_ui.dart';
+// import 'package:fuel2u_user/widgets/border_button_ui.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fuel2u_user/controller/not_available_area_controller.dart';
+
+import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 
 import 'package:fuel2u_user/utils/color.dart';
@@ -23,14 +24,15 @@ class VerificationView extends StatefulWidget {
 
 class _VerificationViewState extends State<VerificationView> {
   final _otpPinFieldController = GlobalKey<OtpPinFieldState>();
-  NotAvailableAreaController controlller =  Get.put(NotAvailableAreaController());
+  SignUpController controlller =  Get.put(SignUpController());
+  String otptext = "";
   @override
   Widget build(BuildContext context) {
      return Scaffold(
       body: Scaffold(
         body: SingleChildScrollView(
-      child:  GetBuilder<NotAvailableAreaController>(
-        init: NotAvailableAreaController(),
+      child:  GetBuilder(
+        init: SignUpController(),
         initState: (_) {},
         builder: (_) {
           return Padding(
@@ -84,7 +86,16 @@ class _VerificationViewState extends State<VerificationView> {
                 onChange: (text) {
                   if(text.length ==6){
                     controlller.getoptValid();
+                     otptext = text;
+                     setState(() {
+                       
+                     });
+
+                  
                     FocusManager.instance.primaryFocus?.unfocus();
+
+                    
+
                   }
                   else{
                   controlller.getotpNotVaild();
@@ -131,7 +142,8 @@ class _VerificationViewState extends State<VerificationView> {
             ),
                child: Obx(() => controlller.otpVaild.value ?
                   FillBtn(ontap: (){
-                          Get.toNamed(Routes.PROMOCODE);
+                  controlller.SignUpVerifyApi(context, otptext);
+                          //
                       }, text: "LOG IN"
                   ): FillBtn(ontap: (){}, text: "LOG IN",
                   Bgcolor: ColorCode.ligthGray,)),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,494 +23,226 @@ class BusinessForm extends GetView<BusinessController> {
           padding:  EdgeInsets.symmetric(
             horizontal: 10.h
           ),
-          child: Column(
-            children: [
-              SizedBox(height: 40.h,),
-              ImageLogo(),
-              SizedBox(height: 40.h,), 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Business Information", style: Heading1(
-                  color: ColorCode.darkGray
-                ),)
-              ],
-            ),
-            SizedBox(height: 10.h,),
-            Padding(
-                  padding:  EdgeInsets.symmetric(
-                    vertical: 10.r, 
-                    horizontal: 15.r
-                  ),
-                  child: Text("Enter your details below, including the promo code for your employees.", 
-                      maxLines: 3,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: HeadingSub2(),),
-                ),
-         SizedBox(height: 15.h,),
-          Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      textInputAction: TextInputAction.next,
-                      controller: controller.employerNameCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter Employer Name";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Employer Name",
-                          hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        
-                        focusedBorder: MainBorder(),
-                        border:  MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                       style: TextFieldStyle(),
-                       textInputAction: TextInputAction.next,
-                      controller: controller.deliveryAddressCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter Delivery Address";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Delivery Address",
-                          hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-          
-                   Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                       style: TextFieldStyle(),
-                       textInputAction: TextInputAction.next,
-                      controller: controller.cityCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter City Name";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "City",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                  // State and Zip code
-                  Padding(
-                   
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: Container(
-                      height: 55.h,
-                      child: Row(
-                        
+          child: GetBuilder(
+            init: BusinessController(),
+            initState: (_) {},
+            builder: (_) {
+
+              return controller.isLoading.value ? Container(
+                height: Get.height,
+                child: Column
+                (
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator()
+                    ],
+                  )
+                ])
+                // mainAxisAlignment: MainAxisAlignment.center,
+                ,
+              )  : Form(
+                key: controller.bussinessFormKey,
+                child: Column(
                         children: [
-                        Expanded(
-                          flex: 2,
-                          // width: Get.width/2.5,
-                          child:  DropdownButtonFormField(
-                            // menuMaxHeight: 40.h,
-                                                // iconSize: ,
-                                              onChanged: (newValue){
-                          // controller.selected.value=newValue!;
-                          
-                                              },
-                                              value: controller.selected?.value,
-                                              hint: Text("State",  style: TextStyle(
+                          SizedBox(height: 40.h,),
+                          ImageLogo(),
+                          SizedBox(height: 40.h,), 
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Business Information", style: Heading1(
+                              color: ColorCode.darkGray
+                            ),)
+                          ],
+                        ),
+                        SizedBox(height: 10.h,),
+                        Padding(
+                              padding:  EdgeInsets.symmetric(
+                                vertical: 10.r, 
+                                horizontal: 15.r
+                              ),
+                              child: Text("Enter your details below, including the promo code for your employees.", 
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: HeadingSub2(),),
+                          ),
+                       SizedBox(height: 15.h,),
+                        Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        textInputAction: TextInputAction.next,
+                        controller: controller.employerNameCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                        onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){     
+                          if(val == null || val.isEmpty){
+                            return "Enter Employer Name";
+                          }
+                          return null;
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "Employer Name",
+                            hintStyle: TextStyle(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,
-                                      color: ColorCode.ligthGray),),
-                                              isExpanded: true,
-                                              items: [
-                          for(var value in controller.tierList)
-                            DropdownMenuItem(
-                                child: new Text(
-                                  value,
-                                ),
-                            value: value.obs,
-                            ),
-                                              ],
-                                              decoration:   InputDecoration(
-                          fillColor: Colors.transparent,
+                                      color: ColorCode.ligthGray),
                           
-                                      border:MainBorder(),
-                                       enabledBorder: MainBorder(),
-                                    ),              
-                                            ),                         
+                          focusedBorder: MainBorder(),
+                          border:  MainBorder(),
+                          enabledBorder: MainBorder(),
                         ),
-                        SizedBox(
-                          width: 15.h,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child:  TextFormField(
-                            style: TextFieldStyle(),
-                            textInputAction: TextInputAction.next,
-                            controller: controller.zipCodeCtrl,
-                            
-                            autocorrect: true,
-                            keyboardType: TextInputType.name,
-                            validator: (val){
-                              if(val!.length == 6){
-                                return null;
-                              }
-                              return "Wrong Zip Code";
-                              
-                            },
-                            
-                            decoration:  InputDecoration(
-                              hintText: "Zip Code",
-                              hintStyle: TextStyle(
-                                      fontSize: 17.sp,
+                      ),
+                    ),
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                         style: TextFieldStyle(),
+                         textInputAction: TextInputAction.next,
+                        controller: controller.deliveryAddressCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                             onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){     
+                          if(val == null || val.isEmpty){
+                            return "Enter Delivery Address";
+                          }
+                          return null;
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "Delivery Address",
+                            hintStyle: TextStyle(
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,
                                       color: ColorCode.ligthGray),
-                              focusedBorder:   MainBorder(),
-                              border: MainBorder(),
-                              enabledBorder: MainBorder(),
-                            ),
-                          )
-                        )
-                        ],
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  // Delivery optional field
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      textInputAction: TextInputAction.next,
-                      controller: controller.deliveryInstructionsCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      
-                      decoration:  InputDecoration(
-                        hintText: "Delivery Instructions (optional)",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
+                        
+                     Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
                       ),
-                    ),
-                  ),
-                  // Promo Code
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      textInputAction: TextInputAction.next,
-                      controller: controller.promoCodeCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter Promo Code";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Promo Code Your Employees will Use",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                  // Contact Name
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      textInputAction: TextInputAction.next,
-                      controller: controller.contactNameCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter Contact Name";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Contact Name",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                   // Contact Email 
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      textInputAction: TextInputAction.next,
-                      controller: controller.contactEmailCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter Contact Email";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Contact Email",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                  // Contact Phone Number
-                  
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      controller: controller.contactNumberCtrl,
-                      textInputAction: TextInputAction.next,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                         MaskedInputFormatter('###-###-####')
-                      ],
-                      validator: (val){
-                        if(val!.length == 12){
+                      child: TextFormField(
+                         style: TextFieldStyle(),
+                         textInputAction: TextInputAction.next,
+                        controller: controller.cityCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                             onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){     
+                          if(val == null || val.isEmpty){
+                            return "Enter City Name";
+                          }
                           return null;
-                        }
-                        else if(val.isEmpty){
-                          return "Enter Phone Number";
-                        }
-                        return "Enter Valid Number";
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Contact Phone Number",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "City",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
                       ),
                     ),
-                  ),
-          
-                  // Check Box Button Billing
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                         Obx(() => Checkbox(
-                           shape: RoundedRectangleBorder(
-                   borderRadius: BorderRadius.circular(3)         
-                          ),
-                                value: controller.deliveryAddSame.value,
-                                onChanged: (value) {
-                                    controller.checkSameBillingAddress(value!);
-                                },
-                              ), ),
-                               Text("Same as delivery address",  style: HeadingCustomFamliy(
-                                size: 13.sp,
-                                family: "RobotoRagular",
-                                fbold: FontWeight.w500,
-                                
-                               )  )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      controller: controller.billingAddressCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter Billing Address";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "Billing Address",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                  // Billing City
-                  Padding(
-                     padding:  EdgeInsets.symmetric(
-                      vertical: 10.r, 
-                      horizontal: 15.r
-                    ),
-                    child: TextFormField(
-                      style: TextFieldStyle(),
-                      controller: controller.billingCityCtrl,
-                      
-                      autocorrect: true,
-                      keyboardType: TextInputType.name,
-                      validator: (val){     
-                        if(val == null || val.isEmpty){
-                          return "Enter City";
-                        }
-                        return null;
-          
-                      },
-                      decoration:  InputDecoration(
-                        hintText: "City",
-                         hintStyle: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                        focusedBorder: MainBorder(),
-                        border: MainBorder(),
-                        enabledBorder: MainBorder(),
-                      ),
-                    ),
-                  ),
-                   // State and Zip code
-                  Container(
-                    child: Padding(
+                    // State and Zip code
+                    Padding(
                      
                        padding:  EdgeInsets.symmetric(
                         vertical: 10.r, 
                         horizontal: 15.r
                       ),
-                      child: Container(
-                      height: 55.h,
+                      child: SizedBox(
+                        height: controller.stateAndZipCodeHeight.h,
                         child: Row(
                           
                           children: [
                           Expanded(
                             flex: 2,
                             // width: Get.width/2.5,
-                            child:  DropdownButtonFormField(
-                                                  // iconSize: ,
-                                                onChanged: (newValue){
-                            // controller.selected.value=newValue!;
-                            
+                            child:  DropdownButtonFormField( 
+                                padding: EdgeInsets.zero,
+                                                      
+                                                onChanged: ( newValue){
+                                                
+                                               
+                                                controller.selectedIndex = newValue.toString(); 
+                                                log(newValue.toString());
+                                                controller.update();     
+                                                 controller.checkFormValied();                                           
                                                 },
-                                                value: controller.billingState?.value,
-                                                hint: Text("State", style: TextStyle(
+                                                  validator: (value) { 
+                                                    
+                                                    if(value == null){
+                                                    controller.stateAndZipCodeHeight = 80;
+                                                    controller.update();
+                                                        return  'Please Select State';
+                                                    }
+                                                    else{
+                                                       controller.stateAndZipCodeHeight = 55;
+                                                    controller.update();
+                                                        return  null;
+
+                                                    }
+           
+              },
+                                                value: controller.selected ?? null,
+                                                hint: Text("State",  style: TextStyle(
                                         fontSize: 16.sp,
+                                        
                                         fontWeight: FontWeight.bold,
                                         color: ColorCode.ligthGray),),
                                                 isExpanded: true,
                                                 items: [
-                            for(var value in controller.tierList)
+                            for(var value in controller.stateList!)
                               DropdownMenuItem(
                                   child: new Text(
-                                    value,
+                                    value.name!,
+                                    style: TextStyle(
+                                      color: ColorCode.darkGray,
+                                       fontSize: 16.sp,
+                                    ),
                                   ),
-                              value: value.obs,
+                              value: value.id,
                               ),
                                                 ],
                                                 decoration:   InputDecoration(
-                            fillColor: Colors.transparent,                        
-                                        border: MainBorder(),
+                            fillColor: Colors.transparent,
+                                    labelStyle: TextStyle(
+                                      color: ColorCode.red
+                                    ),
+                                        border:MainBorder(),
                                          enabledBorder: MainBorder(),
                                       ),              
                                               ),                         
@@ -520,16 +254,25 @@ class BusinessForm extends GetView<BusinessController> {
                             flex: 2,
                             child:  TextFormField(
                               style: TextFieldStyle(),
-                              controller: controller.billingZipCodeCtrl,
+                              textInputAction: TextInputAction.next,
+                              controller: controller.zipCodeCtrl,
                               
                               autocorrect: true,
                               keyboardType: TextInputType.name,
+                                   onChanged: (val){
+                        controller.checkFormValied();
+                        },
                               validator: (val){
-                                if(val!.length == 6){
+                                if(val!.length == 5){
+                                   controller.stateAndZipCodeHeight = 55;
+                                                    controller.update();
+
                                   return null;
                                 }
+                                 controller.stateAndZipCodeHeight = 80;
+                                                    controller.update();
                                 return "Wrong Zip Code";
-                              
+                                
                               },
                               
                               decoration:  InputDecoration(
@@ -538,7 +281,7 @@ class BusinessForm extends GetView<BusinessController> {
                                         fontSize: 17.sp,
                                         fontWeight: FontWeight.bold,
                                         color: ColorCode.ligthGray),
-                                focusedBorder: MainBorder(),
+                                focusedBorder:   MainBorder(),
                                 border: MainBorder(),
                                 enabledBorder: MainBorder(),
                               ),
@@ -548,24 +291,374 @@ class BusinessForm extends GetView<BusinessController> {
                         ),
                       ),
                     ),
-                  ),
-       
-                SizedBox(height: 30.h,),
-               Padding(
-          padding:  EdgeInsets.symmetric(
-            horizontal: 10.h
-          ),
-                   child: FillBtn(ontap: (){
-                    Get.toNamed(Routes.ADDVEHICLE);
-                   }, text: "Save",
-                                 Bgcolor: ColorCode.ligthGray,),
-                 ),
-                SizedBox(height: 40.h,)
-        
-        
-                
-            ],
-          ),
+                    // Delivery optional field
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        textInputAction: TextInputAction.next,
+                        controller: controller.deliveryInstructionsCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                        
+                        decoration:  InputDecoration(
+                          hintText: "Delivery Instructions (optional)",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                    // Promo Code
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        textInputAction: TextInputAction.next,
+                        controller: controller.promoCodeCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                             onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){     
+                          if(val == null || val.isEmpty){
+                            return "Enter Promo Code";
+                          }
+                          return null;
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "Promo Code Your Employees will Use",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                    // Contact Name
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        textInputAction: TextInputAction.next,
+                        controller: controller.contactNameCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                             onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){     
+                          if(val == null || val.isEmpty){
+                            return "Enter Contact Name";
+                          }
+                          return null;
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "Contact Name",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                     // Contact Email 
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        textInputAction: TextInputAction.next,
+                        controller: controller.contactEmailCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                             onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){     
+                          if(val == null || val.isEmpty){
+                            return "Enter Contact Email";
+                          }
+                          return null;
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "Contact Email",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                    // Contact Phone Number
+                    
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        controller: controller.contactNumberCtrl,
+                        textInputAction: TextInputAction.next,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                           MaskedInputFormatter('###-###-####')
+                        ],
+                             onChanged: (val){
+                        controller.checkFormValied();
+                        },
+                        validator: (val){
+                          if(val!.length == 12){
+                            return null;
+                          }
+                          else if(val.isEmpty){
+                            return "Enter Phone Number";
+                          }
+                          return "Enter Valid Number";
+                        
+                        },
+                        decoration:  InputDecoration(
+                          hintText: "Contact Phone Number",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                        
+                    // Check Box Button Billing
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                           Obx(() => Checkbox(
+                             shape: RoundedRectangleBorder(
+                     borderRadius: BorderRadius.circular(3)         
+                            ),
+                                  value: controller.deliveryAddSame.value,
+                                  onChanged: (value) {
+                                      controller.checkSameBillingAddress(value!);
+                                  },
+                                ), ),
+                                 Text("Same as delivery address",  style: HeadingCustomFamliy(
+                                  size: 13.sp,
+                                  family: "RobotoRagular",
+                                  fbold: FontWeight.w500,
+                                  
+                                 )  )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        controller: controller.billingAddressCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                        // validator: (val){     
+                        //   if(val == null || val.isEmpty){
+                        //     return "Enter Billing Address";
+                        //   }
+                        //   return null;
+                        
+                        // },
+                        decoration:  InputDecoration(
+                          hintText: "Billing Address",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                    // Billing City
+                    Padding(
+                       padding:  EdgeInsets.symmetric(
+                        vertical: 10.r, 
+                        horizontal: 15.r
+                      ),
+                      child: TextFormField(
+                        style: TextFieldStyle(),
+                        controller: controller.billingCityCtrl,
+                        
+                        autocorrect: true,
+                        keyboardType: TextInputType.name,
+                        // validator: (val){     
+                        //   if(val == null || val.isEmpty){
+                        //     return "Enter City";
+                        //   }
+                        //   return null;
+                        
+                        // },
+                        decoration:  InputDecoration(
+                          hintText: "City",
+                           hintStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                          focusedBorder: MainBorder(),
+                          border: MainBorder(),
+                          enabledBorder: MainBorder(),
+                        ),
+                      ),
+                    ),
+                     // State and Zip code
+                    Container(
+                      child: Padding(
+                       
+                         padding:  EdgeInsets.symmetric(
+                          vertical: 10.r, 
+                          horizontal: 15.r
+                        ),
+                        child: Container(
+                        height: 55.h,
+                          child: Row(
+                            
+                            children: [
+                            Expanded(
+                              flex: 2,
+                              // width: Get.width/2.5,
+                              child:  DropdownButtonFormField(
+                                                    // iconSize: ,
+                                                  onChanged: (newValue){
+
+                              controller.billingStateId =newValue!.toString();
+                              controller.update();
+                              
+                                                  },
+                                                  value: controller.billingState?.value,
+                                                  hint: Text("State", style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorCode.ligthGray),),
+                                                  isExpanded: true,
+                                                  items: [
+                               for(var value in controller.stateList!)
+                              DropdownMenuItem(
+                                  child: new Text(
+                                    value.name!,
+                                    style: TextStyle(
+                                      color: ColorCode.darkGray,
+                                       fontSize: 16.sp,
+                                    ),
+                                  ),
+                              value: value.id,
+                              ),
+                                                  ],
+                                                  decoration:   InputDecoration(
+                              fillColor: Colors.transparent,                        
+                                          border: MainBorder(),
+                                           enabledBorder: MainBorder(),
+                                        ),              
+                                                ),                         
+                            ),
+                            SizedBox(
+                              width: 15.h,
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child:  TextFormField(
+                                style: TextFieldStyle(),
+                                controller: controller.billingZipCodeCtrl,
+                                
+                                autocorrect: true,
+                                keyboardType: TextInputType.name,
+                                // validator: (val){
+                                //   if(val!.length == 6){
+                                //     return null;
+                                //   }
+                                //   return "Wrong Zip Code";                                
+                                // },
+                                
+                                decoration:  InputDecoration(
+                                  hintText: "Zip Code",
+                                  hintStyle: TextStyle(
+                                          fontSize: 17.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorCode.ligthGray),
+                                  focusedBorder: MainBorder(),
+                                  border: MainBorder(),
+                                  enabledBorder: MainBorder(),
+                                ),
+                              )
+                            )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                     
+                  SizedBox(height: 30.h,),
+                 Padding(
+                        padding:  EdgeInsets.symmetric(
+                          horizontal: 10.h
+                        ),
+                     child: FillBtn(ontap: (){
+                      if(controller.bussinessFormKey.currentState
+                      !.validate()){
+                        controller.BusinessFormApi(context);
+
+                      }
+                      // Get.toNamed(Routes.ADDVEHICLE);
+                     }, text: "Save",
+                                   Bgcolor: controller.formvalid.value ? ColorCode.orange:ColorCode.ligthGray,),
+                   ),
+                  SizedBox(height: 40.h,)
+                      
+                      
+                  
+                          ],
+                        ),
+              ); 
+            },
+          )  
         ),
       ),
     );

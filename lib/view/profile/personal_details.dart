@@ -14,14 +14,19 @@ import 'package:get/get.dart';
 class PersonalDetails extends GetView<SignUpController> {
   @override
   Widget build(BuildContext context) {
-    controller.updateProfile();
+    controller.ProfileApi(context);
     return Scaffold(
         body: GetBuilder(
             init: SignUpController(),
             initState: (_) {},
             builder: (_) {
               return SafeArea(
-                  child: SingleChildScrollView(
+                  child: controller.isLoading.value ? SizedBox(
+                    height: Get.height,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ): SingleChildScrollView(
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.h),
                           child: Form(

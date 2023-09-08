@@ -3,18 +3,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/login_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
-
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
-
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/image_logo.dart';
-
 import 'package:get/get.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
-
-
-
 class LoginOTP extends StatefulWidget {
   const LoginOTP({super.key});
 
@@ -25,6 +19,7 @@ class LoginOTP extends StatefulWidget {
 class _LoginOTPState extends State<LoginOTP> {
   final _otpPinFieldController = GlobalKey<OtpPinFieldState>();
   LoginController controlller =  Get.put(LoginController());
+  String otptext = "";
   @override
   Widget build(BuildContext context) {
      return Scaffold(
@@ -73,7 +68,9 @@ class _LoginOTPState extends State<LoginOTP> {
                 if(text.length ==6){
                   controlller.getoptValid();
                   FocusManager.instance.primaryFocus?.unfocus();
-                }
+                   otptext = text;
+                     setState(() {});
+                  }
                 else{
 controlller.getotpNotVaild();
                 }
@@ -94,8 +91,6 @@ controlller.getotpNotVaild();
                 filledFieldBorderColor: ColorCode.orange,
               ),
               maxLength: 6,
- 
-              
               showCursor: true,          
               otpPinFieldDecoration: OtpPinFieldDecoration.custom),
  SizedBox(height: 15.h,),
@@ -111,7 +106,8 @@ controlller.getotpNotVaild();
           Spacer(),
            Obx(() => controlller.otpVaild.value ?
               FillBtn(ontap: (){
-                      Get.offAndToNamed(Routes.HOME);
+                  controlller.SignInVerifyApi(context, otptext);
+                      // Get.offAndToNamed(Routes.HOME);
                   }, text: "LOG IN"
               ): FillBtn(ontap: (){
 
@@ -124,7 +120,7 @@ controlller.getotpNotVaild();
         },
       )
         ))
-        // child: Form(,
+        
     );
 
   }

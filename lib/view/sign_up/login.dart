@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/login_controller.dart';
@@ -19,31 +20,35 @@ class LoginView extends GetView<LoginController>{
     // TODO: implement build
    return Scaffold(
     body: SingleChildScrollView(
-      child: Container(
-        height: Get.height,
-        child: Form(
-          key: controller.phoneFormKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 50.h,),
-               ImageLogo(),
-              SizedBox(height: 40.h,), 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Enter Your\nPhone Number or Email", 
-                  textAlign: TextAlign.center,
-                  style: Heading1(
-                    color: ColorCode.darkGray
-                  ),)
-                ],
-              ),
-              SizedBox(height: 5.h,),
-              Padding(
-                padding:  EdgeInsets.symmetric(
-                  vertical: 10.r, 
+      child: GetBuilder(
+        init: LoginController(),
+        initState: (_) {},
+        builder: (_) {
+          return Container(
+              height: Get.height,
+              child: Form(
+                key: controller.phoneFormKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50.h,),
+                     ImageLogo(),
+                    SizedBox(height: 40.h,), 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Enter Your\nPhone Number or Email", 
+                        textAlign: TextAlign.center,
+                        style: Heading1(
+                          color: ColorCode.darkGray
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: 5.h,),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(
+                       vertical: 10.r, 
                   horizontal: 15.r
                 ),
                 child: Text("2U Fuel will send you a verification code.", 
@@ -55,6 +60,7 @@ class LoginView extends GetView<LoginController>{
               ),
               
               SizedBox(height: 10.h,),
+               controller.onlyNumber.value ?
               Padding(
                  padding:  EdgeInsets.symmetric(
                   vertical: 10.r, 
@@ -62,28 +68,18 @@ class LoginView extends GetView<LoginController>{
                 ),
                 child: TextFormField(
                   style: TextFieldStyle(),
-                  controller: controller.phoneNo,
-                  
+                  controller: controller.phoneNo,                  
                   autocorrect: true,
                   keyboardType: TextInputType.name,
-                  inputFormatters: [
-                    //  MaskedInputFormatter('###-###-####')
-                  ],
+                   inputFormatters: [
+                       MaskedInputFormatter('###-###-####')
+                    ],
                   onChanged: (val){
                        if(val.isNotEmpty){
-                          controller.onlyNumber.value =  isNumber(val);
-                          // if(isNumber(val)){
-                          //   if(val.length>2 && val.length < 6){    
-                          //     controller.phoneNo.clear();                      
-                          //     controller.phoneNo.text = val + "-"; 
-                          //     controller.phoneNo.selection.end;
-                          //     controller.myFocusNode.requestFocus();
-                            
-                          //     // controller.update();
-                          //     // 
-                          //   }
-                          // }
-                          // print(controller.onlyNumber.value);
+                          controller.onlyNumber.value =  isNumber(val); 
+                          if(controller.onlyNumber.value){
+
+                          }                                               
                           controller.update();
                           controller.getVaild();
                           
@@ -92,14 +88,47 @@ class LoginView extends GetView<LoginController>{
                             controller.getVaildFalse();
                         }
                       },
-                    // if(val.length == 12){
-                    //   controller.getVaild();
+                   
+                  decoration: InputDecoration(
+                    
+                    // prefixIcon: Icon(Icons.location_on, color: ColorCode.black,),
+                    hintText: "Phone Number or Email",
+                       hintStyle: TextStyle(
+                  color: ColorCode.ligthGray,
+                  fontWeight: FontWeight.w700
+                ), 
+                    focusedBorder: MainBorder(),
+                    border: MainBorder(),
+                    enabledBorder: MainBorder(),
+                  ),
+                ),
+              ): 
+              Padding(
+                 padding:  EdgeInsets.symmetric(
+                  vertical: 10.r, 
+                  horizontal: 15.r
+                ),
+                child: TextFormField(
+                  style: TextFieldStyle(),
+                  controller: controller.phoneNo,                  
+                  autocorrect: true,
+                  keyboardType: TextInputType.name,
+                
+                  onChanged: (val){
+                       if(val.isNotEmpty){
+                          controller.onlyNumber.value =  isNumber(val); 
+                          if(controller.onlyNumber.value){
 
-                    // }
-                    // else{
-                    //     controller.getVaildFalse();
-                    // }
-                  // },
+                          }                                               
+                          controller.update();
+                          controller.getVaild();
+                          
+                        }
+                        else{
+                            controller.getVaildFalse();
+                        }
+                      },
+                   
                   decoration: InputDecoration(
                     
                     // prefixIcon: Icon(Icons.location_on, color: ColorCode.black,),
@@ -116,8 +145,7 @@ class LoginView extends GetView<LoginController>{
               ),
               
              
-              // FillBtn(ontap: (){}, text: "Confirm Address",
-              // Bgcolor: ColorCode.darkGray,),
+              
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -151,7 +179,8 @@ class LoginView extends GetView<LoginController>{
               {
                 if(controller.phoneVaild.value ){
                   return FillBtn(ontap: (){
-                      Get.toNamed(Routes.LOGINOTP) ;
+                    controller.SignInApi(context);
+                      // Get.toNamed(Routes.LOGINOTP) ;
                   }, text: "Log in"
               ) ;
                 }
@@ -170,8 +199,11 @@ class LoginView extends GetView<LoginController>{
             ],
           ),
         ),
-      ),
+      ) ; 
+        },
+      )
     ),
+    
     // ),
    );
 
@@ -179,8 +211,10 @@ class LoginView extends GetView<LoginController>{
 
 bool isNumber(String input) {
   print(input);
-  final pattern = r'^-?[0-9]+$';
+  final pattern = r'^-?[0-9, -]+$';
   final regExp = RegExp(pattern);
+  //  print(regExp.hasMatch(input));
   return regExp.hasMatch(input);
 }
+ 
 }
