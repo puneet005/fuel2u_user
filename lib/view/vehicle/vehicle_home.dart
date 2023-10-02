@@ -35,43 +35,48 @@ class _VehicleHomeState extends State<VehicleHome> {
             init: VehicleController(),
             initState: (_) {},
             builder: (_) {
-              return Container(
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.h, vertical: 10.h),
-                      child: ListView(children: [
-                        ImageLogoWithRigthIcon(
-                            icon: InkWell(
-                          onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
-                          child: Image.asset(
-                            "assets/icons/mytruck.png",
-                            width: 50,
+              return RefreshIndicator(
+                            onRefresh: () async{
+                              controller.GetVehicleList();
+                            },
+                child: Container(
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 10.h),
+                        child: ListView(children: [
+                          ImageLogoWithRigthIcon(
+                              icon: InkWell(
+                            onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
+                            child: Image.asset(
+                              "assets/icons/mytruck.png",
+                              width: 50,
+                            ),
+                          )),
+                          SizedBox(
+                            height: 40.h,
                           ),
-                        )),
-                        SizedBox(
-                          height: 40.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "My Vehicles",
-                              style: Heading1(color: ColorCode.darkGray),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        controller.vehicleListLoading.value
-                            ? ListView(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                children: List.generate(
-                                    5, (index) => ShimmerLoading()),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "My Vehicles",
+                                style: Heading1(color: ColorCode.darkGray),
                               )
-                            : VehileList(controller.vehicleList!)
-                      ])));
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          controller.vehicleListLoading.value
+                              ? ListView(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  children: List.generate(
+                                      5, (index) => ShimmerLoading()),
+                                )
+                              : VehileList(controller.vehicleList!)
+                        ]))),
+              );
             }),
       ),
       bottomNavigationBar: Container(
@@ -173,7 +178,7 @@ class _VehicleHomeState extends State<VehicleHome> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            vehicleList[index].image == ""
+                                            vehicleList[index].image == "" ||  vehicleList[index].image == null
                                                 ? Image.asset(
                                                     "assets/images/car_img.png")
                                                 : Image.network(
@@ -185,6 +190,18 @@ class _VehicleHomeState extends State<VehicleHome> {
                                                     height: 35.h,
                                                     width: 60.h,
                                                     fit: BoxFit.fill,
+                                                    loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
                                                   ),
                                             Padding(
                                                 padding: EdgeInsets.symmetric(
@@ -218,8 +235,8 @@ class _VehicleHomeState extends State<VehicleHome> {
                                           children: [
                                             Text(
                                               controller.vehicleList![index]
-                                                          .name ==
-                                                      ""
+                                                          .name == 
+                                                      "" ||  controller.vehicleList![index].name == null
                                                   ? "Name of Vehicle"
                                                   : controller
                                                       .vehicleList![index].name

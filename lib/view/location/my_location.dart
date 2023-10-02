@@ -20,7 +20,7 @@ class MyLocation extends GetView<VehicleController>{
   Widget build(BuildContext context) {
    VehicleController controller = Get.find<VehicleController>(); 
      
-  controller.GetLocationListApi();
+Future.delayed(Duration.zero,() =>  controller.GetLocationListApi());
  return Scaffold(
       body: SafeArea(
         child:GetBuilder<VehicleController>(
@@ -130,7 +130,7 @@ class MyLocation extends GetView<VehicleController>{
 
   LocationList(BuildContext context, List<LocationListModelData>? data ){
       //  VehicleController controller = Get.put(VehicleController());      
-    return data!.isEmpty  || data == null  ? EmptyUi() : ListView(
+    return data == null  || data!.isEmpty  ? EmptyUi() : ListView(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       children: List.generate(data.length, (index) {

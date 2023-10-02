@@ -76,8 +76,8 @@ class _HomeViewState extends State<HomeView> {
       ),
       navBarStyle:
       NavBarStyle.style6,
-
-
+    
+    
     ),
       // body: PersistentTabView(
       //     context,

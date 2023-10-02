@@ -18,35 +18,40 @@ class NotAvaiableArea extends GetView<SignUpController>{
 
   @override
   Widget build(BuildContext context) {
-     Get.lazyPut<SignUpController>(() => SignUpController());
+    //  Get.lazyPut<SignUpController>(() => SignUpController());
     // TODO: implement build
-   return Scaffold(
-    body: GestureDetector(
-          onTap: (){
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-      child: SingleChildScrollView (
-        child: Padding(
-          padding:  EdgeInsets.symmetric(
-                horizontal: 15.h
-              ),
-          child: Form(
-            key: controller.phoneFormKey,
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 50.h,),
-                 ImageLogo(),
-                SizedBox(height: 40.h,), 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text("2U Fuel is not in your area yet",
-                      textAlign: TextAlign.center, style: Heading1(
-                        
-                        color: ColorCode.darkGray
+    SignUpController controller = Get.put(SignUpController());
+   return GetBuilder(
+     init: SignUpController(),
+     initState: (_) {},
+     builder: (_) {
+       return Scaffold(
+       body: GestureDetector(
+             onTap: (){
+                 FocusManager.instance.primaryFocus?.unfocus();
+               },
+         child: SingleChildScrollView (
+           child: Padding(
+             padding:  EdgeInsets.symmetric(
+                   horizontal: 15.h
+                 ),
+             child: Form(
+               key: controller.phoneFormKey,
+               child: Column(
+                 // mainAxisAlignment: MainAxisAlignment.center,
+                 // crossAxisAlignment: CrossAxisAlignment.center,
+                 children: [
+                   SizedBox(height: 50.h,),
+                    ImageLogo(),
+                   SizedBox(height: 40.h,), 
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Expanded(
+                         child: Text("2U Fuel is not in your area yet",
+                         textAlign: TextAlign.center, style: Heading1(
+                           
+                           color: ColorCode.darkGray
                       ),
                       maxLines: 2,),
                     )
@@ -131,44 +136,50 @@ class NotAvaiableArea extends GetView<SignUpController>{
       ),
     ),
     bottomNavigationBar: Container(
-      height: Get.height/4,
-      child: Column(
-        children: [
-           Padding(
-          padding:  EdgeInsets.symmetric(
-            horizontal: 20.h
-          ),
-                child:  FillBtn(ontap: (){
-                  if(controller.phoneVaild.value){
-                    controller.NoFuelApi(context);
-
-                  }
-                }, text: "Notify Me")
-                
-
-                
-              ),
-              SizedBox(height: 20.h,),
+          height: Get.height/4,
+          child: Column(
+            children: [
                Padding(
-          padding:  EdgeInsets.symmetric(
-            horizontal: 20.h
-          ),
-                child: BorderBtn(ontap: (){
-                   Get.toNamed(Routes.SIGNUP);
-                }, text: "No Thanks"),
+              padding:  EdgeInsets.symmetric(
+                horizontal: 20.h
               ),
-             
-              // SizedBox(height: 40.h,),
-              //  Padding(padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
-              //   ),
-          
-        ],
-      )
-      ,
-    ),
+                    child:  FillBtn(ontap: (){
+                      if(controller.phoneVaild.value){
+                        controller.NoFuelApi(context);
+
+                      }
+                    
+                    },
+                    Bgcolor:  controller.phoneVaild.value ? ColorCode.orange : ColorCode.ligthGray,
+                     text: "Notify Me")
+                    
+
+                    
+                  ),
+                  SizedBox(height: 20.h,),
+                   Padding(
+              padding:  EdgeInsets.symmetric(
+                horizontal: 20.h
+              ),
+                    child: BorderBtn(ontap: (){                      
+                       Get.toNamed(Routes.SIGNUP);
+                    }, text: "No Thanks"),
+                  ),
+                 
+                  // SizedBox(height: 40.h,),
+                  //  Padding(padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
+                  //   ),
+              
+            ],
+          )
+          ,
+        )
+  
     // ),
    );
 
+     },
+   );
   }
 
 }

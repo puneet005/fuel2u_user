@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fuel2u_user/model/add_location_model.dart';
 import 'package:fuel2u_user/model/location_list_model.dart';
+import 'package:fuel2u_user/model/order/card_detail_model.dart';
 import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/model/vehicle/vehicle_list_model.dart';
 import 'package:fuel2u_user/resources/session_manager.dart';
@@ -15,6 +16,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
+import 'login_controller.dart';
 
 
 class VehicleController extends GetxController {
@@ -35,29 +38,39 @@ class VehicleController extends GetxController {
   final cardNumber = ''.obs;
   final expiryDate = ''.obs;
   final cardHolderName = ''.obs;
+  final cardNameCtrl = TextEditingController();
+  final cardNumberCtrl = TextEditingController();
+  final expDataCtrl = TextEditingController();
+  final cvvCtrl = TextEditingController();
+  final cardzipCodeCtrl = TextEditingController();
   final cvvCode = ''.obs;
   final zipCode = ''.obs;
   final isCvvFocused = false.obs;
   OutlineInputBorder? border;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+
+
+ 
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     GetVehicleList();
-    Future.delayed(Duration(seconds: 3), () {
-      emptyVehicleList.value = !emptyVehicleList.value;
-      locationList.value = false;
-       paymentdataloading.value = false;
-      update();
-    });
+    // Future.delayed(Duration(seconds: 3), (
+    //   emptyVehicleList.value = !emptyVehicleList.value;
+    //   locationList.value = false;
+    //    paymentdataloading.value = false;
+    //   update();
+    // });
      border = const OutlineInputBorder(
       borderRadius: BorderRadius.zero,
       borderSide: BorderSide(
         color: ColorCode.orange,
       ),
     ); 
+    GetStateList();
   }
 
   addressFormCheck(){
@@ -81,14 +94,14 @@ class VehicleController extends GetxController {
  
 //  }
 
-  void setCardDetails() {
-    cardNumber.value = "4222222222222222";
-expiryDate.value = "12/24";
-cardHolderName.value = "Card Name";
-  cvvCode.value = "123";
+//   void setCardDetails() {
+//     cardNumber.value = "4222222222222222";
+// expiryDate.value = "12/24";
+// cardHolderName.value = "Card Name";
+//   cvvCode.value = "123";
 
 
-  }
+//   }
    void cleanAllData() {
     homename.clear();
 cityCtrl.clear();
@@ -99,14 +112,17 @@ zipCodeCtrl.clear();
 
   }
 
-  // Api Calling Block
- SessionManager pref = SessionManager();
-  final vehicleListLoading = true.obs;
+// Api Calling Block
+SessionManager pref = SessionManager();
+final vehicleListLoading = true.obs;
 List<VehicleListModelData>? vehicleList;
 var selectVehicleId;
 Future<void> GetVehicleList() async{
-   try {
-      String? token = await pref.getAccessToken();      
+  //  try {
+      String? token = await pref.getAccessToken(); 
+      if(token == null || token == ""){
+       token = oneTimeToken;
+      }     
       log(ApiUrls.vehicles);     
       http.Response response = await http.get(
       Uri.parse(ApiUrls.vehicles),
@@ -124,23 +140,24 @@ Future<void> GetVehicleList() async{
           vehicleListLoading.value = false;
          VehicleListModel res = VehicleListModel.fromJson(json.decode(response.body));
          vehicleList = res.data;
-         update();     
+         update();
+              
       } 
       else{
         vehicleListLoading.value = false;
         update();       
       }
-  } catch (e) {
-     vehicleListLoading.value = false;
-        update();
-     log(e.toString());
+  // } catch (e) {
+  //    vehicleListLoading.value = false;
+  //       update();
+  //    log(e.toString());
     
-    // hideLoader(loader);
-     ToastUi(e.toString(), 
-     bgColor: ColorCode.red,
-     textColor: ColorCode.white,
-     );  
-    }
+  //   // hideLoader(loader);
+  //    ToastUi(e.toString(), 
+  //    bgColor: ColorCode.red,
+  //    textColor: ColorCode.white,
+  //    );  
+  //   }
    }
 
 
@@ -151,7 +168,7 @@ Future<bool> _handleLocationPermission() async {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-     
+      permission = await Geolocator.requestPermission();
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -171,16 +188,23 @@ Future<bool> _handleLocationPermission() async {
   String? _currentAddress;
   Position? currentPosition;
   final  usecurrentLoading = false.obs;
-   Future<void> getCurrentPosition() async {
+   Future<void> getCurrentPosition(bool userLive) async {
     
     // update();
+    log("Get Location Permission");
     final hasPermission = await _handleLocationPermission();
-    if (!hasPermission) return;
+    log(hasPermission.toString());
+    if (!hasPermission) {
+
+    };
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
            currentPosition = position;
            update();
            log(position.toString());
+            if(userLive){
+            getAddressFromLatLng(position);
+        }
       // _getAddressFromLatLng(_currentPosition!);
     }).catchError((e) {
       debugPrint(e);
@@ -214,7 +238,11 @@ Future<bool> GetStateList() async {
   try {
      isLoading.value = true;
       // update();
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken(); 
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }
+    
       log(ApiUrls.states);
       http.Response response = await http.get(
       Uri.parse(ApiUrls.states),
@@ -225,8 +253,11 @@ Future<bool> GetStateList() async {
       }).timeout(Duration(seconds: 30));
       log(response.body);
       if (response.statusCode == 200) {
-      log("states Api Response=>> " + (response.body).toString());
+      stateList =  null;
+      stateCodeValue = null;
+      log("states Api Response=>> \n" + (response.body).toString());
          StateListModel res = StateListModel.fromJson(json.decode(response.body));
+        
          stateList = res.data!;
          isLoading.value = false;
          update();
@@ -257,6 +288,9 @@ Future<bool> GetStateList() async {
       
       Overlay.of(context).insert(loader);
         String? token = await pref.getAccessToken(); 
+        if(token == null || token == ""){
+       token = oneTimeToken;
+      }
       // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
        var map = <String, dynamic>{};
       map['name']= homename.text.trim();
@@ -323,7 +357,10 @@ Future<bool> GetStateList() async {
   try {
      isLocationLoading.value = true;
       update();
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken(); 
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }     
       log(ApiUrls.locations);
       http.Response response = await http.get(
       Uri.parse(ApiUrls.locations),
@@ -337,6 +374,7 @@ Future<bool> GetStateList() async {
       log("Location List Response =>>" + (response.body).toString());
          LocationListModel res = LocationListModel.fromJson(json.decode(response.body));
          locationListData = res.data!;
+         
          isLocationLoading.value = false;
          update();
          return true;
@@ -349,7 +387,7 @@ Future<bool> GetStateList() async {
   } catch (e) {
      isLocationLoading.value = false;
     //  update();
-    //  log(e.toString());
+     log(e.toString());
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
@@ -364,7 +402,10 @@ Future<bool> EditStateList(LocationListModelData locationDetails) async {
   try {
      isLoading.value = true;
       // update();
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
       log(ApiUrls.states);
       http.Response response = await http.get(
       Uri.parse(ApiUrls.states),
@@ -424,6 +465,9 @@ addressFormValid.value = true;
       
       Overlay.of(context).insert(loader);
         String? token = await pref.getAccessToken(); 
+        if(token == null || token == ""){
+       token = oneTimeToken;
+      }
       // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
        var map = <String, dynamic>{};
       map['id'] = id;
@@ -486,7 +530,10 @@ Future<bool> DeleteLocationApi(BuildContext context, int id) async {
    OverlayEntry loader = overlayLoader(context);
   try{
   Overlay.of(context).insert(loader);
-  String? token = await pref.getAccessToken();   
+  String? token = await pref.getAccessToken(); 
+  if(token == null || token == ""){
+       token = oneTimeToken;
+      }  
     http.Response response = await http.delete(
       Uri.parse("${ApiUrls.locations}/$id"),
       headers: {
@@ -517,6 +564,266 @@ Future<bool> DeleteLocationApi(BuildContext context, int id) async {
      return false;
     }
    }
+// var stoken ="sk_test_51NYiLjSGeTgiAIfwBMCJTK9pg8LeZ7OgppVpAifsEnRsArJ0xeatTbWzefXZkSVUf4PCOWR3aXSBnAGv8zzRJeHY00jHJUxChD";
+
+// check Card Button Ui Color 
+final addcardvaildvalue =false.obs;
+void addCardVaild(){
+
+  if(cardNumberCtrl.text.length == 19 && expDataCtrl.text.length == 5 && cvvCtrl.text.length == 3 && zipCodeCtrl.text.length == 5){
+  addcardvaildvalue.value = true;
+  update();
+  }
+  else{
+    addcardvaildvalue.value = false;
+    update();
+  }
+}
+//  Add Card Api
+Future<bool> SendCardDetailsApi(BuildContext context) async {
+    OverlayEntry loader = overlayLoader(context);
+    // try {
+      
+      Overlay.of(context).insert(loader);
+        String? token = await pref.getAccessToken(); 
+        if(token == null || token == ""){
+       token = oneTimeToken;
+      }
+      // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
+       var map = <String, dynamic>{};
+      var date = expDataCtrl.text.split("/");
+      map['card_name'] = cardNameCtrl.text;
+      map['card_number'] = cardNumberCtrl.text.replaceAll("-", " ").removeAllWhitespace;
+      map['exp_month'] = date[0];
+      map['exp_year'] = date[1];
+      map['cvc'] = cvvCtrl.text.trim();
+      map['zip'] = zipCodeCtrl.text.trim();
+      log(ApiUrls.paymentMethods);
+      log(map.toString());
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.paymentMethods),
+      body: jsonEncode(map),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      // ignore: unused_local_variable
+      log("paymentMethods Api Response=>> " +
+      json.decode(response.body).toString());
+      var data = json.decode(response.body);
+      if (response.statusCode == 200) {
+      hideLoader(loader);          
+     AddLocationModel res = AddLocationModel.fromJson(json.decode(response.body));
+    if(res.status == true){
+       GetCardList();
+     
+      return true;
+    }
+    else{      
+     hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+     return false;
+    }
+  } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+     return false;
+     }     
+  // } catch (e) {
+  //   hideLoader(loader);
+  //   hideLoader(loader);
+  //    ToastUi(e.toString(), 
+  //    bgColor: ColorCode.red,
+  //    textColor: ColorCode.white,
+  //    );  
+  //    return false;
+  //   }
+
+  }
+
+// Clear add Card Form text 
+cleanAddCardData(){
+  cardNameCtrl.clear();
+  cardNumberCtrl.clear();
+  expDataCtrl.clear();
+  cvvCtrl.clear();
+  zipCodeCtrl.clear();
+  update();
+}
+// Set Data in Edit Card Filed
+
+void setCardDataInEdit(){
+  expDataCtrl.text = "${editCardData?.card!.expMonth}/${editCardData?.card!.expYear}";
+  zipCodeCtrl.text = "${editCardData?.billingDetails!.address!.postalCode}";
+  cardNameCtrl.text = "${editCardData?.metadata!.name}";
+  update();
+}
 
 
+  // Get Card Details
+  List<CardDetailModelData>? cardDetails;
+  CardDetailModelData? editCardData;
+  CardDetailModelData? selectedCardDetails;
+  final cardLoading = true.obs;
+  Future<void> GetCardList() async {
+    try {
+      cardLoading.value = true;
+      update();
+      String? token = await pref.getAccessToken();
+      if(token == null || token == ""){
+       token = oneTimeToken;
+      }
+      log(ApiUrls.paymentMethods);
+      http.Response response =
+          await http.get(Uri.parse(ApiUrls.paymentMethods), headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      var data = json.decode(response.body);
+      log(response.body);
+      if (response.statusCode == 200) {
+        log("payment-methods Api Response=>> " + (response.body).toString());
+        CardDetailModel res = CardDetailModel.fromJson(data);
+        if (data['status'] == true) {
+          cardDetails = res.data!;
+        }
+        cardLoading.value = false;
+        update();
+      } else {
+        ToastUi(
+          data['message'].toString(),
+          bgColor: ColorCode.red,
+          textColor: ColorCode.white,
+        );
+      }
+      cardLoading.value = false;
+      update();
+    } catch (e) {
+      log(e.toString());
+      ToastUi(
+        e.toString(),
+        bgColor: ColorCode.red,
+        textColor: ColorCode.white,
+      );
+      cardLoading.value = false;
+      update();
+    }
+  }
+
+  // Delete Card Detail APi
+
+  Future<void> DeleteCardDetailsApi(BuildContext context, String id) async {
+    OverlayEntry loader = overlayLoader(context);
+    try {
+   
+       Overlay.of(context).insert(loader);
+
+      String? token = await pref.getAccessToken();
+      if(token == null || token == ""){
+       token = oneTimeToken;
+      }
+      log(ApiUrls.paymentMethods);
+      http.Response response =
+          await http.delete(Uri.parse("${ApiUrls.paymentMethods}/$id"), headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      var data = json.decode(response.body);
+      log(response.body);
+      if (response.statusCode == 200) {
+        log("payment-methods Api Response=>> " + (response.body).toString());
+        if (data['status'] == true) {
+          GetCardList();
+          hideLoader(loader);          
+          Navigator.of(context).pop();
+        }
+        hideLoader(loader);
+        // cardLoading.value = false;
+        // update();
+      } else {
+        hideLoader(loader);
+        ToastUi(
+          data['message'].toString(),
+          bgColor: ColorCode.red,
+          textColor: ColorCode.white,
+        );
+      }
+      // cardLoading.value = false;
+      update();
+    } catch (e) {
+      hideLoader(loader);
+      log(e.toString());
+      ToastUi(
+        e.toString(),
+        bgColor: ColorCode.red,
+        textColor: ColorCode.white,
+      );
+      // cardLoading.value = false;
+      // update();
+    }
+  }
+
+
+// update Card Name Api
+  Future<void> updateCardName(BuildContext context) async {
+     OverlayEntry loader = overlayLoader(context);
+    try {
+       Overlay.of(context).insert(loader);
+      String? token = await pref.getAccessToken();
+      if(token == null || token == ""){
+       token = oneTimeToken;
+      }
+      var map = <String, dynamic>{};
+      map['card_name'] = cardNameCtrl.text;
+      log(ApiUrls.paymentMethods + "/${editCardData?.id}");
+      http.Response response =
+          await http.post(Uri.parse("${ApiUrls.paymentMethods}/${editCardData?.id}"), 
+          body: map,
+        headers: {
+        // HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      var data = json.decode(response.body);
+      log(response.body);
+      if (response.statusCode == 200) {
+        log("payment-methods Api Response=>> " + (response.body).toString());
+        if (data['status'] == true) {
+          GetCardList();
+          hideLoader(loader);          
+          Navigator.of(context).pop();
+        }
+        hideLoader(loader);
+        // cardLoading.value = false;
+        // update();
+      } else {
+        hideLoader(loader);
+        ToastUi(
+          data['message'].toString(),
+          bgColor: ColorCode.red,
+          textColor: ColorCode.white,
+        );
+      }
+      // cardLoading.value = false;
+      update();
+    } catch (e) {
+      hideLoader(loader);
+      log(e.toString());
+      ToastUi(
+        e.toString(),
+        bgColor: ColorCode.red,
+        textColor: ColorCode.white,
+      );
+    }
+  }
 }

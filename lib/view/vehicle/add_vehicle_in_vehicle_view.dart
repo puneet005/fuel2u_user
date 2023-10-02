@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/add_vehicle_controller.dart';
+import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
 // import 'package:fuel2u_user/controller/bottom_bar_controller.dart';
 import 'package:fuel2u_user/model/vehicle/car_model.dart';
@@ -119,7 +120,7 @@ controller. MakeApi();
                       controller.makeValue= newValue;
                       controller.update();                                         
                       controller.carModelValue  = null;
-                      // controller.updateBrand(newValue.toString());/
+                      
                       controller.checkAllFieldDone();
                       controller.ModelApi();
                       // log(controller.carModelValue.toString());
@@ -165,7 +166,7 @@ controller. MakeApi();
                     children: [
                       CircularProgressIndicator()
                     ],
-                  ) :DropdownButtonFormField<CarModelData>(
+                  ) :DropdownButtonFormField<CarModelData>( 
                  
                     onChanged: controller.carmodelList == null ? null: (newValue) {
                       controller.carModelValue = newValue;
@@ -371,9 +372,16 @@ controller. MakeApi();
                         : FillBtn(
                             ontap: () async{
                               VehicleController vehicleController = Get.put(VehicleController());
+                              OrderController orderController = Get.put(OrderController());
                                bool res = await controller.AddVehicleApi(context);
                              if(res){
                               vehicleController.GetVehicleList();
+                              if(orderController.newOrderCretating.value = true){
+                                  orderController.GetVehicleList();  
+                                  orderController.newOrderCretating.value = false;                                
+                                  controller.update();
+                              }
+                 
                               Navigator.of(context).pop();
                              }
                            

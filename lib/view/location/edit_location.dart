@@ -30,7 +30,7 @@ class _EditLocationState extends State<EditLocation> {
     // VehicleController controller = Get.find<VehicleController>();
     controller.cleanAllData();
     controller.EditStateList(widget.locationDetails);
-    controller.getCurrentPosition();
+    controller.getCurrentPosition(false);
     // controller.setEditData(widget.locationDetails);
   }
 
@@ -329,31 +329,43 @@ class _EditLocationState extends State<EditLocation> {
                                             style: Heading3Regular(),
                                           ),
                                           actions: <Widget>[
-                                            ElevatedButton(
-                                              // FlatButton widget is used to make a text to work like a button
-                                              // textColor: Colors.black,
-                                              onPressed: () {
-                                                Navigator.of(ctx).pop();
-                                              }, // function used to perform after pressing the button
-                                              child: Text('CANCEL'),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: ElevatedButton(
+                                                // FlatButton widget is used to make a text to work like a button
+                                                // textColor: Colors.black,
+                                                onPressed: () {
+                                                  Navigator.of(ctx).pop();
+                                                }, // function used to perform after pressing the button
+                                                child: Text('CANCEL'),
+                                              ),
                                             ),
-                                            ElevatedButton(
-                                              // textColor: Colors.black,
-                                              onPressed: () async {
-                                                Navigator.of(ctx).pop();
-                                                bool res = await controller
-                                                    .DeleteLocationApi(
-                                                        context,
-                                                        widget.locationDetails
-                                                            .id!);
-                                                if (res) {
-                                                  controller
-                                                      .GetLocationListApi();
-                                                  Navigator.of(context).pop();
-                                                }
-                                              },
-                                              child: Text('DELETE'),
+                                            SizedBox(width: 20.h,),
+                                            Expanded(
+                                              flex: 2,
+                                              child: ElevatedButton(
+                                                // textColor: Colors.black,
+                                                onPressed: () async {
+                                                  Navigator.of(ctx).pop();
+                                                  bool res = await controller
+                                                      .DeleteLocationApi(
+                                                          context,
+                                                          widget.locationDetails
+                                                              .id!);
+                                                  if (res) {
+                                                    controller
+                                                        .GetLocationListApi();
+                                                    Navigator.of(context).pop();
+                                                  }
+                                                },
+                                                child: Text('CONFIRM'),
+                                              ),
                                             ),
+                                            ],
+                                            )
                                           ],
                                         ),
                                       );

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -13,16 +15,16 @@ class DriveRating extends GetView<OrderController>{
   @override
   Widget build(BuildContext context) {
    return Scaffold(
-  appBar:  AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: 100,
-          backgroundColor: ColorCode.white,
-          title:  ImageLogoWithRigthIcon(icon: InkWell(
-                      onTap: ()=> Get.toNamed(Routes.ALLTRUCKINMAP),
-                      child: Image.asset("assets/icons/mytruck.png", width: 50,),
-                    )),
-          elevation: 0,
-        ),
+  // appBar:  AppBar(
+  //         automaticallyImplyLeading: false,
+  //         toolbarHeight: 100,
+  //         backgroundColor: ColorCode.white,
+  //         title:  ImageLogoWithRigthIcon(icon: InkWell(
+  //                     onTap: ()=> Get.toNamed(Routes.ALLTRUCKINMAP),
+  //                     child: Image.asset("assets/icons/mytruck.png", width: 50,),
+  //                   )),
+  //         elevation: 0,
+  //       ),
     body:  
     
     GetBuilder<OrderController>(
@@ -39,11 +41,29 @@ class DriveRating extends GetView<OrderController>{
                               horizontal: 15.h, vertical: 10.h),
                 child: Column(
                   children: [
-                    SizedBox(height: 40.h,),
+                    SizedBox(height: 20.h,),
+                     ImageLogoWithRigthIcon(
+                              back: InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);                                 
+                                },
+                                child: SvgPicture.asset(
+                                  "assets/icons/backarrow.svg",
+                                  width: 30,
+                                ),
+                              ),
+                              icon: InkWell(
+                                 onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
+                                child: Image.asset(
+                                  "assets/icons/mytruck.png",
+                                  width: 50,
+                                ),
+                              )),
+                          SizedBox(height: 20.h,),
                       Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Rate your Driver <Name>", style: Heading1(
+                                Text("Rate your Driver ${controller.orderDetailsData!.driver!.firstName} ${controller.orderDetailsData!.driver!.lastName}", style: Heading1(
                                   color: ColorCode.darkGray
                                 ),)
                               ],
@@ -52,7 +72,7 @@ class DriveRating extends GetView<OrderController>{
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Order Number: XXXXXX",style: Heading3Regular(
+                          Text("Order Number: ${controller.orderDetailsData!.orderNumber}",style: Heading3Regular(
                                   
                                   color: ColorCode.darkGray
                                 ), )
@@ -62,18 +82,21 @@ class DriveRating extends GetView<OrderController>{
                        Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Delivery Date: YYYY-MM-DD",
-                          style: Heading3Regular(
-                                  
+                          Text("Delivery Date: ${controller.orderDetailsData!.deliveryDate}",
+                          style: Heading3Regular(                                  
                                   color: ColorCode.darkGray
                                 ), )
                         ],
                       ),
                       SizedBox(height: 20.h,),
+                      controller.orderDetailsData!.driver!.image == null|| controller.orderDetailsData!.driver!.image == "" ?
                       CircleAvatar(
                         radius: 40,
                         backgroundImage: AssetImage("assets/images/driver_img.png"),
-                      ),
+                      ): CircleAvatar(
+                        radius: 40,
+                        backgroundImage: NetworkImage("${ApiUrls.domain}${controller.orderDetailsData!.driver!.image}"),
+                      ) ,
                       SizedBox(height: 30.h,),
                       Container(
                         child: Row(
@@ -96,35 +119,9 @@ class DriveRating extends GetView<OrderController>{
                     ) : Icon(Icons.star_border,
                     size: 48,
                      color: ColorCode.orange,)
-                    
-                      );
+                    );
                     }
-                    )
-              
-                    //               RatingBar.builder(
-                    //    initialRating: 0,
-                    //    minRating: 1,
-                    //    direction: Axis.horizontal,
-                    //    allowHalfRating: false,
-                    //    itemCount: 5,
-                    //    glow: false,
-                    //    itemSize: 50,
-                    //    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    //    itemBuilder: (context, _) => Icon(
-                    //      Icons.star,
-                    //      color: ColorCode.orange,
-                    //     //  size: 30,
-                    //    ),
-                    //    onRatingUpdate: (rating) {
-                    //     // int rate =  
-                    //   //  controller.rateStar.value = int.parse(rating.toString());
-                    //    controller.rateStar.value = rating.toInt();
-                    //    controller.update();
-              
-                    //    },
-                    // )
-                      
-                    ,
+                    ),
                   ),
                 ),
                 SizedBox(height: 30.h,),
@@ -137,13 +134,7 @@ class DriveRating extends GetView<OrderController>{
                     keyboardType: TextInputType.name,
                     // validator: (val) {},
                     onChanged: (val){ 
-                     
-                      // if(val.isNotEmpty){
-                         
-                          controller.checkRateing();
-                      // }
-                     
-              
+                      controller.checkRateing();                            
                     },
                     decoration:  InputDecoration(
                       hintText: "Comments",
@@ -164,11 +155,9 @@ class DriveRating extends GetView<OrderController>{
                     child: FillBtn(ontap: (){
                      
                       if(controller.israting.value){
-                         controller.updateReview();
-                        
-                      }
-                      
-                                
+                        controller.GetRateingOnOrder(context);
+                        //  controller.updateReview();                        
+                      }                                                      
                     }, text: "SUBMIT",
                     Bgcolor: controller.israting.value ? ColorCode.orange : ColorCode.ligthGray,
                     ),
@@ -178,7 +167,10 @@ class DriveRating extends GetView<OrderController>{
                    padding: EdgeInsets.symmetric(
                               horizontal: 15.h),
                     child: BorderBtn(ontap: (){
-                       Get.offAllNamed(Routes.HOME);
+                      controller.rateStar.value = 0;
+                      controller.commentCtrl.clear();
+                      controller.update();
+                     Navigator.of(context).pop();
                     }, text: "No Thanks"),
                   ),
                    Padding( // this is new

@@ -99,7 +99,11 @@ controlller.getotpNotVaild();
             mainAxisAlignment: MainAxisAlignment.center,
           children: [
              Text("Didn’t receive code? ", style: HeadingSub2()),
-             Text("Send it again.", style: HeadingRobotoBold(),)
+             InkWell(
+              onTap: (){
+                  controlller.SignInApi(context); 
+              },
+              child: Text("Send it again.", style: HeadingRobotoBold(),))
           ],
           ),
 

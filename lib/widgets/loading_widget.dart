@@ -27,7 +27,10 @@ class ShimmerLoading extends StatelessWidget {
                            child: Container(
                              decoration: BoxDecoration(
                               color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10)     
+                               borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(24)
+                       )
+                            // borderRadius: BorderRadius.circular(10)     
                           ),
                              
                              height: 100,

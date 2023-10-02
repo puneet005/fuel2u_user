@@ -27,6 +27,7 @@ class AddPromoCode extends GetView<PremiunController> {
                   child: SizedBox(
                     height: Get.height / 1.1,
                     child: Form(
+                      key: controller.promoCodeFormKey,
                       child: Column(children: [
                         SizedBox(
                           height: 20.h,
@@ -118,8 +119,14 @@ class AddPromoCode extends GetView<PremiunController> {
                         ),
                         Spacer(),
                         FillBtn(
-                            ontap: () {
-                              Get.offAndToNamed(Routes.HOME);
+                            ontap: ()  async{
+                              if(controller.promoCodeFormKey.currentState!.validate()){
+                                 bool res = await controller.UploadPromoCodeAPi(context);
+                                 if(res){
+                                    Get.offAllNamed(Routes.HOME);
+                                 }
+                              }
+                             
                             },
                             text: "SAVE"),
                         SizedBox(

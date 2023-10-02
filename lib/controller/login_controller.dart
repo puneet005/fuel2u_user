@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 import '../model/sign_in_model.dart';
-
+String? oneTimeToken;
 class LoginController extends GetxController {
 
       final phoneNo = TextEditingController();
@@ -87,7 +87,7 @@ Future<void> SignInApi(BuildContext context) async {
        var map = <String, dynamic>{};
        if(onlyNumber.value){
        var mobileNo =  phoneNo.text.trim().replaceAll("-"," ");
-         map['phone_number'] = "+1${mobileNo.removeAllWhitespace}";
+         map['phone_number'] = "${mobileNo.removeAllWhitespace}";
        }
        else{
          map['phone_number'] = phoneNo.text.trim();
@@ -178,7 +178,13 @@ Future<void> SignInApi(BuildContext context) async {
       if (response.statusCode == 200) {
         if(result.status == true){
          loginUserVerfityDetail = result.data!;
-      pref.setAccessToken(loginUserVerfityDetail.accessToken);
+      if(reminderMe.value){
+        pref.setAccessToken(loginUserVerfityDetail.accessToken);
+      }      
+      else{
+        oneTimeToken = loginUserVerfityDetail.accessToken;
+      }
+      log(loginUserVerfityDetail.accessToken.toString());
       hideLoader(loader);   
       Get.offAllNamed(Routes.HOME);
       ToastUi(data['message'].toString(), 

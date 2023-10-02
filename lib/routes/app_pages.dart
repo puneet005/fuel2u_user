@@ -42,6 +42,7 @@ import 'package:get/get.dart';
 
 import '../view/add_vehicle.dart';
 import '../view/order/single_order_in_map.dart';
+import '../view/premium/make_payment.dart';
 import '../view/premium/plan_list.dart';
 import '../view/sign_up/delivery_pincode.dart';
 
@@ -58,7 +59,7 @@ class AppPages{
     GetPage(
       name: _Paths.SPLASH,
       page: () =>  Splash(),
-    ),
+    ),  
     GetPage(
       name: _Paths.WELCOME,
       page: () => Welcome(),
@@ -170,10 +171,10 @@ class AppPages{
       name: _Paths.ALLTRUCKINMAP,
       page: () =>  NearYourTruck(),
     ), 
-    GetPage(
-      name: _Paths.SINGLEORDERINMAP,
-      page: () => SingleOrderViewMap(),
-    ),
+    // GetPage(
+    //   name: _Paths.SINGLEORDERINMAP,
+    //   page: () => SingleOrderViewMap(),
+    // ),
 
     GetPage(
       name: _Paths.DRIVERATEING,
@@ -235,6 +236,11 @@ class AppPages{
     GetPage(
       name: _Paths.SUPPORT,
       page: () => Support(),
+    ),
+
+    GetPage(
+      name: _Paths.MAKEPAYMENT,
+      page: () => MakePayment(),
     ),
 
 

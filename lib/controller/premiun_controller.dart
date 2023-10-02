@@ -3,16 +3,18 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fuel2u_user/model/add_location_model.dart';
 import 'package:fuel2u_user/model/plan_list_model.dart';
+import 'package:fuel2u_user/model/sign_up_model/promocode_model.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
-import 'package:fuel2u_user/view/home.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../resources/session_manager.dart';
 import '../routes/app_pages.dart';
+import 'login_controller.dart';
 
 class PremiunController extends GetxController {
   final selectPlan = 0.obs;
@@ -20,44 +22,8 @@ class PremiunController extends GetxController {
   final promoCodeCtrl = TextEditingController();
   final promoCodeFormKey = GlobalKey<FormState>();
   final isLoading = true.obs;
-
   SessionManager pref = SessionManager();
   List<PlanListModelData>? plansList;
-
-  List<Map<String, dynamic>> planList = [
-    {
-      "name": "Pay as you go",
-      "price": "25",
-      "duration": "Delivery Fee",
-      "featureList": [
-        "No Monthly Fee",
-        "Selected Location based on Availability Only",
-      ]
-    },
-    {
-      "name": "Individual & Family",
-      "price": "25",
-      "duration": "per month",
-      "featureList": [
-        "No Delivery Fee",
-        "Weekly Gas Delivery",
-        "You Choose the Location"
-      ]
-    },
-    {
-      "name": "Business",
-      "price": "50",
-      "duration": "per month",
-      "featureList": [
-        "No Delivery Fee",
-        "Weekly Gas Delivery",
-        "Delivered Directly to Your Company Location",
-        "Unlimited Employees",
-        "Flexible Schedule"
-      ]
-    }
-  ];
-
   @override
   void onInit() {
     super.onInit();
@@ -76,17 +42,19 @@ class PremiunController extends GetxController {
 
   void changePlan(int index) {
     selectPlan.value = index;
-    update();
-  }
+    update(); 
+  } 
   void viewPlan(int index){
     showPlanIndex.value = index;
     update();
 
   }
-
   Future<void> GetPlanListAPi() async {
   try {
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();    
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }  
       var map = <String, dynamic>{};
       map['promocode']= promoCodeCtrl.text.trim();
       log(ApiUrls.plans);
@@ -136,8 +104,11 @@ class PremiunController extends GetxController {
   Future<void> GetPlan(BuildContext context) async {
   
     OverlayEntry loader = overlayLoader(context);
-  try {
-       String? token = await pref.getAccessToken();      
+  // try {
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
       Overlay.of(context).insert(loader);
       var map = <String, dynamic>{};
       map['plan_id']= plansList![selectPlan.value].id;
@@ -164,16 +135,143 @@ class PremiunController extends GetxController {
             Get.toNamed(Routes.BUSINESSFORM);
         }
         else{
+          if(plansList![selectPlan.value].monthlyFee != 0){
+          Get.toNamed(Routes.MAKEPAYMENT);
+          }
+          else{
            Get.toNamed(Routes.ADDVEHICLE);
+          }
         }
-         // calling profile Api
-        //  1
-        // PromocodeModel  res = PromocodeModel.fromJson(data);
+     
 
-        // promoCodeDetail = res.data!;
-        // update();
-        // Get.toNamed(Routes.SELECTPLAN);
+      }
+    
+      //
+  } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );}     
+  // } catch (e) {
+  //    log(e.toString());
+  //   hideLoader(loader);
+  //   hideLoader(loader);
+  //    ToastUi(e.toString(), 
+  //    bgColor: ColorCode.red,
+  //    textColor: ColorCode.white,
+  //    );  
+  //   }
+   }
 
+ //  Update PromoCode Api 
+  PromocodeModelData promoCodeDetail =  PromocodeModelData();
+  Future<bool> UploadPromoCodeAPi(BuildContext context) async {
+    OverlayEntry loader = overlayLoader(context);
+  try {
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
+      Overlay.of(context).insert(loader);
+      var map = <String, dynamic>{};
+      map['promocode']= promoCodeCtrl.text.trim();
+      log(ApiUrls.updatePromocode);
+      log(map.toString());
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.updatePromocode),
+      body: jsonEncode(map),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      // ignore: unused_local_variable
+      var data = json.decode(response.body);
+      log(response.body);
+      if (response.statusCode == 200) {
+         PromocodeModel res = PromocodeModel.fromJson(data);
+          hideLoader(loader);  
+      log("Promo code Api Response=>> " +
+        response.body);
+      hideLoader(loader);       
+      if(res.status ==  true){
+        promoCodeDetail = res.data!;
+        update();
+         ToastUi(data['message'].toString(), 
+     bgColor: Colors.green,
+     textColor: ColorCode.white,
+     );  
+        return true;
+       
+      }
+      else{
+
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      return false;      
+    }
+  } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+     return false;      
+     }  
+        
+  } 
+  catch (e) {
+     log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     ); 
+     return false;       
+    }
+   }
+
+  //  Update Plan
+  Future<void> UpdatePlan(BuildContext context) async {
+  OverlayEntry loader = overlayLoader(context);
+  try {
+       String? token = await pref.getAccessToken();   
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }   
+      Overlay.of(context).insert(loader);
+      var map = <String, dynamic>{};
+      map['plan_id']= plansList![showPlanIndex.value].id;
+      log(ApiUrls.plans);
+      log(map.toString());
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.plans),
+      body: jsonEncode(map),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      // ignore: unused_local_variable
+      var data = json.decode(response.body);
+      log(response.body);
+      if (response.statusCode == 200) {
+      // log("Promo code Api Response=>> " +
+      //   (response.body).toString());
+      hideLoader(loader);       
+      if(data['status'] ==  true){
+        
+     ToastUi(data['message'].toString(), 
+     bgColor: Colors.green,
+     textColor: ColorCode.white,
+     );
+       Navigator.pop(context);
       }
     
       //
@@ -194,6 +292,96 @@ class PremiunController extends GetxController {
      );  
     }
    }
+
+
+
+   // Make Payment Variable and Api
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final cardNameCtrl = TextEditingController();
+  final cardNumberCtrl = TextEditingController();
+  final expDataCtrl = TextEditingController();
+  final cvvCtrl = TextEditingController();
+  final zipCodeCtrl  = TextEditingController();
+
+  final addcardvaildvalue =false.obs;
+void addCardVaild(){
+
+  if(cardNumberCtrl.text.length == 19 && expDataCtrl.text.length == 5 && cvvCtrl.text.length == 3 && zipCodeCtrl.text.length == 5){
+  addcardvaildvalue.value = true;
+  update();
+  }
+  else{
+    addcardvaildvalue.value = false;
+    update();
+  }
+}
+// Api Calling For Make Payment
+Future<bool> SendCardDetailsApi(BuildContext context) async {
+    OverlayEntry loader = overlayLoader(context);
+    // try {
+      
+      Overlay.of(context).insert(loader);
+        String? token = await pref.getAccessToken(); 
+        if(token == null || token == ""){
+       token = oneTimeToken;
+      }
+      // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
+       var map = <String, dynamic>{};
+      var date = expDataCtrl.text.split("/");
+      map['card_name'] = cardNameCtrl.text;
+      map['card_number'] = cardNumberCtrl.text.replaceAll("-", " ").removeAllWhitespace;
+      map['exp_month'] = date[0];
+      map['exp_year'] = date[1];
+      map['cvc'] = cvvCtrl.text.trim();
+      map['zip'] = zipCodeCtrl.text.trim();
+      log(ApiUrls.paymentMethods);
+      log(map.toString());
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.paymentMethods),
+      body: jsonEncode(map),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      // ignore: unused_local_variable
+      log("paymentMethods Api Response=>> " +
+      json.decode(response.body).toString());
+      var data = json.decode(response.body);
+      if (response.statusCode == 200) {
+      hideLoader(loader);          
+     AddLocationModel res = AddLocationModel.fromJson(json.decode(response.body));
+    if(res.status == true){   
+      return true;
+    }
+    else{      
+     hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+     return false;
+    }
+  } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+     return false;
+     }     
+  // } catch (e) {
+  //   hideLoader(loader);
+  //   hideLoader(loader);
+  //    ToastUi(e.toString(), 
+  //    bgColor: ColorCode.red,
+  //    textColor: ColorCode.white,
+  //    );  
+  //    return false;
+  //   }
+
+  }
 }
 
 

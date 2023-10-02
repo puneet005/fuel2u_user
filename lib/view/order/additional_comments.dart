@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
+import 'package:fuel2u_user/routes/app_pages.dart';
 // import 'package:fuel2u_user/routes/app_pages.dart';
 
 import 'package:fuel2u_user/utils/color.dart';
@@ -41,6 +42,7 @@ class AdditionalComments extends GetView<OrderController>{
                       child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                     ),
                       icon: InkWell(
+                         onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                       child: Image.asset("assets/icons/mytruck.png", width: 50,),
                     )),
                     SizedBox(height: 40.h,),
@@ -83,7 +85,7 @@ class AdditionalComments extends GetView<OrderController>{
                 
                    Padding(
                      padding:  EdgeInsets.symmetric(
-                      vertical: 40,
+                      vertical: 20,
                       horizontal: 20.h
                      ),
                      child: FillBtn(

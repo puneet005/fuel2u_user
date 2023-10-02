@@ -4,6 +4,7 @@ import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/image_logo.dart';
@@ -245,12 +246,17 @@ class SignUpView extends GetView<SignUpController>{
                               },
                               
                             ), ),
-                             Text("Accept Terms of Use",  style:  TextStyle(
-                              fontSize: 13.sp,
-                              fontFamily: "RobotoRegular",
-                              color: ColorCode.black,
-                    decoration: TextDecoration.underline,
-                  ),)
+                             InkWell(
+                              onTap: (){
+                                GloballaunchUrl("${ApiUrls.domain}app/terms");
+                              },
+                               child: Text("Accept Terms of Use",  style:  TextStyle(
+                                fontSize: 13.sp,
+                                fontFamily: "RobotoRegular",
+                                color: ColorCode.black,
+                                                 decoration: TextDecoration.underline,
+                                               ),),
+                             )
                     ],
                   ),
                 ),

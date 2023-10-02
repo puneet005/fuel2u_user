@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
+import 'package:fuel2u_user/controller/sign_up_controller.dart';
+import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/order/select_plan.dart';
@@ -15,23 +17,28 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class FuelType extends  GetView<OrderController>{
   const FuelType({super.key});
-  
   @override
   Widget build(BuildContext context) {
+    SignUpController profilecontroller = Get.find<SignUpController>(); 
       return Scaffold(
           body: SafeArea(
-          child:GetBuilder<OrderController>(
+          child:GetBuilder(
         init: OrderController(),
         initState: (_) {},
         builder: (_) {
-              return Container(
+              return  Container(
                 height: Get.height,
                 child: Padding(
                   padding:  EdgeInsets.symmetric(
                     horizontal: 15.h,
                     vertical: 10.h
                   ),
-                  child: ListView(
+                  child: controller.fuelLoaidng.value ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator()
+                      ],
+                    ):ListView(
                     children: [
                       ImageLogoWithRigthIcon(
                         back: InkWell(
@@ -42,6 +49,7 @@ class FuelType extends  GetView<OrderController>{
                         child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                       ),
                         icon: InkWell(
+                           onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                         child: Image.asset("assets/icons/mytruck.png", width: 50,),
                       )),
                       SizedBox(height: 40.h,),
@@ -54,14 +62,10 @@ class FuelType extends  GetView<OrderController>{
                       ],
                       ),
                       SizedBox(height: 30.h,),
-                    controller.fuelLoaidng.value ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator()
-
-                      ],
-                    ):
-                   GridView.builder(
+                    
+                    controller.fuelTypeList!.isEmpty || controller.fuelTypeList == null ? 
+                    Center(child: Text("No Fuel Type"),):
+                    GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.zero,
@@ -73,9 +77,7 @@ class FuelType extends  GetView<OrderController>{
                       mainAxisExtent: 180),
                     itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      // height: 200,
-                     
-
+                      // height: 200,                    
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                       children: [
@@ -84,7 +86,6 @@ class FuelType extends  GetView<OrderController>{
                             controller.selectFuelType = index;
                             controller.selectfuelTypeId = controller.fuelTypeList![index].id;
                             controller.update();
-
                           },
                           child: Container(
                             width: Get.width/4,
@@ -135,7 +136,7 @@ class FuelType extends  GetView<OrderController>{
                     Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("There is a \$20 minimum charge for fuel amount", style: Heading5Medium(
+                      Text("There is a \$${controller.minFuelType} minimum charge for fuel amount", style: Heading5Medium(
                         color: ColorCode.black,
                         fbold: FontWeight.normal
                       ),)
@@ -147,7 +148,7 @@ class FuelType extends  GetView<OrderController>{
                       children: [
                         GestureDetector(
                                                             onTap: (){
-                                                              controller.fuelQuantity = "I only want \$20 of fuel";
+                                                              controller.fuelQuantity = "I only want \$${controller.minFuelType} of fuel";
                                                               controller.update();
                                                               controller.changeFuelAmount(1);
                                                               // controller.changePlan(index);
@@ -162,8 +163,8 @@ class FuelType extends  GetView<OrderController>{
                                                               ),
                                                             ),
                                                           ),
-                            SizedBox(width: 10.h,),
-                                                            Text("I only want \$20 of fuel", style: Heading5(
+                        SizedBox(width: 10.h,),
+                        Text("I only want \$${controller.minFuelType} of fuel", style: Heading5(
                         color: ColorCode.black,
                         fbold: FontWeight.w600
                         
@@ -191,8 +192,7 @@ class FuelType extends  GetView<OrderController>{
                                                               ),
                                                             ),
                                                           ),
-                                                           SizedBox(width: 10.h,),
-                        
+                                                           SizedBox(width: 10.h,),                      
                                                             Text("Fill the tank                   ", 
                                                             style: Heading5(
                         color: ColorCode.black,
@@ -211,23 +211,37 @@ class FuelType extends  GetView<OrderController>{
                 Bgcolor:  controller.selectFuelType != -1 && controller.selectFuelAmount != 0 ?  ColorCode.orange : ColorCode.ligthGray,
                 ontap: (){
                   if(controller.selectFuelType != -1 && controller.selectFuelAmount != 0){
-                     PersistentNavBarNavigator
+                                           controller.selectPlan = -1;
+                                           controller.update();
+                    controller.ProfileApi(context).then((value) {
+                      
+                      if(controller.profileData!.subscription!.planId == 2){
+                          controller.GetPlan(context, controller.profileData!.subscription!.planId!);
+                      }
+                      else{
+                        PersistentNavBarNavigator
                                                       .pushNewScreen(
                                                     context,
-                                                    screen: SelectPlanOnOrder(),
+                                                    screen:  SelectPlanOnOrder(),
                                                     withNavBar:
                                                     true, // OPTIONAL VALUE. True by default.
                                                     pageTransitionAnimation:
                                                     PageTransitionAnimation
                                                         .cupertino,
-                                                  );
+                      );
+
+                      }
+                       
+
+                    });
+
+                      // Future.delayed(Duration.zero,()=> profilecontroller.ProfileApi(context));
+                    // 
                     // Get.toNamed(Routes.SELECTPLANONORDER);
                   }                 
                 }, text: "Next"),
             ),
-               SizedBox(height: 20.h,),
-
-              
+               SizedBox(height: 20.h,),              
                   ])));
       }))
 

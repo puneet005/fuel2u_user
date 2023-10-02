@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
+import 'package:fuel2u_user/routes/app_pages.dart';
 // import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
@@ -17,9 +18,26 @@ class SelectDate extends GetView<OrderController>{
 
   @override
   Widget build(BuildContext context) {
+    OrderController controller = Get.find<OrderController>();
+    Future.delayed(Duration.zero,(){
+      if(!controller.isEdit.value){
+       if(controller.profileData!.userType == "User" ){
+          controller.mainDate();
+      }
+      else{
+        if(controller.selectPlan == 2){
+            controller.mainDate();
+        }
+        else{     
+              
+          controller.BusinessDate(controller.profileData!.deliveryDay);
+        }              
+      }    
+      }
+    });
      return Scaffold(
         body: SafeArea(
-        child:GetBuilder<OrderController>(
+        child:GetBuilder(
       init: OrderController(),
       initState: (_) {},
       builder: (_) {
@@ -34,12 +52,15 @@ class SelectDate extends GetView<OrderController>{
                     ImageLogoWithRigthIcon(
                       back: InkWell(
                         onTap: (){
+                           controller.isEdit.value = false;
+                                                          controller.update();
                           Navigator.of(context).pop();
                           // Get.back();
                         },
                       child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                     ),
                       icon: InkWell(
+                         onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                       child: Image.asset("assets/icons/mytruck.png", width: 50,),
                     )),
                     SizedBox(height: 40.h,),
@@ -59,9 +80,13 @@ class SelectDate extends GetView<OrderController>{
                           vertical: 10.h,
                           horizontal: 30.h
                         ),
-                        child: GridView.builder(
+                        child:controller.dateListofdays.isEmpty ?Center(
+                          child: Text("Not Date Found!!", style: Heading3Medium(
+                            color: ColorCode.orange
+                          ),),
+                        ) :  GridView.builder(
                                           shrinkWrap: true,
-                                          itemCount: controller.dateList.length,
+                                          itemCount: controller.dateListofdays.length,
                                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           crossAxisSpacing: 30,
@@ -70,14 +95,14 @@ class SelectDate extends GetView<OrderController>{
                                           itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            controller.selectdata = controller.dateList[index];
+                            controller.selectdata = controller.dateListofdays[index];
                             controller.update();
                           },
                           child: Container(
                             width: Get.width/4,
                             height: Get.height/7,
                              decoration:   BoxDecoration(   
-                            color: controller.selectdata == controller.dateList[index] ? ColorCode.orange : Colors.transparent,                       
+                            color: controller.selectdata == controller.dateListofdays[index] ? ColorCode.orange : Colors.transparent,                       
                           border: Border.all(
                             color: ColorCode.orange,
                             width: 2
@@ -90,15 +115,15 @@ class SelectDate extends GetView<OrderController>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(controller.dateList[index]['day'],
+                                Text(controller.dateListofdays[index]['day'].toString(),
                                 style: HeadingCustomFamliy(
                                   family:"RobotoRegular",
                                   size: 12.sp,
-                                  color : controller.selectdata == controller.dateList[index] ? ColorCode.white :  ColorCode.black 
+                                  color : controller.selectdata == controller.dateListofdays[index] ? ColorCode.white :  ColorCode.black 
                                 )),
                                 SizedBox(height: 10.h,),
-                                Text(controller.dateList[index]['date'], style: Heading4Medium(
-                                  color : controller.selectdata == controller.dateList[index]? ColorCode.white :  ColorCode.black 
+                                Text(controller.dateListofdays[index]['shortData'].toString(), style: Heading4Medium(
+                                  color : controller.selectdata == controller.dateListofdays[index]? ColorCode.white :  ColorCode.black 
                                 ),),
                                 
                             ]),
@@ -115,9 +140,14 @@ class SelectDate extends GetView<OrderController>{
                 child: FillBtn(
                   Bgcolor:  controller.selectdata.isNotEmpty ?  ColorCode.orange : ColorCode.ligthGray,
                   ontap: (){
+                    if(controller.isEdit.value){
+                        controller.isEdit.value = false;
+                                                          controller.update();
+                                                          Navigator.of(context).pop();
+                    }
+                    else{
                     if(controller.selectdata.isNotEmpty){
-                        PersistentNavBarNavigator
-                                                        .pushNewScreen(
+                        PersistentNavBarNavigator.pushNewScreen(
                                                       context,
                                                       screen: AdditionalComments(),
                                                       withNavBar:
@@ -126,14 +156,13 @@ class SelectDate extends GetView<OrderController>{
                                                       PageTransitionAnimation
                                                           .cupertino,
                                                     );
-                      // Get.toNamed(Routes.COMMENTSCREEN);
-                    }                 
+                    
+                    } 
+                    }                
                   }, text: "Next"),
               ),
               SizedBox(height: 10.h,),                 
                   ])));}))
-                  
-                  
                   );
   }
 

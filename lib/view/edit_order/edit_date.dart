@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fuel2u_user/controller/order_controller.dart';
+import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/color.dart';
+import 'package:fuel2u_user/utils/ui_hepler.dart';
+import 'package:fuel2u_user/widgets/fill_button_ui.dart';
+import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
+import 'package:get/get.dart';
+
+class EditDate extends GetView<OrderController>{
+  const EditDate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    OrderController controller = Get.find<OrderController>();
+    Future.delayed(Duration.zero,(){
+      // if(!controller.isEdit.value)
+      if(controller.profileData!.userType == "User"){
+          controller.mainDate();
+      }
+      else{
+        if(controller.selectPlan == 2){
+            controller.mainDate();
+        }
+        else{     
+              
+          controller.BusinessDate(controller.profileData!.deliveryDay);
+        }  
+
+        // controller.BusinessDate();
+       
+      }
+     
+
+
+    });
+     return Scaffold(
+        body: SafeArea(
+        child:GetBuilder(
+      init: OrderController(),
+      initState: (_) {},
+      builder: (_) {
+            return Container(
+              child: Padding(
+                padding:  EdgeInsets.symmetric(
+                  horizontal: 15.h,
+                  vertical: 10.h
+                ),
+                child: Column(
+                  children: [
+                    ImageLogoWithRigthIcon(
+                      back: InkWell(
+                        onTap: (){
+                           controller.isEdit.value = false;
+                                                          controller.update();
+                          Navigator.of(context).pop();
+                          // Get.back();
+                        },
+                      child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
+                    ),
+                      icon: InkWell(
+                         onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
+                      child: Image.asset("assets/icons/mytruck.png", width: 50,),
+                    )),
+                    SizedBox(height: 40.h,),
+                    Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Select Delivery Date", style: Heading1(
+                        color: ColorCode.darkGray
+                      ),)
+                    ],
+                    ),
+                    SizedBox(height: 30.h,),
+                    Expanded(
+                      // flex: 2,
+                      child:  Padding(
+                        padding:  EdgeInsets.symmetric(
+                          vertical: 10.h,
+                          horizontal: 30.h
+                        ),
+                        child:controller.dateListofdays.isEmpty ?Center(
+                          child: Text("Not Date Found!!", style: Heading3Medium(
+                            color: ColorCode.orange
+                          ),),
+                        ) : GridView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: controller.dateListofdays.length,
+                                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 30,
+                          mainAxisSpacing: 20,
+                          mainAxisExtent: 77),
+                                          itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: () {
+                            controller.selectdata = controller.dateListofdays[index];
+                            controller.update();
+                          },
+                          child: Container(
+                            width: Get.width/4,
+                            height: Get.height/7,
+                             decoration:   BoxDecoration(   
+                            color: controller.selectdata == controller.dateListofdays[index] ? ColorCode.orange : Colors.transparent,                       
+                          border: Border.all(
+                            color: ColorCode.orange,
+                            width: 2
+                          ),
+                           borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(24)
+                       )
+                                      ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(controller.dateListofdays[index]['day'].toString(),
+                                style: HeadingCustomFamliy(
+                                  family:"RobotoRegular",
+                                  size: 12.sp,
+                                  color : controller.selectdata == controller.dateListofdays[index] ? ColorCode.white :  ColorCode.black 
+                                )),
+                                SizedBox(height: 10.h,),
+                                Text(controller.dateListofdays[index]['shortData'].toString(), style: Heading4Medium(
+                                  color : controller.selectdata == controller.dateListofdays[index]? ColorCode.white :  ColorCode.black 
+                                ),),
+                                
+                            ]),
+                          ),
+                        );
+                                          }),
+                      )
+                  ),
+                  SizedBox(height: 30.h,),                    
+              Padding(
+                padding:  EdgeInsets.symmetric(
+                  horizontal: 5.h
+                ),
+                child: FillBtn(
+                  Bgcolor:  controller.selectdata.isNotEmpty ?  ColorCode.orange : ColorCode.ligthGray,
+                  ontap: (){
+                    if(controller.isEdit.value){
+                        controller.isEdit.value = false;
+                                                          controller.update();
+                                                          Navigator.of(context).pop();
+                    }
+                    else{
+                        Navigator.of(context).pop();
+                    }
+                                
+                  }, text: "Next"),
+              ),
+              SizedBox(height: 10.h,),                 
+                  ])));}))
+                  );
+  }
+
+}

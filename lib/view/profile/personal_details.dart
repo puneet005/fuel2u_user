@@ -14,7 +14,9 @@ import 'package:get/get.dart';
 class PersonalDetails extends GetView<SignUpController> {
   @override
   Widget build(BuildContext context) {
-    controller.ProfileApi(context);
+       Future.delayed(Duration.zero, (){
+     controller.ProfileApi(context);
+   });
     return Scaffold(
         body: GetBuilder(
             init: SignUpController(),
@@ -230,7 +232,72 @@ class PersonalDetails extends GetView<SignUpController> {
                                   SizedBox(height: 20.h,),
                                  Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15.h),
-                                    child: BorderBtn(ontap: (){}, text: "DELETE ACCOUNT",Bgcolor: ColorCode.ligthGray,textColor: ColorCode.ligthGray,),
+                                    child: BorderBtn(ontap: (){
+                                      showDialog(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: Text(
+                                          "Delete Account",
+                                          style: Heading1(),
+                                        ),
+                                        content: Text(
+                                          "Are your sure to delete you account",
+                                          style: Heading3Regular(),
+                                        ),
+                                        actions: <Widget>[
+                                           Row(
+                                            children: [
+                                          
+                                          Expanded(
+                                            flex: 2,
+                                            child: ElevatedButton(
+                                              // FlatButton widget is used to make a text to work like a button
+                                          
+                                              onPressed: () {
+                                                Navigator.of(ctx).pop();
+                                              }, // function used to perform after pressing the button
+                                              child: Text('NO'),
+                                            ),
+                                          ),
+                                          SizedBox(width: 20.h,),
+                                         Expanded(
+                                            flex: 2,
+                                            child: ElevatedButton(
+                                                // textColor: Colors.black,
+                                                onPressed: () async {
+                                                  Navigator.of(ctx).pop();
+                                                  controller.deleteAccount(context);
+                                                  // logOutcontroller.SignOutApi(
+                                                  //     context);
+                                                },
+                                                child: Text('CONFIRM'),
+                                                
+                                                ),
+                                          ),
+                                                  
+                                            ],
+                                          )
+                                          // ElevatedButton(
+                                          //   // FlatButton widget is used to make a text to work like a button
+
+                                          //   onPressed: () {
+                                          //     Navigator.of(ctx).pop();
+                                          //   }, // function used to perform after pressing the button
+                                          //   child: Text('NO'),
+                                          // ),
+                                          // ElevatedButton(
+                                          //     // textColor: Colors.black,
+                                          //     onPressed: () async {
+                                          //       Navigator.of(ctx).pop();
+                                          //       controller.deleteAccount(context);
+                                          //       // logOutcontroller.SignOutApi(
+                                          //       //     context);
+                                          //     },
+                                          //     child: Text('YES')),
+                                        ],
+                                      ),
+                                    );
+                                    }, text: "DELETE ACCOUNT",Bgcolor: ColorCode.ligthGray,textColor: ColorCode.ligthGray,),
                                   ),
                                   SizedBox(height: 20.h,)
                           

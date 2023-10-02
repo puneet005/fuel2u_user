@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -14,6 +15,7 @@ class GasCapOpen extends StatefulWidget {
 }
 
 class _GasCapOpenState extends State<GasCapOpen> {
+    OrderController controller = Get.find<OrderController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +56,15 @@ class _GasCapOpenState extends State<GasCapOpen> {
                 ],
               ),
               Spacer(),
-               FillBtn(ontap: (){
-                Get.offAllNamed(Routes.HOME);
-              }, text: "GOT IT"),
+               Padding(
+                 padding:  EdgeInsets.symmetric(
+                  horizontal: 10.h
+                 ),
+                 child: FillBtn(ontap: (){
+                  controller.getOrder();
+                  Get.offAllNamed(Routes.HOME);
+                             }, text: "GOT IT"),
+               ),
               SizedBox(height: 20.h,),
 
           ],

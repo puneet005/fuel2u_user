@@ -36,12 +36,15 @@ class SplashController extends GetxController {
      SessionManager pref = SessionManager();
       String? token = await pref.getAccessToken();    
     log(token.toString()); 
+     await Future.delayed(Duration(seconds: 2), (){
     if(token == null || token == ""){
       Get.offAllNamed(Routes.WELCOME);
     }
     else{
+      // Get.offAllNamed(Routes.BUSINESSFORM);
        Get.offAllNamed(Routes.HOME);
     }
+     });
     //  await Future.delayed(Duration(seconds: 3), (){
       // if(token != null || token != ""){
       //    Get.offAllNamed(Routes.HOME);
@@ -51,6 +54,4 @@ class SplashController extends GetxController {
       // }
     // });
   }
-  
-
 } 

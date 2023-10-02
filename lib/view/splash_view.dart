@@ -30,7 +30,7 @@ class _SplashState extends State<Splash> {
     return Scaffold(
       body: Container(
         height: ScreenUtil().screenHeight ,
-        color: ColorCode.orange,
+        // color: ColorCode.orange,
         child: Image.asset("assets/images/splash.png",
           fit: BoxFit.cover,
          width: ScreenUtil().screenWidth,

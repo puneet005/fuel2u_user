@@ -14,7 +14,7 @@ import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+
 import 'package:image_picker/image_picker.dart';
 
 import '../model/state_list_model.dart';
@@ -23,9 +23,12 @@ import '../resources/session_manager.dart';
 import '../utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 
+import 'login_controller.dart';
+
 class AddVehicleController extends GetxController {
   final nameCtrl = TextEditingController();
   final licensePlateNoCtrl = TextEditingController();
+  
   final allFiledTrue = false.obs;
   final isLoading = true.obs;
       SessionManager pref = SessionManager();
@@ -36,6 +39,7 @@ class AddVehicleController extends GetxController {
   List<StateListModelData>? stateCodeList;
  var stateCodeValue;
   AddVehicleModelData? addVehicleModelData;
+  final editVehiclekey = GlobalKey<FormState>();
    @override  
   void onInit() { 
     super.onInit();
@@ -61,6 +65,7 @@ imagePath = "";
 update();
 }
  void checkAllFieldDone(){
+  log(licensePlateNoCtrl.value.text.toString());
     if(
       licensePlateNoCtrl.value.text.isEmpty || 
       stateCodeValue == null || 
@@ -129,7 +134,11 @@ final editLoading = false.obs;
   
    Future<void>  MakeApi() async{
    try {
-       String? token = await pref.getAccessToken();      
+       nameCtrl.clear();
+       String? token = await pref.getAccessToken(); 
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }     
       // var map = <String, dynamic>{};
       log(ApiUrls.make);
       // log(map.toString());
@@ -144,7 +153,7 @@ final editLoading = false.obs;
       if (response.statusCode == 200) {
       log("Make Api Response=>> " +
         (response.body).toString());
-          isLoading.value = false;
+         isLoading.value = false;
          MakeModel res = MakeModel.fromJson(json.decode(response.body));
          makeList = res.data;
          update();     
@@ -186,7 +195,10 @@ final editLoading = false.obs;
     loadingmodel.value = true;
       
        update();
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
       // var map = <String, dynamic>{};
       log("${ApiUrls.models}${makeValue!.id}");
       // log(map.toString());
@@ -240,7 +252,10 @@ final editLoading = false.obs;
    try {    
       isLoading.value = true;
        update();
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
       // var map = <String, dynamic>{};
       log("${ApiUrls.colors}");
       // log(map.toString());
@@ -282,7 +297,10 @@ final editLoading = false.obs;
   // State List Api
 Future<bool> GetStateList() async {
   try {
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }      
       // var map = <String, dynamic>{};
       
       log(ApiUrls.states);
@@ -299,6 +317,14 @@ Future<bool> GetStateList() async {
       log("states Api Response=>> " + (response.body).toString());
          StateListModel res = StateListModel.fromJson(json.decode(response.body));
          stateCodeList = res.data!;
+        for (var element in res.data!) {
+          if(element.code == "TN")
+          {
+            stateCodeValue = element;
+          }
+          
+        }
+
          isLoading.value = false;
          update();
          return true;
@@ -328,7 +354,10 @@ Future<bool> GetStateList() async {
   try {
      OverlayEntry loader = overlayLoader(context);
      Overlay.of(context).insert(loader);
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }      
       var map = <String, String>{};
       map['name']= nameCtrl.text.trim();
       map['make_id'] = makeValue!.id.toString();
@@ -407,6 +436,9 @@ Future<void> updateVehicleApi(VehicleListModelData vehicledata) async{
     editLoading.value = true;
     
     String? token = await pref.getAccessToken();   
+    if(token == null || token == ""){
+       token = oneTimeToken;
+      }
     log("Edit vehicle Api Calling") ;  
     makeList = null;
 
@@ -440,7 +472,7 @@ Future<void> updateVehicleApi(VehicleListModelData vehicledata) async{
             carModelValue = val2;
             log(carModelValue!.name.toString());
             licensePlateNoCtrl.text = vehicledata.licensePlate.toString();
-            nameCtrl.text =  vehicledata.name.toString();
+            nameCtrl.text = vehicledata.name == null ? "" : vehicledata.name.toString();
              editLoading.value = false;
              update();
              GetColorOrState(vehicledata);
@@ -505,6 +537,8 @@ Future<void> GetColorOrState(VehicleListModelData vehicledata) async {
           }
            
          }
+        checkAllFieldDone();
+
          }
         
 
@@ -518,7 +552,10 @@ Future<bool> EditVehicleApi(BuildContext context, String id) async {
   try {
      OverlayEntry loader = overlayLoader(context);
      Overlay.of(context).insert(loader);
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();     
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      } 
       var map = <String, String>{};
       map['id']= id;
       map['name']= nameCtrl.text.trim();
@@ -558,7 +595,13 @@ hideLoader(loader);
      update();
      log("vehicles Api Response=>> "+json.decode(respStr).toString());
      var data = json.decode(respStr);
+     
      AddVehicleModel res = AddVehicleModel.fromJson(data);
+     if(res.status == true){
+       ToastUi(res.message.toString(), 
+   bgColor: Colors.green,
+     textColor: ColorCode.white,);
+     }
       addVehicleModelData = res.data;
 
      return true;
@@ -597,6 +640,9 @@ Future<bool> DeleteVehicleApi(BuildContext context, String id) async {
   try{
   Overlay.of(context).insert(loader);
   String? token = await pref.getAccessToken();   
+  if(token == null || token == ""){
+       token = oneTimeToken;
+      }
     http.Response response = await http.delete(
       Uri.parse("${ApiUrls.vehicles}/$id"),
       headers: {

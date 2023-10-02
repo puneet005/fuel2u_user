@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/widgets/circularLoading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 TextStyle Heading1({
   Color color = ColorCode.darkGray,
@@ -198,3 +199,46 @@ ToastUi(
 
 
  
+ extension EmailValidator on String {
+  bool isValidEmail() {
+    return RegExp(
+    r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+        .hasMatch(this);
+  }}
+
+  Future<void> GloballaunchUrl(String url) async {
+  if (!await launchUrl(Uri.parse(url))) {
+
+    throw Exception('Could not launch $url');
+  }
+}
+
+String getFormattedPhoneNumber(
+  String _phoneNumber) {
+  if (_phoneNumber.isEmpty) {
+    return "";
+  }
+
+  String phoneNumber = _phoneNumber;
+  // bool addPlus = phoneNumber.startsWith("1");
+  // if (addPlus) phoneNumber = phoneNumber.substring(1);
+  // bool addParents = phoneNumber.length >= 3;
+  // bool addDash = phoneNumber.length >= 8;
+
+  // +1
+  String updatedNumber = "";
+  for(int i =0 ; i< _phoneNumber.length; i++){
+    updatedNumber += _phoneNumber[i];
+    if(i == 2){
+      updatedNumber += "-";
+
+    }
+     if(i == 5){
+      updatedNumber += "-";
+
+    }
+
+  }
+  return updatedNumber;
+ 
+}

@@ -117,20 +117,16 @@ class LoginView extends GetView<LoginController>{
                   onChanged: (val){
                        if(val.isNotEmpty){
                           controller.onlyNumber.value =  isNumber(val); 
-                          if(controller.onlyNumber.value){
-
+                          if(controller.onlyNumber.value){                              
                           }                                               
                           controller.update();
-                          controller.getVaild();
-                          
+                          controller.getVaild();                          
                         }
                         else{
                             controller.getVaildFalse();
                         }
-                      },
-                   
-                  decoration: InputDecoration(
-                    
+                      },                   
+                  decoration: InputDecoration(                    
                     // prefixIcon: Icon(Icons.location_on, color: ColorCode.black,),
                     hintText: "Phone Number or Email",
                        hintStyle: TextStyle(
@@ -142,10 +138,7 @@ class LoginView extends GetView<LoginController>{
                     enabledBorder: MainBorder(),
                   ),
                 ),
-              ),
-              
-             
-              
+              ),                                         
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -179,23 +172,17 @@ class LoginView extends GetView<LoginController>{
               {
                 if(controller.phoneVaild.value ){
                   return FillBtn(ontap: (){
-                    controller.SignInApi(context);
-                      // Get.toNamed(Routes.LOGINOTP) ;
+                    controller.SignInApi(context);                  
                   }, text: "Log in"
-              ) ;
+              );
                 }
                 else{
                   return FillBtn(ontap: (){}, text: "Log in",
               Bgcolor: ColorCode.ligthGray,);
                 }
-              }
-              // ?  FillBtn(ontap: (){}, text: "Notify Me",
-              // Bgcolor: ColorCode.darkGray,):  FillBtn(ontap: (){}, text: "Notify Me,"
-              // ) 
+              }             
               ),
-              SizedBox(height: 40.h,)
-              
-          
+              SizedBox(height: 40.h,)                        
             ],
           ),
         ),

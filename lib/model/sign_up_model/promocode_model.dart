@@ -17,7 +17,7 @@ class PromocodeModelData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
-
+  
   PromocodeModelData({
     this.id,
     this.firstName,

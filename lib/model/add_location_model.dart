@@ -1,5 +1,5 @@
 class AddLocationModelData {
-  int? id;
+  String? id;
   String? name;
   String? address;
   String? city;
@@ -25,7 +25,7 @@ class AddLocationModelData {
     this.createdAt,
   });
   AddLocationModelData.fromJson(Map<String, dynamic> json) {
-    id = json['id']?.toInt();
+    id = json['id']?.toString();
     name = json['name']?.toString();
     address = json['address']?.toString();
     city = json['city']?.toString();

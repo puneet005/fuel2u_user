@@ -71,7 +71,6 @@ class PromoCode extends GetView<SignUpController> {
                                   GestureDetector(
                                                             onTap: (){
                                                               controller.setYesOrNo(1);
-                                                              // controller.changePlan(index);
                                                             },
                                                             child: Container(
                                                               height: 20,
@@ -94,19 +93,10 @@ class PromoCode extends GetView<SignUpController> {
                               SizedBox(height: 20.h,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Radio(
-                                  //     value: 2,
-                                  //     groupValue:
-                                  //         controller.promodeYesOrNo.value,
-                                  //     activeColor: ColorCode.orange,
-                                  //     onChanged: (value) {
-                                  //       controller.setYesOrNo(value);
-                                  //     }),
+                                children: [                                
                                    GestureDetector(
                                                             onTap: (){
-                                                              controller.setYesOrNo(2);
-                                                              // controller.changePlan(index);
+                                                              controller.setYesOrNo(2);                                                           
                                                             },
                                                             child: Container(
                                                               height: 20,

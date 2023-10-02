@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/business_controller.dart';
+import 'package:fuel2u_user/controller/sign_up_controller.dart';
+import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
@@ -16,6 +18,15 @@ class BusinessForm extends GetView<BusinessController> {
 
   @override
   Widget build(BuildContext context) {
+    BusinessController controller = Get.find<BusinessController>();
+    SignUpController userController = Get.find<SignUpController>();
+    Future.delayed(Duration.zero,(){
+      controller.formClean();
+      controller.contactNumberCtrl.text  = getFormattedPhoneNumber(userController.userVerftyDetail.phoneNumber!);
+      controller.contactNameCtrl.text = userController.userVerftyDetail.firstName! + "" +  userController.userVerftyDetail.lastName! ;
+      controller.contactEmailCtrl.text = userController.userVerftyDetail.email ?? "";
+      controller.update();
+    });
     // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
@@ -188,65 +199,127 @@ class BusinessForm extends GetView<BusinessController> {
                         child: Row(
                           
                           children: [
-                          Expanded(
-                            flex: 2,
-                            // width: Get.width/2.5,
-                            child:  DropdownButtonFormField( 
-                                padding: EdgeInsets.zero,
+                             Expanded(
+                                      flex: 2,
+                                      // width: Get.width/2.5,
+                                      child: DropdownButtonFormField<
+                                          StateListModelData>(
+                                        padding: EdgeInsets.zero,
+                                        onChanged: (newValue) {
+                                          controller.stateValue = newValue;
+                                          log(newValue.toString());
+                                          controller.checkFormValied();
+                                          controller.bussinessFormKey.currentState
+                      !.validate();
+                                          controller.update();
+                                 
+                                        },
+                                        validator: (value) {
+                                          if (value == null) {
+                                            controller.stateAndZipCodeHeight =
+                                                80;
+                                            controller.update();
+                                            return 'Please Select State';
+                                          } else {
+                                            controller.stateAndZipCodeHeight =
+                                                55;
+                                            controller.update();
+                                            return null;
+                                          }
+                                        },
+                                        value: controller.stateValue ?? null,
+                                        hint: Text(
+                                          "State",
+                                          style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: ColorCode.ligthGray),
+                                        ),
+                                        isExpanded: true,
+                                        items: [
+                                          for (var value
+                                              in controller.stateList!)
+                                            DropdownMenuItem(
+                                              child: new Text(
+                                                value.name!,
+                                                style: TextStyle(
+                                                  color: ColorCode.darkGray,
+                                                  fontSize: 16.sp,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              value: value,
+                                            ),
+                                        ],
+                                        decoration: InputDecoration(
+                                          fillColor: Colors.transparent,
+                                          labelStyle:
+                                              TextStyle(color: ColorCode.red),
+                                          border: MainBorder(),
+                                          enabledBorder: MainBorder(),
+                                        ),
+                                      ),
+                                    ),
+              //             Expanded(
+              //               flex: 2,
+              //               // width: Get.width/2.5,
+              //               child:  DropdownButtonFormField( 
+              //                   padding: EdgeInsets.zero,
                                                       
-                                                onChanged: ( newValue){
+              //                                   onChanged: ( newValue){
                                                 
                                                
-                                                controller.selectedIndex = newValue.toString(); 
-                                                log(newValue.toString());
-                                                controller.update();     
-                                                 controller.checkFormValied();                                           
-                                                },
-                                                  validator: (value) { 
+              //                                   controller.selectedIndex = newValue.toString(); 
+              //                                   log(newValue.toString());
+              //                                   controller.update();     
+              //                                    controller.checkFormValied();                                           
+              //                                   },
+              //                                     validator: (value) { 
                                                     
-                                                    if(value == null){
-                                                    controller.stateAndZipCodeHeight = 80;
-                                                    controller.update();
-                                                        return  'Please Select State';
-                                                    }
-                                                    else{
-                                                       controller.stateAndZipCodeHeight = 55;
-                                                    controller.update();
-                                                        return  null;
+              //                                       if(value == null){
+              //                                       controller.stateAndZipCodeHeight = 80;
+              //                                       controller.update();
+              //                                           return  'Please Select State';
+              //                                       }
+              //                                       else{
+              //                                          controller.stateAndZipCodeHeight = 55;
+              //                                       controller.update();
+              //                                           return  null;
 
-                                                    }
+              //                                       }
            
-              },
-                                                value: controller.selected ?? null,
-                                                hint: Text("State",  style: TextStyle(
-                                        fontSize: 16.sp,
+              // },
+              //                                   value: controller.selected ?? null,
+              //                                   hint: Text("State",  style: TextStyle(
+              //                           fontSize: 16.sp,
                                         
-                                        fontWeight: FontWeight.bold,
-                                        color: ColorCode.ligthGray),),
-                                                isExpanded: true,
-                                                items: [
-                            for(var value in controller.stateList!)
-                              DropdownMenuItem(
-                                  child: new Text(
-                                    value.name!,
-                                    style: TextStyle(
-                                      color: ColorCode.darkGray,
-                                       fontSize: 16.sp,
-                                    ),
-                                  ),
-                              value: value.id,
-                              ),
-                                                ],
-                                                decoration:   InputDecoration(
-                            fillColor: Colors.transparent,
-                                    labelStyle: TextStyle(
-                                      color: ColorCode.red
-                                    ),
-                                        border:MainBorder(),
-                                         enabledBorder: MainBorder(),
-                                      ),              
-                                              ),                         
-                          ),
+              //                           fontWeight: FontWeight.bold,
+              //                           color: ColorCode.ligthGray),),
+              //                                   isExpanded: true,
+              //                                   items: [
+              //               for(var value in controller.stateList!)
+              //                 DropdownMenuItem(
+              //                     child: new Text(
+              //                       value.name!,
+              //                       style: TextStyle(
+              //                         color: ColorCode.darkGray,
+              //                          fontSize: 16.sp,
+              //                       ),
+              //                     ),
+              //                 value: value.id,
+              //                 ),
+              //                                   ],
+              //                                   decoration:   InputDecoration(
+              //               fillColor: Colors.transparent,
+              //                       labelStyle: TextStyle(
+              //                         color: ColorCode.red
+              //                       ),
+              //                           border:MainBorder(),
+              //                            enabledBorder: MainBorder(),
+              //                         ),              
+              //                                 ),                         
+              //             ),
                           SizedBox(
                             width: 15.h,
                           ),
@@ -396,10 +469,9 @@ class BusinessForm extends GetView<BusinessController> {
                       child: TextFormField(
                         style: TextFieldStyle(),
                         textInputAction: TextInputAction.next,
-                        controller: controller.contactEmailCtrl,
-                        
+                        controller: controller.contactEmailCtrl,                        
                         autocorrect: true,
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.emailAddress,
                              onChanged: (val){
                         controller.checkFormValied();
                         },
@@ -407,8 +479,12 @@ class BusinessForm extends GetView<BusinessController> {
                           if(val == null || val.isEmpty){
                             return "Enter Contact Email";
                           }
-                          return null;
-                        
+                              if (val.isValidEmail()) {
+                        return null;
+                      }
+                      return "Enter Valid Email";
+
+                                                 
                         },
                         decoration:  InputDecoration(
                           hintText: "Contact Email",
@@ -449,6 +525,7 @@ class BusinessForm extends GetView<BusinessController> {
                           else if(val.isEmpty){
                             return "Enter Phone Number";
                           }
+                       
                           return "Enter Valid Number";
                         
                         },
@@ -477,6 +554,14 @@ class BusinessForm extends GetView<BusinessController> {
                                   value: controller.deliveryAddSame.value,
                                   onChanged: (value) {
                                       controller.checkSameBillingAddress(value!);
+                                      if(value == true){
+                                        controller.billingAddressCtrl.text  = controller.deliveryAddressCtrl.text;
+                                        controller.billingCityCtrl.text  = controller.cityCtrl.text;
+                                        controller.billingZipCodeCtrl.text  = controller.zipCodeCtrl.text;
+                                        controller.billStateValue = controller.stateValue;
+                                        controller.update();
+                                        
+                                      }
                                   },
                                 ), ),
                                  Text("Same as delivery address",  style: HeadingCustomFamliy(
@@ -529,14 +614,7 @@ class BusinessForm extends GetView<BusinessController> {
                         controller: controller.billingCityCtrl,
                         
                         autocorrect: true,
-                        keyboardType: TextInputType.name,
-                        // validator: (val){     
-                        //   if(val == null || val.isEmpty){
-                        //     return "Enter City";
-                        //   }
-                        //   return null;
-                        
-                        // },
+                        keyboardType: TextInputType.name,                      
                         decoration:  InputDecoration(
                           hintText: "City",
                            hintStyle: TextStyle(
@@ -551,54 +629,58 @@ class BusinessForm extends GetView<BusinessController> {
                     ),
                      // State and Zip code
                     Container(
-                      child: Padding(
-                       
+                      child: Padding(                       
                          padding:  EdgeInsets.symmetric(
                           vertical: 10.r, 
                           horizontal: 15.r
                         ),
                         child: Container(
                         height: 55.h,
-                          child: Row(
-                            
+                          child: Row(                            
                             children: [
-                            Expanded(
-                              flex: 2,
-                              // width: Get.width/2.5,
-                              child:  DropdownButtonFormField(
-                                                    // iconSize: ,
-                                                  onChanged: (newValue){
 
-                              controller.billingStateId =newValue!.toString();
-                              controller.update();
-                              
-                                                  },
-                                                  value: controller.billingState?.value,
-                                                  hint: Text("State", style: TextStyle(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorCode.ligthGray),),
-                                                  isExpanded: true,
-                                                  items: [
-                               for(var value in controller.stateList!)
-                              DropdownMenuItem(
-                                  child: new Text(
-                                    value.name!,
-                                    style: TextStyle(
-                                      color: ColorCode.darkGray,
-                                       fontSize: 16.sp,
-                                    ),
-                                  ),
-                              value: value.id,
-                              ),
-                                                  ],
-                                                  decoration:   InputDecoration(
-                              fillColor: Colors.transparent,                        
-                                          border: MainBorder(),
-                                           enabledBorder: MainBorder(),
-                                        ),              
-                                                ),                         
-                            ),
+                            Expanded(
+                                        flex: 2,
+                                        // width: Get.width/2.5,
+                                        child: DropdownButtonFormField<
+                                            StateListModelData>(
+                                          onChanged: (newValue) {
+                                            controller.billStateValue =
+                                                newValue!;
+
+                                            controller.update();
+                                          },
+                                          value:
+                                              controller.billStateValue ?? null,
+                                          hint: Text(
+                                            "State",
+                                            style: TextStyle(
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: ColorCode.ligthGray),
+                                          ),
+                                          isExpanded: true,
+                                          items: [
+                                            for (var value
+                                                in controller.stateList!)
+                                              DropdownMenuItem(
+                                                child: new Text(
+                                                  value.name!,
+                                                  style: TextStyle(
+                                                    color: ColorCode.darkGray,
+                                                    fontSize: 16.sp,
+                                                  ),
+                                                ),
+                                                value: value,
+                                              ),
+                                          ],
+                                          decoration: InputDecoration(
+                                            fillColor: Colors.transparent,
+                                            border: MainBorder(),
+                                            enabledBorder: MainBorder(),
+                                          ),
+                                        ),
+                                      ),
                             SizedBox(
                               width: 15.h,
                             ),
@@ -609,14 +691,7 @@ class BusinessForm extends GetView<BusinessController> {
                                 controller: controller.billingZipCodeCtrl,
                                 
                                 autocorrect: true,
-                                keyboardType: TextInputType.name,
-                                // validator: (val){
-                                //   if(val!.length == 6){
-                                //     return null;
-                                //   }
-                                //   return "Wrong Zip Code";                                
-                                // },
-                                
+                                keyboardType: TextInputType.name,                                                            
                                 decoration:  InputDecoration(
                                   hintText: "Zip Code",
                                   hintStyle: TextStyle(
@@ -644,9 +719,7 @@ class BusinessForm extends GetView<BusinessController> {
                       if(controller.bussinessFormKey.currentState
                       !.validate()){
                         controller.BusinessFormApi(context);
-
-                      }
-                      // Get.toNamed(Routes.ADDVEHICLE);
+                      }                    
                      }, text: "Save",
                                    Bgcolor: controller.formvalid.value ? ColorCode.orange:ColorCode.ligthGray,),
                    ),

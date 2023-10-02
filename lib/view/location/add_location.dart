@@ -13,21 +13,28 @@ import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 
 class AddLocation extends StatefulWidget {
-  const AddLocation({super.key});
+  bool userLive = false;
+   AddLocation({super.key, this.userLive = false});
 
   @override
   State<AddLocation> createState() => _AddLocationState();
 }
 
 class _AddLocationState extends State<AddLocation> {
+   VehicleController controller = Get.find<VehicleController>(); 
   @override
   void initState() {
-    super.initState();
-       VehicleController controller = Get.find<VehicleController>(); 
-     controller.GetStateList();
-    controller.getCurrentPosition();
-  }
-   VehicleController controller = Get.find<VehicleController>(); 
+    super.initState();      
+    Future.delayed(Duration.zero, () async {
+      controller.stateCodeValue = null;
+      controller.update();
+      controller.getCurrentPosition(widget.userLive);
+      
+     
+});
+    
+}
+ 
      
   Widget build(BuildContext context) {
     
@@ -229,7 +236,7 @@ class _AddLocationState extends State<AddLocation> {
                                         fontWeight: FontWeight.bold,
                                         color: ColorCode.ligthGray),),
                                                 isExpanded: true,
-                                                items:controller.stateList!.isNotEmpty ? [
+                                                items: controller.stateList == null ? [] :[
                             for(var value in controller.stateList! )
                               DropdownMenuItem(
                                   child: new Text(
@@ -241,7 +248,7 @@ class _AddLocationState extends State<AddLocation> {
                                   ),
                               value: value,
                               ),
-                                                ]: [],
+                                                ],
                                                 decoration:   InputDecoration(
                             fillColor: Colors.transparent,
                                     labelStyle: TextStyle(
@@ -314,6 +321,7 @@ class _AddLocationState extends State<AddLocation> {
                           if(controller.addressFormValid.value) {
                            bool res = await controller.AddLocationApi(context);
                             if(res){
+                              controller.GetLocationListApi();
                               Navigator.pop(context);
                             }
 

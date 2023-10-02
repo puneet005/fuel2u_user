@@ -12,6 +12,8 @@ import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/session_manager.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -109,6 +111,76 @@ class DeliveryZipCodeController extends GetxController {
     }
    }
 
-   
+
+  Future<void> getCurrentPositionForLive() async {
+    // update();
+    log("Get Location Permission");
+    final hasPermission = await _handleLocationPermission();
+    log(hasPermission.toString());
+    if (!hasPermission) {}
+    ;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      currentPositionForAddress = position;
+      update();
+      log(position.toString());
+      // if(userLive){
+      getAddressFromLatLng(position);
+      // }
+      // _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+  String? _currentAddress;
+  Position? currentPositionForAddress;
+  final isLoading = true.obs;
+  Future<void> getAddressFromLatLng(Position position) async {
+    isLoading.value = true;
+    update();
+    await placemarkFromCoordinates(currentPositionForAddress!.latitude,
+            currentPositionForAddress!.longitude)
+        .then((List<Placemark> placemarks) {
+      // log(placemarks.toString());
+      Placemark place = placemarks[0];
+      _currentAddress =
+          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}, ${place.administrativeArea}';
+      
+      zipcode.text = place.postalCode.toString();
+      zipCodeVaild.value  = true;
+      isLoading.value = false;
+      
+      update();
+      log(_currentAddress.toString());
+    }).catchError((e) {
+      debugPrint(e);
+      isLoading.value = false;
+
+      update();
+    });
+  }   
+
+  // Add Location
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      permission = await Geolocator.requestPermission();
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return false;
+    }
+    return true;
+  }
 
 }

@@ -20,6 +20,7 @@ import 'package:http/http.dart' as http;
 
 import '../model/sign_up_model/promocode_model.dart';
 import '../resources/session_manager.dart';
+import 'login_controller.dart';
 
 class SignUpController extends GetxController {
   
@@ -105,10 +106,12 @@ void IsSignUpAllField(){
   // }
   void getVaild() {
     phoneVaild.value = true;
+    update();
 }
 
   void getVaildFalse() {
      phoneVaild.value = false;
+     update();
   }
 
   void getoptValid() {
@@ -143,7 +146,7 @@ void IsSignUpAllField(){
       Overlay.of(context).insert(loader);
       var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
        var map = <String, dynamic>{};
-      map['phone_number'] = "+1${mobileNo.removeAllWhitespace}";
+      map['phone_number'] = "${mobileNo.removeAllWhitespace}";
       log(ApiUrls.noFuel);
       log(map.toString());
       http.Response response = await http.post(
@@ -201,7 +204,7 @@ Future<void> SignUpApi(BuildContext context) async {
       map['first_name']= firstnameCrt.text.tr;
       map['last_name'] = lastnameCrt.text.tr;
       map['email'] = emailCrt.text.tr;
-      map['phone_number'] = "+1${mobileNo.removeAllWhitespace}";
+      map['phone_number'] = "${mobileNo.removeAllWhitespace}";
       log(ApiUrls.signup);
       log(map.toString());
       http.Response response = await http.post(
@@ -257,10 +260,8 @@ Future<void> SignUpApi(BuildContext context) async {
   //  SignUp Verify
    Future<void> SignUpVerifyApi(BuildContext context, String otp) async {
     OverlayEntry loader = overlayLoader(context);
-    try {
-      
-      Overlay.of(context).insert(loader);
-      
+    try {      
+      Overlay.of(context).insert(loader);      
       // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
        var map = <String, dynamic>{};
       map['token']= userDetail.token;
@@ -325,10 +326,12 @@ Future<void> SignUpApi(BuildContext context) async {
    
    //  Promo code Par
   Future<void> PromoCodeAPi(BuildContext context) async {
-  
     OverlayEntry loader = overlayLoader(context);
   try {
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
       Overlay.of(context).insert(loader);
       var map = <String, dynamic>{};
       map['promocode']= promoCodeCtrl.text.trim();
@@ -344,7 +347,6 @@ Future<void> SignUpApi(BuildContext context) async {
       }).timeout(Duration(seconds: 30));
       // ignore: unused_local_variable
       var data = json.decode(response.body);
-      
       log(response.body);
       if (response.statusCode == 200) {
          PromocodeModel res = PromocodeModel.fromJson(data);
@@ -353,20 +355,17 @@ Future<void> SignUpApi(BuildContext context) async {
         response.body);
       hideLoader(loader);       
       if(res.status ==  true){
-       
         promoCodeDetail = res.data!;
         update();
-        Get.toNamed(Routes.SELECTPLAN);
-
+        Get.toNamed(Routes.ADDVEHICLE);
       }
       else{
         // hideLoader(loader);
      ToastUi(data['message'].toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
-     );
-        
-      }
+     );        
+    }
       //
   } 
   else{
@@ -394,10 +393,13 @@ Future<void> SignUpApi(BuildContext context) async {
   ProfileModelData? profileData;
   
   Future<void> ProfileApi(BuildContext context) async{
-      try {
+      // try {
      isLoading.value = true;
       // update();
-       String? token = await pref.getAccessToken();      
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
       log(ApiUrls.profile);
       http.Response response = await http.get(
       Uri.parse(ApiUrls.profile),
@@ -413,12 +415,12 @@ Future<void> SignUpApi(BuildContext context) async {
         profileData = res.data;
 
         if(res.data != null){
-          var number = res.data!.phoneNumber!.split("+1");
-          String no = getFormattedPhoneNumber(number[1]);
+          // var number = res.data!.phoneNumber!.split("+1");
+          // String no = getFormattedPhoneNumber(number[1]);
           firstnameCrt.text = res.data!.firstName.toString();
           lastnameCrt.text = res.data!.lastName.toString();
-          phoneNoCrt.text = no;
-          emailCrt.text = res.data!.email!;
+          phoneNoCrt.text =  getFormattedPhoneNumber(res.data!.phoneNumber!);
+          emailCrt.text = res.data!.email ?? "";
         }
         isLoading.value = false;         
          update();
@@ -428,18 +430,18 @@ Future<void> SignUpApi(BuildContext context) async {
           update();  
           // return false;    
       }
-  } catch (e) {
-     isLoading.value = false;
-         update();
-     log(e.toString());
+  // } catch (e) {
+  //    isLoading.value = false;
+  //        update();
+  //    log(e.toString());
     
-    // hideLoader(loader);
-     ToastUi(e.toString(), 
-     bgColor: ColorCode.red,
-     textColor: ColorCode.white,
-     );  
-    //  return false;
-    }
+  //   // hideLoader(loader);
+  //    ToastUi(e.toString(), 
+  //    bgColor: ColorCode.red,
+  //    textColor: ColorCode.white,
+  //    );  
+  //   //  return false;
+  //   }
   }
 
 
@@ -467,12 +469,98 @@ String getFormattedPhoneNumber(
     }
      if(i == 5){
       updatedNumber += "-";
-
     }
 
   }
   return updatedNumber;
  
+}
+
+// Sign Out Api 
+ Future<void> SignOutApi(BuildContext context) async {
+  
+    OverlayEntry loader = overlayLoader(context);
+  try {
+    //  pref.logOut();
+       String? token = await pref.getAccessToken();  
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }    
+      Overlay.of(context).insert(loader);
+      log(ApiUrls.signout);
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.signout),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      var data = json.decode(response.body);      
+      log(response.body);
+      if (response.statusCode == 200) {
+      pref.logOut();
+      Get.offAllNamed(Routes.WELCOME);
+      } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );}     
+  } 
+  catch (e) {
+     log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+   }
+
+  
+// Delete Account Api 
+Future<void> deleteAccount(BuildContext context) async {
+   OverlayEntry loader = overlayLoader(context);
+  try {
+    //  pref.logOut();
+       String? token = await pref.getAccessToken();   
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }   
+      Overlay.of(context).insert(loader);
+      log(ApiUrls.deleteAccount);
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.deleteAccount),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      }).timeout(Duration(seconds: 30));
+      var data = json.decode(response.body);      
+      log(response.body);
+      if (response.statusCode == 200) {
+      pref.logOut();
+      Get.offAllNamed(Routes.WELCOME);
+      } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );}     
+  } 
+  catch (e) {
+     log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+
 }
 
 

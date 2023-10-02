@@ -94,20 +94,25 @@ class DeliveryZipCode extends GetView<DeliveryZipCodeController> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: Container(
-                    // width: ScreenUtil().screenWidth/2,
-                    child: Row(
-                      children: [
-                        SvgPicture.asset("assets/icons/current_location.svg"),
-                        SizedBox(
-                          width: 5.h,
-                        ),
-                        Text(
-                          "Use Current Location",
-                          style: HeadingCustomFamliy(
-                              color: ColorCode.orange, fbold: FontWeight.bold),
-                        )
-                      ],
+                  child: InkWell(
+                    onTap: (){
+                       controller.getCurrentPositionForLive();
+                    },
+                    child: Container(
+                      // width: ScreenUtil().screenWidth/2,
+                      child: Row(
+                        children: [
+                          SvgPicture.asset("assets/icons/current_location.svg"),
+                          SizedBox(
+                            width: 5.h,
+                          ),
+                          Text(
+                            "Use Current Location",
+                            style: HeadingCustomFamliy(
+                                color: ColorCode.orange, fbold: FontWeight.bold),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

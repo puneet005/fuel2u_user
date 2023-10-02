@@ -131,7 +131,11 @@ class _VerificationViewState extends State<VerificationView> {
               mainAxisAlignment: MainAxisAlignment.center,
             children: [
                Text("Didn’t receive code? ", style: HeadingSub2()),
-               Text("Send it again.", style: HeadingRobotoBold(),)
+               InkWell(
+                onTap: (){
+                   controlller.SignUpApi(context);
+                },
+                child: Text("Send it again.", style: HeadingRobotoBold(),))
             ],
             ),
       

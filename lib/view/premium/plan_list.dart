@@ -134,11 +134,7 @@ class SelectPlan extends GetView {
                   // print(controller.planList[controller.selectPlan.value]);
                       // if(controller.plansList![controller.selectPlan.value].name == "Business"){
                           controller.GetPlan(context);
-                         
-                      // }
-                      // else{
-                        
-                      // }
+                                            
                        
                          }, text: "Save"
                     ),

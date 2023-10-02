@@ -63,9 +63,12 @@ class Membership extends GetView<PremiunController> {
             SizedBox(
               height: 5.h,
             ),
-             ListView(
+             controller.isLoading.value ?  Container(                
+                child: CircularProgressIndicator(),
+                color: Colors.transparent,
+              ) : ListView(
                 shrinkWrap: true,
-                children: List.generate(controller.planList.length,
+                children: List.generate(controller.plansList!.length,
                     (index) => 
                     Padding(
                       padding:  EdgeInsets.symmetric(
@@ -75,8 +78,7 @@ class Membership extends GetView<PremiunController> {
                       child: Column(
                                   children: [
                                     InkWell(
-                                      onTap: (){
-                                       
+                                      onTap: (){                                       
                                       },
                                       child: Padding(
                                         padding:  EdgeInsets.symmetric(
@@ -99,21 +101,14 @@ class Membership extends GetView<PremiunController> {
                                                                   color: controller.selectPlan.value == index ? ColorCode.orange : ColorCode.white,
                                                                 ),
                                                               ),
-                                                            ),
-                                                            // Radio(
-                                                            //     value: index,
-                                                            //     groupValue: controller.selectPlan.value,
-                                                            //     onChanged: (value) {
-                                                            //         controller.changePlan(index);
-                                                            //     }),
+                                                            ),                                                           
                                                             SizedBox(width: 10.h,),
                                                             Text(
-                                                              controller.planList[index]['name'],
+                                                             controller.plansList![index].name.toString(),
                                                               style: Heading2(color: ColorCode.darkGray),
                                                             ),
                                                             Spacer(),
                                                             GestureDetector(
-
                                                               onTap: (){
                                                                  controller.viewPlan(index);
                                                                 PersistentNavBarNavigator
@@ -142,84 +137,7 @@ class Membership extends GetView<PremiunController> {
                                 ),
                     )),
               ), 
-            // ListView(
-            //   shrinkWrap: true,
-            //   children: List.generate(controller.planList.length,
-            //       (index) => 
-            //       Padding(
-            //         padding:  EdgeInsets.symmetric(
-            //           vertical: 6.h,
-            //           horizontal: 15.h
-            //         ),
-            //         child: Column(
-            //                     children: [
-            //                       InkWell(
-            //                         onTap: (){
-            //                           controller.showPlanIndex.value = index;
-            //                           // Get.toNamed(Routes.MEMBERSHIPETAILS);
-                                       
-            //                  PersistentNavBarNavigator
-            //                                             .pushNewScreen(
-            //                                           context,
-            //                                           screen: MemberShipDetail(),
-            //                                           withNavBar:
-            //                                           true, // OPTIONAL VALUE. True by default.
-            //                                           pageTransitionAnimation:
-            //                                           PageTransitionAnimation
-            //                                               .cupertino,
-            //                                         );
-            //                         },
-            //                         child: Padding(
-            //                           padding:  EdgeInsets.symmetric(
-            //                             vertical: 10.h
-            //                           ),
-            //                           child: Row(
-            //                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                                             children: [
-            //                                               Container(
-            //                                                     height: 20,
-            //                                                     width: 20,
-            //                                                     decoration: BoxDecoration(
-            //                                                       shape: BoxShape.circle,
-            //                                                       border: Border.all(color: ColorCode.orange),
-            //                                                       color: controller.selectPlan.value == index ? ColorCode.orange : ColorCode.white,
-            //                                                     ),
-            //                                                   ),
-            //                                                 // ),
-            //                                                 // Radio(
-            //                                                 //     value: index,
-            //                                                 //     groupValue: controller.selectPlan.value,
-            //                                                 //     onChanged: (value) {
-            //                                                 //         controller.changePlan(index);
-            //                                                 //     }),
-            //                                                 SizedBox(width: 10.h,),
-            //                                               // Radio(
-            //                                               //     value: index,
-            //                                               //     groupValue: controller.selectPlan.value,
-            //                                               //     onChanged: (value) {
-            //                                               //         controller.changePlan(index);
-            //                                               //     }),
-            //                                               Text(
-            //                                                 controller.planList[index]['name'],
-            //                                                 style: Heading1(color: ColorCode.darkGray,
-            //                                                 fbold: FontWeight.w500),
-            //                                               ),
-            //                                               Spacer(),
-            //                                               SvgPicture.asset("assets/icons/rightarrow.svg")
-            //                                             ],
-            //                           ),
-            //                         ),
-            //                       ),
-            //                       SizedBox(
-            //         height: 5.h,
-            //                       ),
-            //                       Divider(
-            //         thickness: 2,
-            //                       )
-            //                     ],
-            //                   ),
-            //       )),
-            // ), 
+            
                         ])));
                         }),
       )

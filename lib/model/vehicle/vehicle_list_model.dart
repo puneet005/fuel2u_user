@@ -156,7 +156,8 @@ class VehicleListModelDataUser {
   String? emailVerifiedAt;
   String? phoneNumber;
   String? phoneNumberVerifiedAt;
-  int? businessId;
+  // int? businessId;
+  String? businessId;
   String? promocode;
   String? subscriptionId;
   String? status;
@@ -190,7 +191,7 @@ class VehicleListModelDataUser {
     emailVerifiedAt = json['email_verified_at']?.toString();
     phoneNumber = json['phone_number']?.toString();
     phoneNumberVerifiedAt = json['phone_number_verified_at']?.toString();
-    businessId = json['business_id']?.toInt();
+    businessId = json['business_id']?.toString();
     promocode = json['promocode']?.toString();
     subscriptionId = json['subscription_id']?.toString();
     status = json['status']?.toString();

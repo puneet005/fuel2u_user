@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
@@ -19,6 +20,7 @@ class Support extends StatefulWidget {
 }
 
 class _SupportState extends State<Support> {
+  SignUpController controller = Get.find<SignUpController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,28 +66,33 @@ class _SupportState extends State<Support> {
                   Divider(
                     color: ColorCode.ligthGray,
                   ),
-                 Row(
-                  children: [
-                    Container(
-                      width: Get.height /8,
-                      height: 70.h,
-                      child: Image.asset("assets/images/email_icon.png"),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Email", style: Heading1(),),
-                        // SizedBox(height: 10.h,),
-                        Text("support@2Ufuel.com", style:  HeadingCustomFamliy(
-                          family: "RobotoRegular",
-                          size: 16.sp,
-                          // fbold: 
-                          
-                        ),)
-                      ],
-                    )
-                  ],
+                  InkWell(
+                      onTap: (){
+                        GloballaunchUrl("mailto:support@2Ufuel.com?subject=2U Fuel In App Support Request&body=Support Request from: Name: ${controller.profileData?.firstName ??  "" } ${controller.profileData?.lastName ?? ""} \nEmail: ${controller.profileData?.email ?? ""} \n Phone:  ${controller.profileData?.phoneNumber ?? ""} ");
+                      },
+                   child: Row(
+                    children: [
+                      Container(
+                        width: Get.height /8,
+                        height: 70.h,
+                        child: Image.asset("assets/images/email_icon.png"),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Email", style: Heading1(),),
+                          // SizedBox(height: 10.h,),
+                          Text("support@2Ufuel.com", style:  HeadingCustomFamliy(
+                            family: "RobotoRegular",
+                            size: 16.sp,
+                            // fbold: 
+                            
+                          ),)
+                        ],
+                      )
+                    ],
+                   ),
                  ),
                   Divider(
                     color: ColorCode.ligthGray,

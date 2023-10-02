@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
+import 'package:fuel2u_user/model/order/card_detail_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/profile/add_card.dart';
 import 'package:fuel2u_user/view/profile/edit_card_details.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
+import 'package:fuel2u_user/widgets/loading_widget.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../../widgets/logo_rigth_icon.dart';
@@ -15,6 +17,10 @@ import '../../widgets/logo_rigth_icon.dart';
 class PaymentDetails extends GetView<VehicleController> {
   @override
   Widget build(BuildContext context) {
+      VehicleController controller = Get.find<VehicleController>();
+    Future.delayed(Duration.zero, (){
+      controller.GetCardList();
+    });
     return Scaffold(
       body: SafeArea(
           child: GetBuilder(
@@ -25,7 +31,7 @@ class PaymentDetails extends GetView<VehicleController> {
                     child: Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 15.h, vertical: 10.h),
-                        child: Column(children: [
+                        child: ListView(children: [
                           Padding(
                             padding: EdgeInsets.only(left: 10.h),
                             child: ImageLogoWithRigthIcon(
@@ -59,18 +65,34 @@ class PaymentDetails extends GetView<VehicleController> {
                 ),)
               ],
             ),
-            if(!controller.paymentdataloading.value)
-            SizedBox(height: 40.h,),
+            // if(!controller.paymentdataloading.value)
+            SizedBox(height: 20.h,),
             // SizedBox(height: ,)
-                          controller.paymentdataloading.value
+             controller.cardLoading.value
+                                ? ListView(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    children: List.generate(
+                                        3, (index) => ShimmerLoading()),
+                                  ):
+                          controller.cardDetails!.isEmpty || controller.cardDetails == null 
                               ? EmptyUi()
-                              : PaymentList(context),
-                          Spacer(),
-                          Padding(
+                              : PaymentList(context, controller.cardDetails!),
+                        
+                          
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                        ])));
+              }),
+              ),
+              bottomNavigationBar:  Padding(
                             padding:  EdgeInsets.symmetric(
-                              horizontal: 10.h
+                              horizontal: 15.h,
+                              vertical: 20.h
                             ),
                             child: FillBtn(ontap: () {
+                              controller.cleanAddCardData();
                                PersistentNavBarNavigator
                                                         .pushNewScreen(
                                                       context,
@@ -84,11 +106,6 @@ class PaymentDetails extends GetView<VehicleController> {
                               // Get.toNamed(Routes.ADDCARD);
                             }, text: "+ ADD A PAYMENT METHOD"),
                           ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                        ])));
-              })),
     );
   }
 
@@ -117,12 +134,12 @@ class PaymentDetails extends GetView<VehicleController> {
     );
   }
 
-  PaymentList(BuildContext context) {
+  PaymentList(BuildContext context, List<CardDetailModelData> cardDetails ) {
     VehicleController controller = Get.put(VehicleController());
     return ListView(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        children: List.generate(controller.cardList.length, (index) {
+        children: List.generate(cardDetails.length, (index) {
           return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -150,11 +167,14 @@ class PaymentDetails extends GetView<VehicleController> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        controller.cardList[index],
+                                        cardDetails[index].metadata!.name ?? "",
                                         style: Heading4Medium(),
                                       ),
                                       InkWell(
                                           onTap: () {
+                                            controller.editCardData =  cardDetails[index];
+                                            controller.update();
+                                            controller.setCardDataInEdit();
                                              PersistentNavBarNavigator
                                                         .pushNewScreen(
                                                       context,
@@ -164,8 +184,7 @@ class PaymentDetails extends GetView<VehicleController> {
                                                       pageTransitionAnimation:
                                                       PageTransitionAnimation
                                                           .cupertino,
-                                                    );
-                                           
+                                                    );                                           
                                           },
                                            child: Image.asset("assets/icons/edit_icon.png"),
                                          
@@ -176,7 +195,7 @@ class PaymentDetails extends GetView<VehicleController> {
                                   Row(
                                     children: [
                                       Text(
-                                        "Card ending in XXXX",
+                                        "Card ending in ${cardDetails[index].card!.last4}",
                                         style: Heading5(fbold: FontWeight.normal),
                                       ),
                                     ],

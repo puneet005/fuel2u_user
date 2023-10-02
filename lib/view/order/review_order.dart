@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
+import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/order/confirm_order.dart';
@@ -14,14 +16,15 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 // import '../../routes/app_pages.dart';
 
-class ReviewOrder extends GetView {
+class ReviewOrder extends GetView<OrderController>{
   const ReviewOrder({super.key});
 
   @override
   Widget build(BuildContext context) {
+     OrderController controller = Get.find<OrderController>();
     return Scaffold(
         body: SafeArea(
-            child: GetBuilder<OrderController>(
+            child: GetBuilder(
                 init: OrderController(),
                 initState: (_) {},
                 builder: (_) {
@@ -43,6 +46,7 @@ class ReviewOrder extends GetView {
                                   ),
                                 ),
                                 icon: InkWell(
+                                   onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                                   child: Image.asset(
                                     "assets/icons/mytruck.png",
                                     width: 50,
@@ -79,7 +83,7 @@ class ReviewOrder extends GetView {
                                         child:  Padding(
                                           padding:  EdgeInsets.symmetric(vertical: 10.h,horizontal: 10.h),
                                           child: Column(
-                                           
+                                           crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -104,67 +108,84 @@ class ReviewOrder extends GetView {
                                                 ],
                                               ),
                                                 SizedBox(height: 0.h,),
+                                              //  Row(
+                                              //   // mainAxisAlignment: MainAxisAlignment.end,
+                                              //   children: [
+                                              //     Text("Order Number: XXXXXX", style: Heading5(),)
+                                              //   ],
+                                              // ),
+                                                // SizedBox(height: 5.h,),
                                                Row(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Text("Order Number: XXXXXX", style: Heading5(),)
+                                                  Text("Order Date: ${controller.selectdata['date']}", style: Heading5(),)
                                                 ],
                                               ),
-                                                SizedBox(height: 5.h,),
-                                               Row(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text("Order Date: YYYY-MM-DD", style: Heading5(),)
-                                                ],
-                                              ),
-                                                SizedBox(height: 5.h,),
-                                               Row(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text("Status: Out for Delivery", style: Heading5(),)
-                                                ],
-                                              ),
+                                                // SizedBox(height: 5.h,),
+                                              //  Row(
+                                              //   // mainAxisAlignment: MainAxisAlignment.end,
+                                              //   children: [
+                                              //     Text("Status: Review Order", style: Heading5(),)
+                                              //   ],
+                                              // ),
                                                 SizedBox(height: 5.h,),
                                               Row(
                                                 children: [
                                                   // SizedBox(width: 10,),
-                                                   Image.asset("assets/images/car_img.png", height: 50.h, width: 50.h, fit:BoxFit.contain,)
+                                                    controller.vehicleList![controller.selectVehicleIndex].image ==
+                                                                          "" || controller.vehicleList![controller.selectVehicleIndex].image == null 
+                                                                        ? Image.asset(
+                                                                            "assets/images/car_img.png")
+                                                                        : Image
+                                                                            .network(
+                                                                            ApiUrls.domain +
+                                                                                controller.vehicleList![controller.selectVehicleIndex].image.toString(),
+                                                                            height:
+                                                                                35.h,
+                                                                            width:
+                                                                                70.h,
+                                                                            fit:
+                                                                                BoxFit.fill,
+                                                                          ),
+                                                  //  Image.asset("assets/images/car_img.png", height: 50.h, width: 50.h, fit:BoxFit.contain,)
                                                 ],
                                               ),
                                                 SizedBox(height: 5.h,),
                                                Row(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Text("Vehicle Name: Mary’s Car", style: Heading5(),)
+                                                  Text("Vehicle Name: ${controller.vehicleList![controller.selectVehicleIndex].name ?? ""}", style: Heading5(),)
                                                 ],
                                               ),
                                                 SizedBox(height: 5.h,),
                                               Row(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Text("Fuel Type: Octane 87", style: Heading5(),)
+                                                  Text("Fuel Type: ${controller.fuelTypeList![controller.selectFuelType].type ?? ""}", style: Heading5(),)
                                                 ],
                                               ),
                                                 SizedBox(height: 5.h,),
                                                Row(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Text("Cost per Gallon: \$X.XX", style: Heading5(),)
+                                                  Text("Cost per Gallon: \$${controller.fuelTypeList![controller.selectFuelType].price ?? ""}", style: Heading5(),)
                                                 ],
                                               ),
                                                 SizedBox(height: 5.h,),
-                                               Row(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text("Location: Address ", style: Heading5(),)
-                                                ],
-                                              ),
+                                               Container(
+
+                                                 child: Text("Location: ${controller.selectLocation!.address ?? ""}", 
+                                                  overflow: TextOverflow.ellipsis, 
+                                                maxLines: 1,
+                                                 style: Heading5(),),
+                                               ),
                                               SizedBox(height: 5.h,),
-                                              Row(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Text("Delivery Instructions: Parked near...", style: Heading5(),)
-                                                ],
+                                              Container(
+                                                height: 20.h,
+                                                child: Text("Delivery Instructions: ${controller.commentCtrl.text ?? ""}",
+                                                overflow: TextOverflow.ellipsis, 
+                                                maxLines: 1,
+                                                style: Heading5(),),
                                               ),
                                     
                                               Padding(
@@ -214,16 +235,9 @@ class ReviewOrder extends GetView {
                                child: FillBtn(
                                            // Bgcolor:  controller.selectdata.isNotEmpty ?  ColorCode.orange : ColorCode.ligthGray,
                                 ontap: () {
-                                    PersistentNavBarNavigator
-                                                        .pushNewScreen(
-                                                      context,
-                                                      screen: ComfirmOrder(),
-                                                      withNavBar:
-                                                      true, // OPTIONAL VALUE. True by default.
-                                                      pageTransitionAnimation:
-                                                      PageTransitionAnimation
-                                                          .cupertino,
-                                                    );
+                                    
+
+                                      controller.CreateOrderApi(context);
                                       // Get.toNamed(Routes.CONFIRMORDER);
                                       },
                                             text: "CONFIRM ORDER"),
@@ -232,6 +246,38 @@ class ReviewOrder extends GetView {
                             Padding(
                                padding: EdgeInsets.symmetric(horizontal: 5.h),
                               child: BorderBtn(ontap: (){
+                                 showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title:  Text("Cancel Order", style: Heading1(),),
+                content:  Text("Are your sure to cancel your order", style: Heading3Regular(),),
+                actions: <Widget>[
+                   ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
+               
+                onPressed: 
+                
+                () {
+                  Navigator.of(ctx).pop(); 
+                },             // function used to perform after pressing the button
+                child: Text('NO'),
+              ),
+              ElevatedButton(
+                // textColor: Colors.black,
+                onPressed: ()
+                async{
+                   Navigator.of(ctx).pop(); 
+                   controller.cleanAllData();
+                   Get.offAllNamed(Routes.HOME);
+                  // logOutcontroller.SignOutApi(context);
+              
+
+                },
+                child: Text('YES')
+              ),
+                  
+                ],
+              ),
+            );    
                             
                               }, text: "CANCEL ORDER"),
                             )  

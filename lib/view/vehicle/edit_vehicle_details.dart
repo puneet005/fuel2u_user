@@ -59,393 +59,411 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
         builder: (_) {
           return SafeArea(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 15.h
-                  ),
-                  child: controller.editLoading.value ? SizedBox(
-                    height: Get.height,
-                    child: Center(
-                      child: CircularProgressIndicator(),
+                child: Form(
+                  key: controller.editVehiclekey,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.h
                     ),
-                  ):Column(
-                    children: [
-                      SizedBox(height: 20.h,),
-                      ImageLogoWithRigthIcon(
-                              back: InkWell(
-                                onTap: (){
-                                  Navigator.of(context).pop();
-                                  // Get.back();
-                                },
-                              child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
-                            ),
-                              icon: InkWell(
-                                onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
-                              child: Image.asset("assets/icons/mytruck.png", width: 50,),
-                            )),
-                            SizedBox(height: 40.h,),
-                      SizedBox(
-                        height: 20.h,
+                    child: controller.editLoading.value ? SizedBox(
+                      height: Get.height,
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Text(
-                      "Edit Vehicle",
-                      style: Heading1(color: ColorCode.darkGray),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Container(
-                  height: 150.h,
-                  width: 200.h,
-                  decoration: controller.imagePath == ""?  BoxDecoration(
-                    image: DecorationImage(image:   widget.data.image != "" ? NetworkImage(ApiUrls.domain+widget.data.image.toString()) : AssetImage("assets/images/car_img.png") as ImageProvider,
-                    fit: BoxFit.cover
-                    )) : BoxDecoration(
-                    image: DecorationImage(image:   FileImage(File(controller.imagePath)) as ImageProvider,
-                    fit: BoxFit.cover
-                    ),
-                  ),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap:(){
-                          _addPictureSheet(context);
-                        },
-                        child: Image.asset("assets/icons/edit_icon.png"),
-                        // child: Icon(
-                          
-                        //   Icons.edit_square,
-                        //   size: 28,
-                        //   color: ColorCode.white,
-                        // ),
-                      ),
-                    ),
-                  ),
-                ),
-                 // Add Name
-                          Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                            child: TextFormField(
-                              style: TextFieldStyle(),
-                              controller: controller.nameCtrl,
-                              autocorrect: true,
-                            keyboardType: TextInputType.name,
-                    // validator: (val) {},
-                    decoration:  InputDecoration(
-                      hintText: "Name (optional), ie Frank’s Car",
-                      hintStyle: TextStyle(
-                         fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: ColorCode.ligthGray),
-                      focusedBorder:  MainBorder(),
-                      border:  MainBorder(),
-                      enabledBorder:  MainBorder(),
-                    ),
-                  ),
-                ),
-                  Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: DropdownButtonFormField<MakeModelData>(                                 
-                    onChanged: (newValue) {                            
-                      controller.makeValue= newValue;
-                      controller.update();                                         
-                      controller.carModelValue  = null;                     
-                      controller.checkAllFieldDone();
-                      controller.ModelApi();                     
-                    },                    
-                    value: controller.makeValue ?? null,                  
-                    hint: Text(
-                      "Make",
-                      style: HeadingCustom(
-                        size: 16.sp,
-                        color: ColorCode.ligthGray,
-                        fbold: FontWeight.bold,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: controller.makeList == null ? [] :[
-                      for (var value in controller.makeList ?? [])
-                        DropdownMenuItem(
-                          child: Text(
-                            value.name!,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              color: ColorCode.darkGray,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          value: value,
-                        ),
-                    ],
-                    decoration:  InputDecoration(
-                      fillColor: Colors.transparent,
-                      border: MainBorder(),
-                      enabledBorder:  MainBorder(),
-                    ),
-                  ),
-                ),
-                 // Model Name DropDown
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: controller.loadingmodel.value ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator()
-                    ],
-                  ) :DropdownButtonFormField<CarModelData>(
-                    
-                    onChanged: controller.carmodelList == null ? null: (newValue) {
-                      controller.carModelValue = newValue;
-                      // controller.selectedModel.value = newValue.toString();
-                      // controller.update();
-                      controller.checkAllFieldDone();
-                     
-                    },
-                    value: controller.carModelValue ?? null,                   
-                    hint: Text(
-                      "Model ",
-                      style: HeadingCustom(
-                        size: 16.sp,
-                        color: ColorCode.ligthGray,
-                        fbold: FontWeight.bold,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items:controller.carmodelList != null?  [
-                      // if(controller.makeValue != null && controller.carmodelList != null)
-                    
-                      for (var value in controller.carmodelList!)
-                        DropdownMenuItem(
-                          child: new Text(
-                            value.name!,
-                            style: TextStyle(
-                                fontSize: 16.sp,
-                              color: ColorCode.darkGray,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          value: value,
-                        )
-                    
-                    ]: [],
-                    decoration:  InputDecoration(
-                      fillColor: Colors.transparent,
-                      border: MainBorder(),
-                      enabledBorder:  MainBorder(),
-                    ),
-                  ),
-                ),
-                // Color Name DropDown
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: DropdownButtonFormField<ColorModelData>(
-                    // iconSize: ,
-                    onChanged: (newValue) {
-                      controller.colorsModelValue = newValue;
-                      controller.update();
-                      controller.checkAllFieldDone();
-                    },
-                    value: controller.colorsModelValue ??  null,                  
-                    hint: Text(
-                      "Color ",
-                      style: HeadingCustom(
-                        size: 16.sp,
-                        color: ColorCode.ligthGray,
-                        fbold: FontWeight.bold,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: controller.colorsList == null ? null: [
-                      for (var value in controller.colorsList!)
-                        DropdownMenuItem(
-                          child: new Text(
-                            value.name!,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                        color: ColorCode.darkGray,
-                        fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          value: value,
-                        ),
-                    ],
-                    decoration:  InputDecoration(
-                      fillColor: Colors.transparent,
-                      border: MainBorder(),
-                      enabledBorder: MainBorder()
-                    ),
-                  ),
-                ),
-                
-                // License Plate Number and State
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: Container(
-                    height: 55.h,
-                    child: Row(
+                    ):Column(
                       children: [
-                        Expanded(
-                            flex: 3,
-                            child: TextFormField(
-                              style: TextFieldStyle(),
-                              controller: controller.licensePlateNoCtrl,
-                              autocorrect: true,
-                              keyboardType: TextInputType.name,
-                              validator: (val) {
-                                if (val!.isNotEmpty) {
-                                  return null;
-                                }
-                                return "Enter Number";
-                              },
-                              onChanged: (val) {
-                                controller.checkAllFieldDone();
-                              },
-                              decoration: InputDecoration(
-                                hintText: "License Plate Number",
-                                hintStyle: TextStyle(
-                                   fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                                focusedBorder:   MainBorder(),
-                                border:   MainBorder(),
-                                enabledBorder:   MainBorder(),
+                        SizedBox(height: 20.h,),
+                        ImageLogoWithRigthIcon(
+                                back: InkWell(
+                                  onTap: (){
+                                    Navigator.of(context).pop();
+                                    // Get.back();
+                                  },
+                                child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                               ),
-                            )),
+                                icon: InkWell(
+                                  onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+                                child: Image.asset("assets/icons/mytruck.png", width: 50,),
+                              )),
+                              SizedBox(height: 40.h,),
                         SizedBox(
-                          width: 15.h,
+                          height: 20.h,
                         ),
-                        Expanded(
-                          flex: 2,
-                          // width: Get.width/2.5,
-                          child: DropdownButtonFormField(                                                                      
-                            onChanged: (newValue) {
-                              controller.stateCodeValue = newValue;
-                              controller.update();
-                              controller.checkAllFieldDone();                              
-                            },
-                            value: controller.stateCodeValue ?? null,
-                           
-                            hint: Text(
-                              "State",
-                              style: HeadingCustom(
-                                size: 16.sp,
-                                color: ColorCode.ligthGray,
-                                fbold: FontWeight.bold,
-                              ),
-                            ),
-                            isExpanded: true,
-                            items: controller.stateCodeList ==  null ? null :[
-                              for (var value in controller.stateCodeList!)
-                                DropdownMenuItem(
-                                  child: new Text(
-                                    value.code.toString(),
-                                    style: TextStyle(
-                                       fontSize: 16.sp,
-                        color: ColorCode.darkGray,
-                        fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  value: value,
-                                ),
-                            ],
-                            decoration:  InputDecoration(
-                              
-                              fillColor: Colors.transparent,
-                              border:  MainBorder(),
-                              enabledBorder:  MainBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Text(
+                        "Edit Vehicle",
+                        style: Heading1(color: ColorCode.darkGray),
+                      )
+                    ],
                   ),
-                ),
-
-                SizedBox(
-                  height: 20.h,
-                ),
-                
-                SizedBox(
+                  SizedBox(
                     height: 30.h,
                   ),
-                
-               Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.h
-                  ),
-                  child: FillBtn(ontap: () async{
-                    VehicleController vehicleController = Get.put(VehicleController());
-                 bool res = await controller.EditVehicleApi(context, widget.data.id.toString());
-                          if(res){
-                            vehicleController.GetVehicleList();
-                            Navigator.of(context).pop();                            
-                          } 
-                      }, text: "SAVE CHANGES"
+                  Container(
+                    height: 150.h,
+                    width: 200.h,
+                    decoration: controller.imagePath == "" ?  BoxDecoration(
+                      image: DecorationImage(image:   widget.data.image != "" && widget.data.image != null ? NetworkImage(ApiUrls.domain+widget.data.image.toString()) : AssetImage("assets/images/car_img.png") as ImageProvider,
+                      fit: BoxFit.cover
+                      )) : BoxDecoration(
+                      image: DecorationImage(image: FileImage(File(controller.imagePath)) as ImageProvider,
+                      fit: BoxFit.cover
+                      ),
                     ),
-                ),
-                  SizedBox(height: 10.h,),
-               Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.h
-                  ),child: BorderBtn(ontap: (){
-                    
-                    showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title:  Text("Delete Vehicle", style: Heading1(),),
-                  content:  Text("Are you sure to Delete this vehicle", style: Heading3Regular(),),
-                  actions: <Widget>[
-                     ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
-                  // textColor: Colors.black,
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                  },             // function used to perform after pressing the button
-                  child: Text('CANCEL'),
-                ),
-                ElevatedButton(
-                  // textColor: Colors.black,
-                  onPressed: () async{
-                    Navigator.of(ctx).pop();
-                     VehicleController vehicleController = Get.put(VehicleController());
-                   bool res = await  controller.DeleteVehicleApi(context, widget.data.id.toString());
-                   if(res){
-                     vehicleController.GetVehicleList();
-                              Navigator.of(context).pop();
-
-                   }
-
-                  },
-                  child: Text('DELETE'),
-                ),
-                    
-                  ],
-                ),
-              );
-
-                   
-                  }, text: "DELETE VEHICLE")),
-
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap:(){
+                            _addPictureSheet(context);
+                          },
+                          child: Image.asset("assets/icons/edit_icon.png"),
+                          // child: Icon(
+                            
+                          //   Icons.edit_square,
+                          //   size: 28,
+                          //   color: ColorCode.white,
+                          // ),
+                        ),
+                      ),
+                    ),
+                  ),
+                   // Add Name
+                            Padding(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                              child: TextFormField(
+                                style: TextFieldStyle(),
+                                controller: controller.nameCtrl,
+                                autocorrect: true,
+                              keyboardType: TextInputType.name,
+                      // validator: (val) {},
+                      decoration:  InputDecoration(
+                        hintText: "Name (optional), ie Frank’s Car",
+                        hintStyle: TextStyle(
+                           fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: ColorCode.ligthGray),
+                        focusedBorder:  MainBorder(),
+                        border:  MainBorder(),
+                        enabledBorder:  MainBorder(),
+                      ),
+                    ),
+                  ),
+                    Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: DropdownButtonFormField<MakeModelData>(                                 
+                      onChanged: (newValue) {                            
+                        controller.makeValue= newValue;
+                        controller.update();                                         
+                        controller.carModelValue  = null;                     
+                        controller.checkAllFieldDone();
+                        controller.ModelApi();                     
+                      },                    
+                      value: controller.makeValue ?? null,                  
+                      hint: Text(
+                        "Make",
+                        style: HeadingCustom(
+                          size: 16.sp,
+                          color: ColorCode.ligthGray,
+                          fbold: FontWeight.bold,
+                        ),
+                      ),
+                      isExpanded: true,
+                      items: controller.makeList == null ? [] :[
+                        for (var value in controller.makeList ?? [])
+                          DropdownMenuItem(
+                            child: Text(
+                              value.name!,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: ColorCode.darkGray,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            value: value,
+                          ),
+                      ],
+                      decoration:  InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: MainBorder(),
+                        enabledBorder:  MainBorder(),
+                      ),
+                    ),
+                  ),
+                   // Model Name DropDown
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: controller.loadingmodel.value ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator()
+                      ],
+                    ) :DropdownButtonFormField<CarModelData>(
+                      
+                      onChanged: controller.carmodelList == null ? null: (newValue) {
+                        controller.carModelValue = newValue;
+                        // controller.selectedModel.value = newValue.toString();
+                        // controller.update();
+                        controller.checkAllFieldDone();
+                       
+                      },
+                      value: controller.carModelValue ?? null,                   
+                      hint: Text(
+                        "Model ",
+                        style: HeadingCustom(
+                          size: 16.sp,
+                          color: ColorCode.ligthGray,
+                          fbold: FontWeight.bold,
+                        ),
+                      ),
+                      isExpanded: true,
+                      items:controller.carmodelList != null?  [
+                        // if(controller.makeValue != null && controller.carmodelList != null)
+                      
+                        for (var value in controller.carmodelList!)
+                          DropdownMenuItem(
+                            child: new Text(
+                              value.name!,
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                color: ColorCode.darkGray,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            value: value,
+                          )
+                      
+                      ]: [],
+                      decoration:  InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: MainBorder(),
+                        enabledBorder:  MainBorder(),
+                      ),
+                    ),
+                  ),
+                  // Color Name DropDown
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: DropdownButtonFormField<ColorModelData>(
+                      // iconSize: ,
+                      onChanged: (newValue) {
+                        controller.colorsModelValue = newValue;
+                        controller.update();
+                        controller.checkAllFieldDone();
+                      },
+                      value: controller.colorsModelValue ??  null,                  
+                      hint: Text(
+                        "Color ",
+                        style: HeadingCustom(
+                          size: 16.sp,
+                          color: ColorCode.ligthGray,
+                          fbold: FontWeight.bold,
+                        ),
+                      ),
+                      isExpanded: true,
+                      items: controller.colorsList == null ? null: [
+                        for (var value in controller.colorsList!)
+                          DropdownMenuItem(
+                            child: new Text(
+                              value.name!,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                          color: ColorCode.darkGray,
+                          fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            value: value,
+                          ),
+                      ],
+                      decoration:  InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: MainBorder(),
+                        enabledBorder: MainBorder()
+                      ),
+                    ),
+                  ),
                   
-                 
-          
+                  // License Plate Number and State
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: Container(
+                      height: 55.h,
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 3,
+                              child: TextFormField(
+                                style: TextFieldStyle(),
+                                controller: controller.licensePlateNoCtrl,
+                                autocorrect: true,
+                                keyboardType: TextInputType.name,
+                                validator: (val) {
+                                  if (val!.isNotEmpty) {
+                                    return null;
+                                  }
+                                  return "Enter License Plate Number";
+                                },
+                                onChanged: (val) {
+                                  controller.checkAllFieldDone();
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "License Plate Number",
+                                  hintStyle: TextStyle(
+                                     fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                                  focusedBorder:   MainBorder(),
+                                  border:   MainBorder(),
+                                  enabledBorder:   MainBorder(),
+                                ),
+                              )),
+                          SizedBox(
+                            width: 15.h,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            // width: Get.width/2.5,
+                            child: DropdownButtonFormField(                                                                      
+                              onChanged: (newValue) {
+                                controller.stateCodeValue = newValue;
+                                controller.update();
+                                controller.checkAllFieldDone();                              
+                              },
+                              value: controller.stateCodeValue ?? null,
+                             
+                              hint: Text(
+                                "State",
+                                style: HeadingCustom(
+                                  size: 16.sp,
+                                  color: ColorCode.ligthGray,
+                                  fbold: FontWeight.bold,
+                                ),
+                              ),
+                              isExpanded: true,
+                              items: controller.stateCodeList ==  null ? null :[
+                                for (var value in controller.stateCodeList!)
+                                  DropdownMenuItem(
+                                    child: new Text(
+                                      value.code.toString(),
+                                      style: TextStyle(
+                                         fontSize: 16.sp,
+                          color: ColorCode.darkGray,
+                          fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    value: value,
+                                  ),
+                              ],
+                              decoration:  InputDecoration(
+                                
+                                fillColor: Colors.transparent,
+                                border:  MainBorder(),
+                                enabledBorder:  MainBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                
                   SizedBox(
                     height: 20.h,
                   ),
-              ],
-            ),
-          ),
+                  
+                  SizedBox(
+                      height: 30.h,
+                    ),
+                  
+                               Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.h
+                    ),
+                    child: FillBtn(ontap: () async{
+                    // if(controller.editVehiclekey.currentState!.validate())
+                    if(controller.allFiledTrue.value)
+                    {
+                        VehicleController vehicleController = Get.put(VehicleController());
+                   bool res = await controller.EditVehicleApi(context, widget.data.id.toString());
+                            if(res){
+                              vehicleController.GetVehicleList();
+                              Navigator.of(context).pop();                            
+                            } 
+                    }
+                        }, text: "SAVE CHANGES",
+                        Bgcolor: controller.allFiledTrue.value ? ColorCode.orange : ColorCode.ligthGray,
+                      ),
+                  ),
+                    SizedBox(height: 10.h,),
+                               Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.h
+                    ),child: BorderBtn(ontap: (){
+                      
+                      showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title:  Text("Delete Vehicle", style: Heading1(),),
+                    content:  Text("Are you sure to Delete this vehicle", style: Heading3Regular(),),
+                    actions: <Widget>[
+                        Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                            Expanded(
+                                              flex: 2,
+                     child:  ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
+                    // textColor: Colors.black,
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },             // function used to perform after pressing the button
+                    child: Text('CANCEL'),
+                  ),),
+                  SizedBox(width: 20.h,),
+                    Expanded(
+                    flex: 2,
+                    child: ElevatedButton(
+                      // textColor: Colors.black,
+                      onPressed: () async{
+                        Navigator.of(ctx).pop();
+                         VehicleController vehicleController = Get.put(VehicleController());
+                       bool res = await  controller.DeleteVehicleApi(context, widget.data.id.toString());
+                       if(res){
+                         vehicleController.GetVehicleList();
+                                  Navigator.of(context).pop();
+                                  
+                       }
+                                  
+                      },
+                      child: Text('DELETE'),
+                    ),
+                  ),
+                                              ]),
+                      
+                    ],
+                  ),
+                              );
+                
+                     
+                    }, text: "DELETE VEHICLE")),
+                
+                    
+                   
+                          
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                              ],
+                            ),
+                          ),
+                ),
         ),
       ); 
         },

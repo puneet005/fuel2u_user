@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_credit_card/flutter_credit_card.dart';
+// import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
@@ -21,9 +22,10 @@ class EditCardDetails extends GetView<VehicleController> {
   Widget build(BuildContext context) {
     VehicleController controller = Get.find<VehicleController>();
     Future.delayed(Duration.zero, (){
-       log("calling initstate function");
-     controller.setCardDetails();
-     controller.update();
+      controller.setCardDataInEdit();
+      //  log("calling initstate function");
+    //  controller.setCardDetails();
+    //  controller.update();
     });
  return GetBuilder(
       init: VehicleController(),
@@ -85,142 +87,214 @@ class EditCardDetails extends GetView<VehicleController> {
                               SizedBox(
                                 height: 15.h,
                               ),
-                              CreditCardForm(
-                                formKey: controller.formKey,
-                                obscureCvv: true,
-                                obscureNumber: true,
-                                cardNumber: controller.cardNumber.value,
-                                cvvCode: controller.cvvCode.value,
-                                zipCode: controller.zipCode.value,
-                                isHolderNameVisible: true,
-                                isCardNumberVisible: true,
-                                isExpiryDateVisible: true,
-                                cardHolderName: controller.cardHolderName.value,
-                                expiryDate: controller.expiryDate.value,
-                                themeColor: ColorCode.orange,
-                                textColor: ColorCode.darkGray,
-                                
-                                cardHolderDecoration: InputDecoration(
-                                    hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorCode.ligthGray),
-                                
-                                    // labelStyle: const TextStyle(color: ),
-                                    focusedBorder: controller.border,
-                                    enabledBorder: controller.border,
-                                    // labelText: 'Card Holder',
-                                    hintText: "Card Name (optional)"),
-                                cardNumberDecoration: InputDecoration(
-                                  
-                                    // labelText: 'Number',
-                                    hintText: 'Card Number',
-                                    
-                                    hintStyle:
-                                       TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorCode.ligthGray),
-                                    labelStyle:
-                                        const TextStyle(color: Colors.black),
-                                    focusedBorder: controller.border,
-                                    enabledBorder: controller.border,
-                                    errorBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.red,
+                              Padding(
+                                       padding:  EdgeInsets.symmetric(
+                                        vertical: 10.r, 
+                                        horizontal: 15.r
+                                      ),
+                                      child: TextFormField(
+                                        style: TextFieldStyle(),
+                                        controller: controller.cardNameCtrl,                  
+                                        autocorrect: true,
+                                        keyboardType: TextInputType.name,
+                                      
+                                        onChanged: (val){
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: "Card Name",
+                         hintStyle: TextStyle(
+                                        color: ColorCode.ligthGray,
+                                        fontWeight: FontWeight.w700
                                       ), 
-                                    )
+                                          focusedBorder: MainBorder(),
+                                          border: MainBorder(),
+                                          enabledBorder: MainBorder(),
+                                        ),
+                                      ),
                                     ),
-                                expiryDateDecoration: InputDecoration(
-                                  
-                                  // labelStyle: const TextStyle(color: ColorCode.orange),
-                                  focusedBorder: controller.border,
-                                  enabledBorder: controller.border,
-                                  errorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
+                                
+                                Padding(
+                                       padding:  EdgeInsets.symmetric(
+                                        vertical: 10.r, 
+                                        horizontal: 15.r
+                                      ),
+                                      child: TextFormField(
+                                        readOnly: true,
+                                        style: TextFieldStyle(),
+                                        // controller: controller.cardNumberCtrl,                  
+                                        autocorrect: true,
+                                        keyboardType: TextInputType.number,
+                                        // obscureText: true,
+                                        // obscuringCharacter:  ,
+                                         inputFormatters: [
+                         MaskedInputFormatter('####-####-####-####')
+                                          ],
+                                        onChanged: (val){
+                                          log(val.length.toString());
+                                           controller.addCardVaild();
+                                          if(val.length == 19){
+                        FocusManager.instance.primaryFocus?.nextFocus();
+                        
+                                          }
+                                         
+                                        },
+                                        validator: (val){
+                                           if(val!.length == 19){
+                                            return null;
+                                          }
+                                          else{
+                                            return "Wrong Card Number";
+                                          }
+
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: "XXXX-XXXX-XXXX-XXXX",
+                         hintStyle: TextStyle(
+                                        color: ColorCode.darkGray,
+                                        fontWeight: FontWeight.w700
+                                      ), 
+                                          focusedBorder: MainBorder(),
+                                          border: MainBorder(),
+                                          enabledBorder: MainBorder(),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  // labelText: 'Expired Date',
-                                  hintText: 'EXP',
-                                   hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorCode.ligthGray),
-                                ),
-                                cvvCodeDecoration: InputDecoration(
-                                   hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorCode.ligthGray),
-                                  // labelStyle: const TextStyle(color: ColorCode.orange),
-                                  focusedBorder: controller.border,
-                                  enabledBorder: controller.border,
-                                  errorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  // labelText: 'CVV',
-                                  hintText: 'CSV',
-                                ),
-                                zipCodeDecoration: 
-                                InputDecoration(
-                                  hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorCode.ligthGray),
-                                  // labelStyle: const TextStyle(color: ColorCode.orange),
-                                  focusedBorder: controller.border,
-                                  enabledBorder: controller.border,
-                                  errorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  // labelText: 'CVV',
-                                  hintText: 'ZIP',
-                                ),
-            
-                                onCreditCardModelChange: (v) {
-                                  log(v.zipCode.toString());
-                                  // controller.setCardValue(v);
-                                },
-                                // onCreditCardModelChange: () => onCreditCardModel,
+                                    Padding(
+                                       padding:  EdgeInsets.symmetric(
+                                        vertical: 10.r, 
+                                        horizontal: 15.r
+                                      ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                            Expanded(
+                               flex: 2,
+                                child: TextFormField(
+                                        style: TextFieldStyle(),
+                                        controller: controller.expDataCtrl,  
+                                    readOnly: true,
+                                        autocorrect: true,
+                                        keyboardType: TextInputType.number,
+                                         inputFormatters: [
+                         MaskedInputFormatter('##/####')
+                                          ],
+                                        onChanged: (value){
+                                          if(value.length == 5){
+                       FocusManager.instance.primaryFocus?.nextFocus();
+                                          }  
+                                          controller.addCardVaild();      
+                                        },
+                                           validator: (val){
+                                           if(val!.length == 5){
+                                            return null;
+                                          }
+                                          else{
+                                            return "Exp Data";
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: "MM/YY",
+                         hintStyle: TextStyle(
+                                        color: ColorCode.ligthGray,
+                                        fontWeight: FontWeight.w700
+                                      ), 
+                                          focusedBorder: MainBorder(),
+                                          border: MainBorder(),
+                                          enabledBorder: MainBorder(),
+                                        ),
+                                      ),
                               ),
-                              Spacer(),
+                                 SizedBox(width: 20.h,),
+                              Expanded(
+                                 flex: 2,
+                                 
+                                child: TextFormField(
+                                        style: TextFieldStyle(),
+                                        controller: controller.cvvCtrl,                  
+                                        autocorrect: true,
+                                        
+                                        keyboardType: TextInputType.number,
+                                        obscureText: true,
+                                        obscuringCharacter: "X",
+                                         inputFormatters: [
+                         MaskedInputFormatter('###')
+                                          ],
+                                        onChanged: (val){
+                                          if(val.length ==  3){
+                         FocusManager.instance.primaryFocus?.nextFocus();
+                                          }
+                                          controller.addCardVaild();
+                                        },
+                                         validator: (val){
+                                           if(val!.length == 3){
+                                            return null;
+                                          }
+                                          else{
+                                            return "CVV";
+                                          }
+
+                                        },
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          hintText: "XXX",
+                         hintStyle: TextStyle(
+                                        color: ColorCode.darkGray,
+                                        fontWeight: FontWeight.w700
+                                      ), 
+                                          focusedBorder: MainBorder(),
+                                          border: MainBorder(),
+                                          enabledBorder: MainBorder(),
+                                        ),
+                                      ),
+                              ),
+                              SizedBox(width: 20.h,),
+                              Expanded(
+                                 flex: 2,
+                                child: TextFormField(
+                                  readOnly: true,
+                                        style: TextFieldStyle(),
+                                        controller: controller.zipCodeCtrl,                  
+                                        autocorrect: true,
+                                        obscureText: true,
+                                        obscuringCharacter: "X",
+                                        keyboardType: TextInputType.name,
+                                         inputFormatters: [
+                                            MaskedInputFormatter('#####')
+                                          ],
+                                        onChanged: (val){
+                                           controller.addCardVaild();
+                                           if(val.length == 5){
+
+                                           FocusManager.instance.primaryFocus?.unfocus();
+                                           }
+                                          
+                                        },
+                                        validator: (val){
+                                          if(val!.length == 5){
+                                            return null;
+                                          }
+                                          else{
+                                            return "Zip";
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: "XXXXX",
+                                          hintStyle: TextStyle(
+                                        color: ColorCode.ligthGray,
+                                        fontWeight: FontWeight.w700
+                                      ), 
+                                          focusedBorder: MainBorder(),
+                                          border: MainBorder(),
+                                          enabledBorder: MainBorder(),
+                                        ),
+                                      ),
+                              ),
+                            ],),
+                                   ),
                               const SizedBox(
                                 height: 20,
                               ),
-                              Padding(
-                                padding:  EdgeInsets.symmetric(
-                                  horizontal: 10.h,
-                                ),
-                                child: FillBtn(
-                                  ontap: () {
-                                    if(controller.formKey.currentState!.validate()){
-                                          //  Get.back();
-                                          Navigator.pop(context);
-                                          
-                                    }
-                                  },
-                                  text: "SAVE",
-                                  Bgcolor: ColorCode.ligthGray,
-                                ),
-                              ),
-                              SizedBox(height: 20.h,),
-                              Padding(
-                               padding:  EdgeInsets.symmetric(
-                                  horizontal: 10.h,
-                                ),
-                                child: BorderBtn(ontap: (){}, text: "DELETE PAYMENT METHOD", Bgcolor: ColorCode.ligthGray,
-                                textColor: ColorCode.ligthGray,
-                                 ),
-                              ),
-                               SizedBox(
-                                height: 100.h,
-                              ),
-                              Padding(
+                             Padding(
                                   // this is new
                                   padding: EdgeInsets.only(
                                       bottom: MediaQuery.of(context)
@@ -228,7 +302,83 @@ class EditCardDetails extends GetView<VehicleController> {
                                           .bottom))
                             ]),
                       )))),
-            ));
+            ),
+            bottomNavigationBar: Container(
+              height: 140.h,
+              child: Column(
+                children: [
+                   Padding(
+                                padding:  EdgeInsets.symmetric(
+                                  horizontal: 15.h,
+                                ),
+                                child: FillBtn(
+                                  ontap: () {
+                                    // if(controller.formKey.currentState!.validate()){
+                                          //  Get.back();
+                                          // Navigator.pop(context);     
+                                      controller.updateCardName(context);                                     
+                                    // }
+                                  },
+                                  text: "SAVE",
+                                  Bgcolor: ColorCode.ligthGray,
+                                ),
+                              ),
+                              SizedBox(height: 10.h,),
+                              Padding(
+                               padding:  EdgeInsets.symmetric(
+                                  horizontal: 15.h,
+                                  vertical: 5.h
+                                ),
+                                child: BorderBtn(ontap: (){
+                                    showDialog(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: Text(
+                                          "Delete Card",
+                                          style: Heading1(),
+                                        ),
+                                        content: Text(
+                                          "Are your sure to delete this card",
+                                          style: Heading3Regular(),
+                                        ),
+                                        actions: <Widget>[
+                                          Row(children: [
+                                          
+                                 Expanded(
+                                              flex: 2,
+                                            child: ElevatedButton(
+                                              // FlatButton widget is used to make a text to work like a button
+                                          
+                                              onPressed: () {
+                                                Navigator.of(ctx).pop();
+                                              }, // function used to perform after pressing the button
+                                              child: Text('CANCEL'),
+                                            ),
+                                          ),
+                                          SizedBox(width:  20.h,),
+                             Expanded(
+                                              flex: 2,
+                                            child: ElevatedButton(
+                                                // textColor: Colors.black,
+                                                onPressed: () async {
+                                                  Navigator.of(ctx).pop();
+                                                   controller.DeleteCardDetailsApi(context, controller.editCardData!.id.toString());
+                                                },
+                                                child: Text('DELETE')),
+                                          ),
+                                          ],)
+                                        ],
+                                      ),
+                                    );
+                                  // controller.DeleteCardDetailsApi(context, controller.editCardData!.id.toString());
+                                }, text: "DELETE PAYMENT METHOD", Bgcolor: ColorCode.ligthGray,
+                                textColor: ColorCode.ligthGray,
+                                 ),
+                              ),
+                ],
+              ),
+            ),
+            );
       },
     );
     // return GetBuilder<VehicleController>(

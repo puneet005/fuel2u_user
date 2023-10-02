@@ -46,6 +46,7 @@ abstract class Routes {
   static const  MEMBERSHIPETAILS= _Paths.MEMBERSHIPETAILS;
   static const  ADDPROMOCODE= _Paths.ADDPROMOCODE;
   static const  SUPPORT= _Paths.SUPPORT;
+  static const  MAKEPAYMENT= _Paths.MAKEPAYMENT;
   
 
   
@@ -98,6 +99,7 @@ abstract class _Paths{
   static const MEMBERSHIPETAILS =  '/MemberShipDetail';
   static const ADDPROMOCODE =  '/AddPromoCode';
   static const SUPPORT =  '/Support';
+  static const MAKEPAYMENT =  '/MakePayment';
     
   
   

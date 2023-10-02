@@ -2,30 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
-// import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
-import 'package:fuel2u_user/view/order/select_location.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+
 
 class SelectPlanOnOrder extends GetView<OrderController> {
   const SelectPlanOnOrder({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-            child: GetBuilder<OrderController>(
+  Widget build(BuildContext context) {  
+    return GetBuilder(
                 init: OrderController(),
                 initState: (_) {},
                 builder: (_) {
-                  return GestureDetector(
+                  return  Scaffold(
+        body: SafeArea(
+            child: GestureDetector(
                     onTap: ()
-                    
                     {
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
@@ -46,6 +44,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                     ),
                                   ),
                                   icon: InkWell(
+                                     onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                                     child: Image.asset(
                                       "assets/icons/mytruck.png",
                                       width: 50,
@@ -67,10 +66,11 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                 height: 30.h,
                               ),
                               // Bussiness Plan
+                              if(controller.profileData!.userType != "User")
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                    height: Get.height / 10,
+                                    height: Get.height /  9.5,
                                     decoration: BoxDecoration(
                                         // color: ColorCode.orange,
                                         border: Border.all(
@@ -137,7 +137,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                                       height: 5.h,
                                                     ),
                                                     Text(
-                                                      "Employer Promo Code: XXXXXX",
+                                                      "Employer Promo Code: ${controller.profileData!.promocode ?? "XXXXXX"}",
                                                       style: Heading5(
                                                           fbold:
                                                               FontWeight.normal),
@@ -147,13 +147,11 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                               ))
                                         ])),
                               ),
-                  
                               // Pay as you go
-                  
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                    height: Get.height / 10,
+                                    height: Get.height / 9.5,
                                     decoration: BoxDecoration(
                                         // color: ColorCode.orange,
                                         border: Border.all(
@@ -233,7 +231,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                               ),
                               // Promo code  Field
                   
-                              if (controller.selectPlan == 1)
+                              if (controller.selectPlan == 1 && controller.profileData!.userType != "User" && controller.isPromoCodevalid.value == false)
                                 Padding(
                                   padding:  EdgeInsets.symmetric(
                                     horizontal: 10.h, 
@@ -252,7 +250,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                     ],
                                   ),
                                 ),
-                              if (controller.selectPlan == 1)
+                              if (controller.selectPlan == 1 && controller.profileData!.userType != "User" && controller.isPromoCodevalid.value == false)
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 10.r, horizontal: 15.r),
@@ -264,10 +262,18 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                       keyboardType: TextInputType.name,
                                       onChanged: (val) {
                                         if (val.isNotEmpty) {
-                                          // controller.getVaildPromoCode();
-                                        } else {
-                                          //  controller.getNotVaildPromoCode();
+                                          controller.promoCodeInPlanSelect.value = true;
+                                          controller.update();
                                         }
+                                        else{
+                                           controller.promoCodeInPlanSelect.value = false;
+                                            controller.update();
+                                        }
+                                        //   controller.getVaildPromoCode();
+                                        // } 
+                                        // else {
+                                        //    controller.getNotVaildPromoCode();
+                                        // }
                                       },
                                       validator: (val) {
                                         if (val == null || val.isEmpty) {
@@ -290,35 +296,44 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                 ),
                               // Spacer(),
                                SizedBox(height: 30.h,),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10.h,
-                                  // vertical: 0.h
-                                ),
-                                child: FillBtn(
-                                  ontap: () {
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: SelectLocation(),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
-                                  },
-                                  text: "Next",
-                                  Bgcolor:controller.selectPlan == -1 ? ColorCode.ligthGray : ColorCode.orange,
-                                ),
-                              ),
+                              
                               SizedBox(
                                 height: 20.h,
                               )
                             ]))),
-                  );
-                })));
+                  ), 
+                ),
+                bottomNavigationBar: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20.h,
+                                  vertical: 20.h
+                                ),
+                                child: 
+                                controller.selectPlan == 1 ? 
+                                FillBtn(
+                                  ontap: () {
+                                    // Business plan with promo code rigth
+                                    if(controller.selectPlan == 1 &&  controller.isPromoCodevalid.value == true){
+                                      controller.GetPlan(context, 3);
+                                    }
+                                    else{
+                                      // 
+                                    controller.updatePromoCodeApi(context);                                
+                                    }
+                                  },
+                                  text: "Next", 
+                                  Bgcolor: controller.selectPlan == 1 &&  controller.isPromoCodevalid.value == true ?  ColorCode.orange : controller.selectPlan == 1  &&  controller.promoCodeInPlanSelect.value ?  ColorCode.orange: ColorCode.ligthGray ,
+                                ):
+                                FillBtn(
+                                  ontap: () {
+                                     controller.GetPlan(context, 1);                                   
+                                  },
+                                  text: "Next",
+                                  Bgcolor:controller.selectPlan == -1 ? ColorCode.ligthGray : ColorCode.orange,
+                                ),
+                              ),); });
   }
 }
-
 /*
  ListView(
           //             shrinkWrap: true,
@@ -376,6 +391,4 @@ class SelectPlanOnOrder extends GetView<OrderController> {
           //               ))
           //             ,
           //           )
-
-
  */

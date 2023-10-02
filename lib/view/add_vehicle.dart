@@ -23,9 +23,13 @@ class AddVehicle extends GetView<AddVehicleController> {
   @override
   Widget build(BuildContext context) {
     AddVehicleController controller = Get.find<AddVehicleController>();
+   Future.delayed(Duration.zero, (){
+    controller.update();
     controller. MakeApi();
     controller. ColorApi();
-    controller. GetStateList();
+    controller. GetStateList();   
+   });
+    
     // BusinessController stateController = Get.find<BusinessController>();
     // TODO: implement build
     return Scaffold(
@@ -365,7 +369,7 @@ class AddVehicle extends GetView<AddVehicleController> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.h),
                   child: BorderBtn(ontap: () {
-                    Get.offAllNamed(Routes.HOME);
+                      Get.offAllNamed(Routes.HOME);
                   }, text: "SKIP FOR NOW"),
                 ),
 
