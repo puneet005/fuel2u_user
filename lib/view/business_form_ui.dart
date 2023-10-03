@@ -21,6 +21,8 @@ class BusinessForm extends GetView<BusinessController> {
     BusinessController controller = Get.find<BusinessController>();
     SignUpController userController = Get.find<SignUpController>();
     Future.delayed(Duration.zero,(){
+      // controller
+      controller.getCurrentPosition();
       controller.formClean();
       controller.contactNumberCtrl.text  = getFormattedPhoneNumber(userController.userVerftyDetail.phoneNumber!);
       controller.contactNameCtrl.text = userController.userVerftyDetail.firstName! + "" +  userController.userVerftyDetail.lastName! ;
@@ -638,7 +640,6 @@ class BusinessForm extends GetView<BusinessController> {
                         height: 55.h,
                           child: Row(                            
                             children: [
-
                             Expanded(
                                         flex: 2,
                                         // width: Get.width/2.5,

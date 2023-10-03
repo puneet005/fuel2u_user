@@ -488,6 +488,7 @@ String getFormattedPhoneNumber(
       }    
       Overlay.of(context).insert(loader);
       log(ApiUrls.signout);
+      log("Bearer $token");
       http.Response response = await http.post(
       Uri.parse(ApiUrls.signout),
       headers: {

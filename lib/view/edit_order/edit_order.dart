@@ -649,7 +649,7 @@ class OrderEditAfterCreate extends GetView<OrderController> {
                                                         controller.editOrderDetailsData?.location!.name ?? "" : controller.selectLocation!.name ?? ""}",
                                                         style: Heading4Medium(),
                                                       ),
-                                                      if(controller.editOrderDetailsData!.user!.userType == "User")
+                                                      // if(controller.editOrderDetailsData!.user!.userType != "")
                                                       InkWell(
                                                         onTap: (){
                                                           controller.isEdit.value = true;

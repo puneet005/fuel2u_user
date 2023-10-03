@@ -188,7 +188,7 @@ class OrderReviewStatus extends GetView<OrderController> {
                                   Container(
                                     height: 20.h,
                                     child: Text(
-                                      "Delivery Instructions: ${controller.orderDetailsData!.instructions}",
+                                      "Delivery Instructions: ${controller.orderDetailsData!.instructions ?? ""}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: Heading5(),

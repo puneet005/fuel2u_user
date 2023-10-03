@@ -36,9 +36,9 @@ class NewOrder extends GetView<OrderController> {
             body: SafeArea(
                 child:  RefreshIndicator(
                             onRefresh: () async{
-                              controller.GetVehicleList();
-                            
-                            },
+                            controller.GetVehicleList();
+                            controller.update();                              
+                  },
                   child: Container(
                       child: Padding(
                           padding: EdgeInsets.symmetric(

@@ -1,4 +1,6 @@
-  import 'package:flutter/material.dart';
+  import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,10 +24,13 @@ class AddLocation extends StatefulWidget {
 
 class _AddLocationState extends State<AddLocation> {
    VehicleController controller = Get.find<VehicleController>(); 
+
   @override
   void initState() {
     super.initState();      
     Future.delayed(Duration.zero, () async {
+      // log(widget.userLive.toString());
+      controller.clearLocationData();
       controller.stateCodeValue = null;
       controller.update();
       controller.getCurrentPosition(widget.userLive);

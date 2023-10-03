@@ -6,7 +6,7 @@ import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
-import 'package:fuel2u_user/view/order/confirm_order.dart';
+// import 'package:fuel2u_user/view/order/confirm_order.dart';
 import 'package:fuel2u_user/view/order/edit_order.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -172,13 +172,14 @@ class ReviewOrder extends GetView<OrderController>{
                                                 ],
                                               ),
                                                 SizedBox(height: 5.h,),
-                                               Container(
-
+                                                if(controller.planId != 3)
+                                               Container(                                            
                                                  child: Text("Location: ${controller.selectLocation!.address ?? ""}", 
                                                   overflow: TextOverflow.ellipsis, 
                                                 maxLines: 1,
                                                  style: Heading5(),),
                                                ),
+                                                  if(controller.planId != 3)
                                               SizedBox(height: 5.h,),
                                               Container(
                                                 height: 20.h,

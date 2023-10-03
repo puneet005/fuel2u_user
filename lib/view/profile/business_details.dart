@@ -28,6 +28,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
   @override
   void initState() {
     super.initState();
+    controller.getCurrentPosition();
     controller.BusinessInfoApi(controller);
   }
 
@@ -392,7 +393,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                                 textInputAction: TextInputAction.next,
                                 controller: controller.contactEmailCtrl,
                                 autocorrect: true,
-                                keyboardType: TextInputType.name,
+                                keyboardType: TextInputType.emailAddress,
                                 onChanged: (val) {
                                   controller.checkFormValied();
                                 },
@@ -427,6 +428,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
                                   MaskedInputFormatter('###-###-####')
+
                                 ],
                                 onChanged: (val) {
                                   controller.checkFormValied();
@@ -635,8 +637,10 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                               padding: EdgeInsets.symmetric(horizontal: 10.h),
                               child: FillBtn(
                                 ontap: () {
+                                  // controller.UpdateBusinessFormApi(context, "0");
                                   if(controller.bussinessFormKey.currentState!.validate()){
-                                      // log("Hello Business");\
+                                    
+                                      // log("Hello Business");
                                       if(controller.editBusinessData == null){
                                         controller.SaveBusinessFormApi(context);
 

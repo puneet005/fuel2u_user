@@ -6,6 +6,7 @@ import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
+import 'package:fuel2u_user/view/order/select_location.dart';
 import 'package:fuel2u_user/view/order/select_plan.dart';
 // import 'package:fuel2u_user/view/premium/plan_list.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -213,10 +214,23 @@ class FuelType extends  GetView<OrderController>{
                   if(controller.selectFuelType != -1 && controller.selectFuelAmount != 0){
                                            controller.selectPlan = -1;
                                            controller.update();
-                    controller.ProfileApi(context).then((value) {
-                      
-                      if(controller.profileData!.subscription!.planId == 2){
-                          controller.GetPlan(context, controller.profileData!.subscription!.planId!);
+                    controller.ProfileApi(context).then((value) {                    
+                      if(controller.profileData!.userType == "Family User"){
+                            controller.planId = controller.profileData!.subscription!.planId ?? 2;
+                            controller.update();
+                             PersistentNavBarNavigator
+                                                      .pushNewScreen(
+                                                    context,
+                                                    screen:  SelectLocation(),
+                                                    withNavBar:
+                                                    true, // OPTIONAL VALUE. True by default.
+                                                    pageTransitionAnimation:
+                                                    PageTransitionAnimation
+                                                        .cupertino,
+                      );
+
+
+                          // controller.GetPlan(context, controller.profileData!.subscription!.planId!);                         
                       }
                       else{
                         PersistentNavBarNavigator

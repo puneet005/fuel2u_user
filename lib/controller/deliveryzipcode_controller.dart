@@ -144,12 +144,10 @@ class DeliveryZipCodeController extends GetxController {
       // log(placemarks.toString());
       Placemark place = placemarks[0];
       _currentAddress =
-          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}, ${place.administrativeArea}';
-      
+          '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}, ${place.administrativeArea}';      
       zipcode.text = place.postalCode.toString();
       zipCodeVaild.value  = true;
-      isLoading.value = false;
-      
+      isLoading.value = false;      
       update();
       log(_currentAddress.toString());
     }).catchError((e) {

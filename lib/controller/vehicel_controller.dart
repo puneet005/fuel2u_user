@@ -175,12 +175,12 @@ Future<bool> _handleLocationPermission() async {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-       
+        permission = await Geolocator.requestPermission();
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-     
+     permission = await Geolocator.requestPermission();
       return false;
     }
     return true;
@@ -193,10 +193,13 @@ Future<bool> _handleLocationPermission() async {
     // update();
     log("Get Location Permission");
     final hasPermission = await _handleLocationPermission();
-    log(hasPermission.toString());
+    // log(hasPermission.toString());
     if (!hasPermission) {
+        // permission = await Geolocator.requestPermission();
+       await _handleLocationPermission();
+    }
+    else{
 
-    };
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
            currentPosition = position;
@@ -205,10 +208,12 @@ Future<bool> _handleLocationPermission() async {
             if(userLive){
             getAddressFromLatLng(position);
         }
+        
       // _getAddressFromLatLng(_currentPosition!);
     }).catchError((e) {
       debugPrint(e);
     });
+    }
   }
    Future<void> getAddressFromLatLng(Position position) async {
     usecurrentLoading.value =  true;
@@ -826,4 +831,14 @@ void setCardDataInEdit(){
       );
     }
   }
+
+  void clearLocationData() {
+    homename.clear();
+    streetAddressCtrl.clear();
+    cityCtrl.clear();
+    stateCodeValue = null;
+    zipCodeCtrl.clear();
+    update();
+
+    }
 }

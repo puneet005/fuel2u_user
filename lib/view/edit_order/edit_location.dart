@@ -72,7 +72,7 @@ class EditLocation extends GetView<OrderController> {
                             SizedBox(
                               height: 20.h,
                             ),
-                            if(controller.profileData!.userType != "User")
+                            // if(controller.profileData!.userType == "User")
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 10.r, horizontal: 10.r),
@@ -231,7 +231,7 @@ class EditLocation extends GetView<OrderController> {
                                                                               controller.locationList![index].name ?? "",
                                                                               style: Heading4Medium(),
                                                                             ),
-                                                                            Image.asset("assets/icons/edit_icon.png"),
+                                                                            // Image.asset("assets/icons/edit_icon.png"),
                                                                             // Icon(Icons.edit_square, color: Colors.grey[400],)
                                                                           ],
                                                                         ),
@@ -285,7 +285,7 @@ class EditLocation extends GetView<OrderController> {
                                   }
                                   }
                                 },
-                                text: 'Next',
+                                text: 'Save',
                               ),
                             ),
                             SizedBox(

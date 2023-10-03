@@ -328,7 +328,7 @@ class MyOrder extends GetView<OrderController> {
                                 SizedBox(
                                   height: 5.h,
                                 ),
-                                if(orderList[index].business != null && (orderList[index].business!.deliveryInstructions!.isNotEmpty || orderList[index].business!.deliveryInstructions != null))
+                                if(orderList[index].business != null && (orderList[index].business!.deliveryInstructions!= null))
                                 Row(
                                   // mainAxisAlignment: MainAxisAlignment.end,
                                   children: [

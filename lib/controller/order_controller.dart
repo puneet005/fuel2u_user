@@ -22,6 +22,7 @@ import 'package:fuel2u_user/view/order/confirm_order.dart';
 import 'package:fuel2u_user/view/order/order_process/driver_accpet_request.dart';
 import 'package:fuel2u_user/view/order/order_process/order_review.dart';
 import 'package:fuel2u_user/view/order/select_location.dart';
+import 'package:fuel2u_user/view/order/select_payment_method.dart';
 import 'package:fuel2u_user/view/order/single_order_in_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -60,6 +61,8 @@ class OrderController extends GetxController {
 
 // Order Details after Order Creating in Main Order List
   SingleOrderModelData? orderDetailsData;
+
+  int? planId;
 // Get Next 9 Days Function
   void getnextDay() {
     DateTime _firstDayOfTheweek =
@@ -101,8 +104,8 @@ Future<void> BusinessDate(List<String>? day
 ) async{
 //  Change this to the number of days you want to add.
 
-
-    
+    log("BusinessDate block");
+    log(day.toString());
     dateListofdays.clear();
     List<DateTime> dateList = [];
     var currentDate = DateTime.now();
@@ -110,17 +113,21 @@ Future<void> BusinessDate(List<String>? day
     String? formattedDate;
     for (var i = 0; i < 9; i++) {
       dateList.add(currentDate);
+      
       currentDate = currentDate.add(Duration(days: 1));
     }
-
-    // print('List of Dates:');
+  log(dateList.toString());
+    print('List of Dates:');
     if(day!.isNotEmpty || day != null){
     for (var date in dateList) {     
       formattedDate = DateFormat('yyyy-MM-dd').format(date);
       var formattedDate2 = DateFormat('dd').format(date);
     var weekname = getDayOfWeek(date);
+    log( "weekName ==> " + weekname);
+    
     for(int j =0; j< day.length; j++){
-      String shotday = day[j].substring(1, 4);
+      String shotday = day[j].substring(0, 3);
+      log("shotday ====> " +shotday);
       if(shotday == weekname){
         dateListofdays.add({
         "day": weekname,
@@ -320,7 +327,7 @@ Future<void> BusinessDate(List<String>? day
       if (response.statusCode == 200) {
         vehicleListLoading.value = false;
         update();
-        log("vehicles?limit=10&page=1 Response=>> " +
+        log("vehicles Response=>> " +
             (response.body).toString());
         isLoading.value = false;
         VehicleListModel res =
@@ -498,14 +505,13 @@ String? minFuelType;
       log("profile Response=>> " + (response.body).toString());
       ProfileModel res = ProfileModel.fromJson(json.decode(response.body));
       profileData = res.data;
-      if(res.data!.userType != "User"){
+      if(res.data!.userType != "User" && res.data!.userType != "Family User"){
       VerifyPromoCode(context, profileData!.promocode.toString());
       }
       update();
       hideLoader(loader);
     } else {
       profileLoading.value = false;
-
       update();
       hideLoader(loader);
       // return false;
@@ -536,18 +542,19 @@ String? minFuelType;
       log(response.body);
       if (response.statusCode == 200) {
         // locationLoading.value = false;
-        selectPlan = 1;
+       
         update();
         log("verfiyPromocode Response=>> " + (response.body).toString());
         var res = json.decode(response.body);
 
         if (res['is_valid'] == true) {
+           selectPlan = 1;
           isPromoCodevalid.value = true;
 
           update();
         } else {
           isPromoCodevalid.value = false;
-          selectPlan = 1;
+          // selectPlan = 1;
           update();
         }
         profileLoading.value = false;
@@ -604,7 +611,7 @@ String? minFuelType;
           promoCodeDetail = res.data!;
           PersistentNavBarNavigator.pushNewScreen(
             context,
-            screen: SelectLocation(),
+            screen: SelectPaymentMethod(),
             withNavBar: true, // OPTIONAL VALUE. True by default.
             pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );
@@ -630,58 +637,70 @@ String? minFuelType;
   }
 
 // Get Plans
-  Future<void> GetPlan(BuildContext context, int id) async {
-    OverlayEntry loader = overlayLoader(context);
-    try {
-      String? token = await pref.getAccessToken();
-      if (token == null || token == "") {
-        token = oneTimeToken;
-      }
-      Overlay.of(context).insert(loader);
-      var map = <String, dynamic>{};
-      map['plan_id'] = id;
-      log(ApiUrls.plans);
-      log(map.toString());
-      http.Response response = await http
-          .post(Uri.parse(ApiUrls.plans), body: jsonEncode(map), headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.acceptHeader: 'application/json',
-        HttpHeaders.authorizationHeader: 'Bearer $token',
-      }).timeout(Duration(seconds: 30));
-      // ignore: unused_local_variable
-      var data = json.decode(response.body);
-      log(response.body);
-      if (response.statusCode == 200) {
-        // log("Promo code Api Response=>> " +
-        //   (response.body).toString());
-        hideLoader(loader);
-        if (data['status'] == true) {
-          PersistentNavBarNavigator.pushNewScreen(
-            context,
-            screen: SelectLocation(),
-            withNavBar: true,
-            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-          );
-        }
-      } else {
-        hideLoader(loader);
-        ToastUi(
-          data['message'].toString(),
-          bgColor: ColorCode.red,
-          textColor: ColorCode.white,
-        );
-      }
-    } catch (e) {
-      log(e.toString());
-      hideLoader(loader);
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
-    }
-  }
+  // Future<void> GetPlan(BuildContext context, int id) async {
+  //   OverlayEntry loader = overlayLoader(context);
+  //   try {
+  //     String? token = await pref.getAccessToken();
+  //     if (token == null || token == "") {
+  //       token = oneTimeToken;
+  //     }
+  //     Overlay.of(context).insert(loader);
+  //     var map = <String, dynamic>{};
+  //     map['plan_id'] = id;
+  //     log(ApiUrls.plans);
+  //     log(map.toString());
+  //     http.Response response = await http
+  //         .post(Uri.parse(ApiUrls.plans), body: jsonEncode(map), headers: {
+  //       HttpHeaders.contentTypeHeader: 'application/json',
+  //       HttpHeaders.acceptHeader: 'application/json',
+  //       HttpHeaders.authorizationHeader: 'Bearer $token',
+  //     }).timeout(Duration(seconds: 30));
+  //     // ignore: unused_local_variable
+  //     var data = json.decode(response.body);
+  //     log(response.body);
+  //     if (response.statusCode == 200) {
+  //       // log("Promo code Api Response=>> " +
+  //       //   (response.body).toString());
+  //       hideLoader(loader);
+  //       if (data['status'] == true) {
+  //         if(id == 3){
+  //            PersistentNavBarNavigator.pushNewScreen(
+  //                                     context,
+  //                                     screen: SelectPaymentMethod(),
+  //                                     withNavBar:
+  //                                         true, // OPTIONAL VALUE. True by default.
+  //                                     pageTransitionAnimation:
+  //                                         PageTransitionAnimation.cupertino,
+  //             );
+  //         }
+  //         else{
+  //         PersistentNavBarNavigator.pushNewScreen(
+  //           context,
+  //           screen: SelectLocation(),
+  //           withNavBar: true,
+  //           pageTransitionAnimation: PageTransitionAnimation.cupertino,
+  //         );
+  //         }
+  //       }
+  //     } else {
+  //       hideLoader(loader);
+  //       ToastUi(
+  //         data['message'].toString(),
+  //         bgColor: ColorCode.red,
+  //         textColor: ColorCode.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //     hideLoader(loader);
+  //     hideLoader(loader);
+  //     ToastUi(
+  //       e.toString(),
+  //       bgColor: ColorCode.red,
+  //       textColor: ColorCode.white,
+  //     );
+  //   }
+  // }
 
 // Get Card Details
   List<CardDetailModelData>? cardDetails;
@@ -699,10 +718,10 @@ String? minFuelType;
       // Overlay.of(context).insert(loader);
       // var map = <String, dynamic>{};
       // map['plan_id']= 1;
-      log(ApiUrls.paymentMethods);
+      log("${ApiUrls.paymentMethods}?order_type=${planId !=3 ?"personal":"business"}");
 
       http.Response response =
-          await http.get(Uri.parse(ApiUrls.paymentMethods), headers: {
+          await http.get(Uri.parse("${ApiUrls.paymentMethods}?order_type=${planId !=3 ?"personal":"business"}"), headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.acceptHeader: 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token',
@@ -776,7 +795,9 @@ String? minFuelType;
       }
       log(ApiUrls.orders);
       var map = <String, dynamic>{};
+      if(planId != 3){
       map['location_id'] = selectLocation!.id.toString();
+      }
       map['vehicle_id'] = vehicleList![selectVehicleIndex].id;
       map['fuel_type_id'] = selectfuelTypeId;
       map['fuel_quantity'] = selectFuelAmount.value == 1
@@ -785,6 +806,7 @@ String? minFuelType;
       map['instructions'] = commentCtrl.text.trim();
       map['delivery_date'] = selectdata['date'];
       map['payment_method'] = selectedCardDetails!.id.toString();
+      map['plan_id'] = planId;
       log(map.toString());
       http.Response response = await http
           .post(Uri.parse(ApiUrls.orders), body: jsonEncode(map), headers: {

@@ -30,8 +30,6 @@ class LoginController extends GetxController {
       SessionManager pref = SessionManager();
       SignInModelData loginUserDetail =  SignInModelData();
       LogigOtpModelData loginUserVerfityDetail = LogigOtpModelData();
-
-
     @override
   void onInit() {
     super.onInit();

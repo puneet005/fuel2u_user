@@ -9,6 +9,8 @@ import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -354,7 +356,10 @@ BusinessModelData? editBusinessData;
   // Update Business Api
   Future<void> UpdateBusinessFormApi(BuildContext context, String id) async {
     OverlayEntry loader = overlayLoader(context);
+    //  getAddressFromLatLng("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
     try {
+    var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
+      log(locations.toString());
       Overlay.of(context).insert(loader);
       var mobileNo = contactNumberCtrl.text.trim().replaceAll("-", " ");
       String? token = await pref.getAccessToken();
@@ -378,6 +383,8 @@ BusinessModelData? editBusinessData;
       map['billing_city'] = billingCityCtrl.text.tr;
       map['billing_state_id'] = billStateValue!.id;
       map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
+      map['delivery_latitude'] = locations[0].latitude;
+      map['delivery_longitude'] = locations[0].longitude;
       log(ApiUrls.updateBusiness);
       log(map.toString());
       http.Response response = await http
@@ -433,6 +440,8 @@ BusinessModelData? editBusinessData;
     OverlayEntry loader = overlayLoader(context);
     try {
       Overlay.of(context).insert(loader);
+      var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
+      log(locations.toString());
       var mobileNo = contactNumberCtrl.text.trim().replaceAll("-", " ");
       String? token = await pref.getAccessToken();
       if(token == null || token == ""){
@@ -455,8 +464,11 @@ BusinessModelData? editBusinessData;
       map['billing_city'] = billingCityCtrl.text.tr;
       map['billing_state_id'] = billStateValue!.id;
       map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
+      map['delivery_latitude'] = locations[0].latitude;
+      map['delivery_longitude'] = locations[0].longitude;
       log(ApiUrls.business);
       log(map.toString());
+      log('Bearer $token');
       http.Response response = await http
           .post(Uri.parse(ApiUrls.business), body: jsonEncode(map), headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -494,7 +506,8 @@ BusinessModelData? editBusinessData;
         );
       }
     } catch (e) {
-      hideLoader(loader);
+      log(e.toString());
+      // hideLoader(loader);
       hideLoader(loader);
       ToastUi(
         e.toString(),
@@ -502,5 +515,82 @@ BusinessModelData? editBusinessData;
         textColor: ColorCode.white,
       );
     }
+  }
+Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      permission = await Geolocator.requestPermission();
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+     permission = await Geolocator.requestPermission();
+      return false;
+    }
+    return true;
+  }
+
+  String? _currentAddress;
+  Position? currentPosition;
+  final  usecurrentLoading = false.obs;
+   Future<void> getCurrentPosition(
+    // bool userLive
+    ) async {
+    
+    // update();
+    log("Get Location Permission");
+    final hasPermission = await _handleLocationPermission();
+    // log(hasPermission.toString());
+    if (!hasPermission) {
+        // permission = await Geolocator.requestPermission();
+       await _handleLocationPermission();
+    }
+    else{
+
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+           currentPosition = position;
+           update();
+           log(position.toString());
+        //     if(userLive){
+        //     getAddressFromLatLng(position);
+        // }
+        
+      // _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+    }
+  }
+   
+   Future<void> getAddressFromLatLng(String address) async {
+    // usecurrentLoading.value =  true;
+    // update();
+   var locations = await locationFromAddress(address);
+   log(locations.toString());
+    //     .then((List<Placemark> placemarks) {
+    //       // log(placemarks.toString());
+    //   Placemark place = placemarks[0];
+    //   _currentAddress = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}, ${place.administrativeArea}';
+    //   streetAddressCtrl.text = place.street.toString();
+    //   cityCtrl.text = place.locality.toString();
+    //   zipCodeCtrl.text = place.postalCode.toString();
+    //   usecurrentLoading.value = false;
+    //   update();
+    //   log(_currentAddress.toString());
+
+    // }).catchError((e) {
+    //   debugPrint(e);
+    // });
   }
 }

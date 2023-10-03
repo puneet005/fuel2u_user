@@ -5,10 +5,13 @@ import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
+import 'package:fuel2u_user/view/order/select_location.dart';
+import 'package:fuel2u_user/view/order/select_payment_method.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 
 class SelectPlanOnOrder extends GetView<OrderController> {
@@ -314,7 +317,20 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                   ontap: () {
                                     // Business plan with promo code rigth
                                     if(controller.selectPlan == 1 &&  controller.isPromoCodevalid.value == true){
-                                      controller.GetPlan(context, 3);
+                                      if(controller.profileData!.subscription != null){
+                                      controller.planId =  controller.profileData!.subscription?.planId ?? 3;
+                                      }
+                                      else{
+                                        controller.planId = 3;
+                                      }
+                                      controller.update();
+                                       PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: SelectPaymentMethod(),
+            withNavBar: true, // OPTIONAL VALUE. True by default.
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          );
+                                      // controller.GetPlan(context, 3);
                                     }
                                     else{
                                       // 
@@ -326,7 +342,21 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                 ):
                                 FillBtn(
                                   ontap: () {
-                                     controller.GetPlan(context, 1);                                   
+                                     if(controller.profileData!.subscription != null){
+                                      controller.planId =  controller.profileData!.subscription?.planId ?? 1;
+                                      }
+                                      else{
+                                        controller.planId = 1;
+                                      }
+                                    //  controller.GetPlan(context, 1);  
+                                      // controller.planId =  controller.profileData!.subscription!.planId ?? 1;                               
+                                      controller.update();
+                                       PersistentNavBarNavigator.pushNewScreen(
+            context,
+            screen: SelectLocation(),
+            withNavBar: true, // OPTIONAL VALUE. True by default.
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          );
                                   },
                                   text: "Next",
                                   Bgcolor:controller.selectPlan == -1 ? ColorCode.ligthGray : ColorCode.orange,

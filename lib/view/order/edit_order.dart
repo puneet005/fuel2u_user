@@ -535,6 +535,9 @@ class EditOrder extends GetView<OrderController> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(height: 5.h,),
+                                                  controller.planId == 2 ? Text("Individual & Family", 
+                                                   style: Heading4Medium(),
+                                                  ):
                                                   Text(
                                                    controller.isPromoCodevalid.value  ? "Business" : "Pay as you go",
                                                     style: Heading4Medium(),
@@ -555,6 +558,7 @@ class EditOrder extends GetView<OrderController> {
                               height: 40.h,
                             ),
                             // Location Ui
+                             if(controller.planId != 3)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -564,9 +568,11 @@ class EditOrder extends GetView<OrderController> {
                                 )
                               ],
                             ),
+                             if(controller.planId != 3)
                              SizedBox(
                               height: 5.h,
                             ),
+                             if(controller.planId != 3)
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(

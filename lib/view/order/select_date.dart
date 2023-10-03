@@ -1,3 +1,7 @@
+
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,17 +25,22 @@ class SelectDate extends GetView<OrderController>{
     OrderController controller = Get.find<OrderController>();
     Future.delayed(Duration.zero,(){
       if(!controller.isEdit.value){
-       if(controller.profileData!.userType == "User" ){
+        log(controller.profileData!.userType!.toString());
+        log("${controller.profileData!.userType} == Family User");
+       if(controller.profileData!.userType == "User" || controller.profileData!.userType == "Family User"){
+          log("if part");
           controller.mainDate();
       }
       else{
-        if(controller.selectPlan == 2){
-            controller.mainDate();
-        }
-        else{     
-              
+         log("else part");         
+          log(controller.profileData!.deliveryDay.toString());  
+          if(controller.planId == 3){
           controller.BusinessDate(controller.profileData!.deliveryDay);
-        }              
+          }
+          else{
+            controller.mainDate();
+          }
+       
       }    
       }
     });

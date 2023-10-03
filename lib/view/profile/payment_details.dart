@@ -77,9 +77,7 @@ class PaymentDetails extends GetView<VehicleController> {
                                   ):
                           controller.cardDetails!.isEmpty || controller.cardDetails == null 
                               ? EmptyUi()
-                              : PaymentList(context, controller.cardDetails!),
-                        
-                          
+                              : PaymentList(context, controller.cardDetails!),                                                  
                           SizedBox(
                             height: 20.h,
                           ),
