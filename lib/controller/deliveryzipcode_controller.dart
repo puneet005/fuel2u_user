@@ -155,6 +155,23 @@ class DeliveryZipCodeController extends GetxController {
       isLoading.value = false;
 
       update();
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     });
   }   
 

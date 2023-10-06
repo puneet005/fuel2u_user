@@ -28,6 +28,7 @@ class _VehicleHomeState extends State<VehicleHome> {
   @override
   Widget build(BuildContext context) {
     VehicleController controller = Get.put(VehicleController());
+    
     // TODO: implement build
     return Scaffold(
       body: SafeArea(

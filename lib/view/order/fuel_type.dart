@@ -21,6 +21,9 @@ class FuelType extends  GetView<OrderController>{
   @override
   Widget build(BuildContext context) {
     SignUpController profilecontroller = Get.find<SignUpController>(); 
+    Future.delayed(Duration(seconds: 5), (){
+      controller.loadingFlase();
+    });
       return Scaffold(
           body: SafeArea(
           child:GetBuilder(
@@ -29,7 +32,9 @@ class FuelType extends  GetView<OrderController>{
         builder: (_) {
               return  Container(
                 height: Get.height,
-                child: Padding(
+                child: controller.loadingAllData.value? Center(
+                  child: CircularProgressIndicator()
+                ) : Padding(
                   padding:  EdgeInsets.symmetric(
                     horizontal: 15.h,
                     vertical: 10.h

@@ -22,6 +22,7 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    
     // log("Hello");
     // Future.delayed(Duration(seconds: 3),() =>  Get.to(Routes.WELCOME));
   }

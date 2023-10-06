@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
+import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/model/location_list_model.dart';
 import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
@@ -12,6 +13,8 @@ import 'package:fuel2u_user/widgets/border_button_ui.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 // import 'package:get/get_state_manager/src/simple/get_view.dart';
 
 class EditLocation extends StatefulWidget {
@@ -111,8 +114,8 @@ class _EditLocationState extends State<EditLocation> {
                                       )
                                     : GestureDetector(
                                         onTap: () {
-                                          controller.getAddressFromLatLng(
-                                              controller.currentPosition!);
+                                          // controller.getAddressFromLatLng(
+                                          //     controller.currentPosition!);
                                         },
                                         child: Row(
                                           mainAxisAlignment:
@@ -183,7 +186,28 @@ class _EditLocationState extends State<EditLocation> {
                                     border: MainBorder(),
                                     enabledBorder: MainBorder(),
                                   ),
+                                   onTap: () async {
+                        await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>    PlacePicker(
+                                apiKey: googleMKey,              
+                                onPlacePicked: (result) { 
+                                  print(result.adrAddress.toString()); 
+                                  print(result.addressComponents!.toString()); 
+                                  print(result.formattedAddress);                                
+                                  var add =  result.formattedAddress!.split(",");
+                                  print(add.length);
+                                  controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.cityCtrl.text = add[add.length - 3];                                                 
+                                  controller.update();
+                                  Navigator.of(context).pop();
+                                },
+                                initialPosition: LatLng(controller.currentPosition!.latitude, controller.currentPosition!.longitude),
+                                useCurrentLocation: true,
+                                resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                              )));
+                    },
                                 ),
+                                
                               ),
                               // Add City
                               Padding(

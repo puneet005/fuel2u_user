@@ -26,21 +26,27 @@ class NewOrder extends GetView<OrderController> {
 
   @override
   Widget build(BuildContext context) {
-    // OrderController controller = Get.find<OrderController>();
-    // TODO: implement build
+   OrderController controller = Get.find<OrderController>();
+   Future.delayed(Duration.zero,(){
+    controller.cleanAllData();
+    controller.GetVehicleList();
+    
+    controller.update(); 
+   });
     return GetBuilder(
         init: OrderController(),
         initState: (_) {},
         builder: (_) {
           return Scaffold(
             body: SafeArea(
-                child:  RefreshIndicator(
-                            onRefresh: () async{
-                            controller.GetVehicleList();
-                            controller.update();                              
-                  },
-                  child: Container(
-                      child: Padding(
+                child:  Container(
+                  child: RefreshIndicator(
+                    onRefresh: () async{
+                              controller.GetVehicleList();
+                              controller.update(); 
+                                                           
+                    },
+                    child: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 15.h, vertical: 10.h),
                           child: ListView(children: [
@@ -86,7 +92,7 @@ class NewOrder extends GetView<OrderController> {
                                     children: List.generate(
                                         5, (index) => ShimmerLoading()),
                                   )
-                                : controller.vehicleList!.isEmpty
+                                : controller.vehicleList == null || controller.vehicleList!.isEmpty 
                                     ? SizedBox(
                                         height: 150.h,
                                         child: Center(
@@ -366,7 +372,8 @@ class NewOrder extends GetView<OrderController> {
                                                 )),
                                       ),
                             // Spacer(),
-                          ]))),
+                          ])),
+                  ),
                 )),
             bottomNavigationBar: Container(
               height: 120.h,

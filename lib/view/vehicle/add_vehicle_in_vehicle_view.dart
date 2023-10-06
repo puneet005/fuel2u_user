@@ -30,6 +30,7 @@ class AddVehicleInVehicleView extends GetView<AddVehicleController> {
   @override
   Widget build(BuildContext context) {
     AddVehicleController controller = Get.find<AddVehicleController>();
+    controller.checkAllFieldDone();
 controller. MakeApi();
     controller. ColorApi();
     controller. GetStateList();

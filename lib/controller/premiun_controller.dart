@@ -87,13 +87,30 @@ class PremiunController extends GetxController {
   } catch (e) {
      isLoading.value = false;
          update();
-     log(e.toString());
-    
+          if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
     // hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    //  log(e.toString());
+    
+    // // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
     }
    }
 
@@ -226,13 +243,30 @@ class PremiunController extends GetxController {
         
   } 
   catch (e) {
-     log(e.toString());
+    //  log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  ); 
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
-     ); 
+     );  
+    } 
      return false;       
     }
    }
@@ -283,13 +317,30 @@ class PremiunController extends GetxController {
      textColor: ColorCode.white,
      );}     
   } catch (e) {
-     log(e.toString());
+    //  log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
     }
    }
 
@@ -334,10 +385,10 @@ Future<bool> SendCardDetailsApi(BuildContext context) async {
       map['exp_year'] = date[1];
       map['cvc'] = cvvCtrl.text.trim();
       map['zip'] = zipCodeCtrl.text.trim();
-      log(ApiUrls.paymentMethods);
+      log(ApiUrls.makePayment);
       log(map.toString());
       http.Response response = await http.post(
-      Uri.parse(ApiUrls.paymentMethods),
+      Uri.parse(ApiUrls.makePayment),
       body: jsonEncode(map),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',

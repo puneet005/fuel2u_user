@@ -276,10 +276,16 @@ class SignUpView extends GetView<SignUpController>{
                 Bgcolor:   controller.acceptTeam.value? ColorCode.orange :  ColorCode.ligthGray,
                   ontap: (){
 
-                  // if(controller.isSignUp.value){
-                if(controller.signupkey.currentState!.validate()){
+                  if( controller.acceptTeam.value){
+                if(controller.signupkey.currentState!.validate() ){
                         controller.SignUpApi(context);
                       }
+                  }else{
+                     ToastUi("Please Accept Terms", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+                  }
                   // }
                   // else{
                   //   ToastUi("Please Enter Requried Field");

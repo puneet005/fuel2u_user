@@ -22,11 +22,21 @@ class NearYourTruck extends StatefulWidget {
 
 class _NearYourTruckState extends State<NearYourTruck> {
    OrderController controller = Get.find<OrderController>();
+   bool loadingis=  true;
   @override
   void initState() {
     // TODO: implement initState
     getLocation();
     super.initState();
+    Future.delayed(Duration(
+      seconds: 3
+    ),(){
+      loadingis = false;
+      setState(() {
+        
+      });
+      
+    });
    
 }
 
@@ -53,9 +63,14 @@ Future<void> getLocation() async {
     return  Scaffold(
       body: GetBuilder<OrderController>(
           init: OrderController(),
-          initState: (_) {},
+          initState: (_) {}, 
           builder: (_) {
-            return Container(
+            return  loadingis ? Container(
+              height: Get.height,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ): Container(
                 child: Stack(
                   children: [
                     GoogleMap(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/model/logig_otp_model.dart';
@@ -76,10 +77,14 @@ class LoginController extends GetxController {
    
 //  Sign In Api
 Future<void> SignInApi(BuildContext context) async {
-    OverlayEntry loader = overlayLoader(context);
+   OverlayEntry loader = overlayLoader(context);
+    Overlay.of(context).insert(loader);
+  if(await ConnectivityWrapper.instance.isConnected){
+
+   
     try {
       
-      Overlay.of(context).insert(loader);
+     
       
      
        var map = <String, dynamic>{};
@@ -138,6 +143,16 @@ Future<void> SignInApi(BuildContext context) async {
      textColor: ColorCode.white,
      );  
     }
+   
+  }
+   else{
+      hideLoader(loader);
+      ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+
    }
 
 
@@ -146,10 +161,12 @@ Future<void> SignInApi(BuildContext context) async {
 
    //  SignUp Verify
    Future<void> SignInVerifyApi(BuildContext context, String otp) async {
-    OverlayEntry loader = overlayLoader(context);
+     OverlayEntry loader = overlayLoader(context);
+    Overlay.of(context).insert(loader);
+  if(await ConnectivityWrapper.instance.isConnected){
     try {
       
-      Overlay.of(context).insert(loader);
+      // Overlay.of(context).insert(loader);
       
       // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
        var map = <String, dynamic>{};
@@ -211,6 +228,14 @@ Future<void> SignInApi(BuildContext context) async {
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    }
+   }
+    else{
+    hideLoader(loader);
+    ToastUi("No Internet Please Try After Sometime", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

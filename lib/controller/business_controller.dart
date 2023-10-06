@@ -12,6 +12,7 @@ import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import '../resources/session_manager.dart';
@@ -168,11 +169,28 @@ update();
       log(e.toString());
 
       // hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 
@@ -180,6 +198,8 @@ update();
   Future<void> BusinessFormApi(BuildContext context) async {
     OverlayEntry loader = overlayLoader(context);
     try {
+      var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
+      log(locations.toString());
       Overlay.of(context).insert(loader);
       var mobileNo = contactNumberCtrl.text.trim().replaceAll("-", " ");
       String? token = await pref.getAccessToken();
@@ -203,6 +223,9 @@ update();
       map['billing_address'] = billingAddressCtrl.text.tr;
       map['billing_state_id'] = billStateValue!.id;
       map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
+      map['delivery_latitude'] = addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
+      map['delivery_longitude'] =addLanlng != null ? addLanlng!.longitude : currentPosition!.longitude;
+  
       log(ApiUrls.business);
       log(map.toString());
       http.Response response = await http
@@ -237,13 +260,30 @@ update();
         );
       }
     } catch (e) {
-      hideLoader(loader);
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // hideLoader(loader);
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 
@@ -383,8 +423,8 @@ BusinessModelData? editBusinessData;
       map['billing_city'] = billingCityCtrl.text.tr;
       map['billing_state_id'] = billStateValue!.id;
       map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
-      map['delivery_latitude'] = locations[0].latitude;
-      map['delivery_longitude'] = locations[0].longitude;
+ map['delivery_latitude'] = addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
+      map['delivery_longitude'] =addLanlng != null ? addLanlng!.longitude : currentPosition!.longitude;
       log(ApiUrls.updateBusiness);
       log(map.toString());
       http.Response response = await http
@@ -424,13 +464,30 @@ BusinessModelData? editBusinessData;
         );
       }
     } catch (e) {
-      hideLoader(loader);
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // hideLoader(loader);
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 
@@ -440,8 +497,8 @@ BusinessModelData? editBusinessData;
     OverlayEntry loader = overlayLoader(context);
     try {
       Overlay.of(context).insert(loader);
-      var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
-      log(locations.toString());
+      // var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
+      // log(locations.toString());
       var mobileNo = contactNumberCtrl.text.trim().replaceAll("-", " ");
       String? token = await pref.getAccessToken();
       if(token == null || token == ""){
@@ -464,8 +521,8 @@ BusinessModelData? editBusinessData;
       map['billing_city'] = billingCityCtrl.text.tr;
       map['billing_state_id'] = billStateValue!.id;
       map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
-      map['delivery_latitude'] = locations[0].latitude;
-      map['delivery_longitude'] = locations[0].longitude;
+      map['delivery_latitude'] = addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
+      map['delivery_longitude'] =addLanlng != null ? addLanlng!.longitude : currentPosition!.longitude;
       log(ApiUrls.business);
       log(map.toString());
       log('Bearer $token');
@@ -508,12 +565,29 @@ BusinessModelData? editBusinessData;
     } catch (e) {
       log(e.toString());
       // hideLoader(loader);
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 Future<bool> _handleLocationPermission() async {
@@ -522,6 +596,7 @@ Future<bool> _handleLocationPermission() async {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      await Geolocator.isLocationServiceEnabled();
       permission = await Geolocator.requestPermission();
       return false;
     }
@@ -529,11 +604,15 @@ Future<bool> _handleLocationPermission() async {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        await Geolocator.isLocationServiceEnabled();
+        await Geolocator.openLocationSettings(); 
         permission = await Geolocator.requestPermission();
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
+      await Geolocator.isLocationServiceEnabled();
+      await Geolocator.openLocationSettings(); 
      permission = await Geolocator.requestPermission();
       return false;
     }
@@ -542,17 +621,16 @@ Future<bool> _handleLocationPermission() async {
 
   String? _currentAddress;
   Position? currentPosition;
+  LatLng? addLanlng;
   final  usecurrentLoading = false.obs;
    Future<void> getCurrentPosition(
     // bool userLive
-    ) async {
-    
-    // update();
+    ) async {    
     log("Get Location Permission");
     final hasPermission = await _handleLocationPermission();
     // log(hasPermission.toString());
     if (!hasPermission) {
-        // permission = await Geolocator.requestPermission();
+       await Geolocator.requestPermission();
        await _handleLocationPermission();
     }
     else{

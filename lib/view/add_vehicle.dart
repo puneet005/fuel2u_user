@@ -24,6 +24,7 @@ class AddVehicle extends GetView<AddVehicleController> {
   Widget build(BuildContext context) {
     AddVehicleController controller = Get.find<AddVehicleController>();
    Future.delayed(Duration.zero, (){
+    controller.checkAllFieldDone();
     controller.update();
     controller. MakeApi();
     controller. ColorApi();

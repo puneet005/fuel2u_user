@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:fuel2u_user/model/vehicle/add_vehicle_model.dart';
 import 'package:fuel2u_user/model/vehicle/car_model.dart';
@@ -170,10 +171,27 @@ final editLoading = false.obs;
      log(e.toString());
     
     // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
     }
    }
 
@@ -296,6 +314,7 @@ final editLoading = false.obs;
    }
   // State List Api
 Future<bool> GetStateList() async {
+  
   try {
        String? token = await pref.getAccessToken();
        if(token == null || token == ""){
@@ -351,9 +370,12 @@ Future<bool> GetStateList() async {
   //  Add Vehicle Api
 
   Future<bool> AddVehicleApi(BuildContext context) async {
+       OverlayEntry loader = overlayLoader(context);
+    Overlay.of(context).insert(loader);
+  if(await ConnectivityWrapper.instance.isConnected){
   try {
-     OverlayEntry loader = overlayLoader(context);
-     Overlay.of(context).insert(loader);
+    //  OverlayEntry loader = overlayLoader(context);
+    //  Overlay.of(context).insert(loader);
        String? token = await pref.getAccessToken();
        if(token == null || token == ""){
        token = oneTimeToken;
@@ -420,12 +442,37 @@ hideLoader(loader);
      log(e.toString());
     
     // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
      return false;
     }
+  } else{
+     hideLoader(loader);
+      ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+     return false;
+  }
    }
 
   
@@ -507,11 +554,28 @@ Future<void> updateVehicleApi(VehicleListModelData vehicledata) async{
   } catch (e) {
     editLoading.value = false;
          update();
-     log(e.toString());
+    //  log(e.toString());
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
     }
 
 }
@@ -549,9 +613,10 @@ Future<void> GetColorOrState(VehicleListModelData vehicledata) async {
 
 //  Edit Vehicle Api
 Future<bool> EditVehicleApi(BuildContext context, String id) async {
-  try {
      OverlayEntry loader = overlayLoader(context);
-     Overlay.of(context).insert(loader);
+    Overlay.of(context).insert(loader);
+  if(await ConnectivityWrapper.instance.isConnected){
+  try {   
        String? token = await pref.getAccessToken();     
        if(token == null || token == ""){
        token = oneTimeToken;
@@ -598,6 +663,7 @@ hideLoader(loader);
      
      AddVehicleModel res = AddVehicleModel.fromJson(data);
      if(res.status == true){
+      hideLoader(loader);
        ToastUi(res.message.toString(), 
    bgColor: Colors.green,
      textColor: ColorCode.white,);
@@ -619,17 +685,43 @@ hideLoader(loader);
     return false;
   }       
   } catch (e) {
+    hideLoader(loader);
      isLoading.value = false;
          update();
      log(e.toString());
-    
-    // hideLoader(loader);
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
      return false;
     }
+} else{
+  hideLoader(loader);
+      ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      return false;
+}
    }
 
 

@@ -132,8 +132,10 @@ class ReviewOrder extends GetView<OrderController>{
                                               Row(
                                                 children: [
                                                   // SizedBox(width: 10,),
-                                                    controller.vehicleList![controller.selectVehicleIndex].image ==
-                                                                          "" || controller.vehicleList![controller.selectVehicleIndex].image == null 
+                                                controller.vehicleList! == null ? Image.asset(
+                                                                            "assets/images/car_img.png"):
+                                                 controller.vehicleList![controller.selectVehicleIndex].image == null ||    controller.vehicleList![controller.selectVehicleIndex].image ==
+                                                                          ""
                                                                         ? Image.asset(
                                                                             "assets/images/car_img.png")
                                                                         : Image

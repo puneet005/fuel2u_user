@@ -106,6 +106,15 @@ class AddCard extends GetView<VehicleController> {
                                           border: MainBorder(),
                                           enabledBorder: MainBorder(),
                                         ),
+                                         validator: (val){
+                                           if(val!.length >2){
+                                            return null;
+                                          }
+                                          else{
+                                            return "Enter Card Name";
+                                          }
+
+                                        },
                                       ),
                                     ),
                                 
@@ -182,7 +191,7 @@ class AddCard extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "Exp Data";
+                                            return "Exp Date";
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -247,7 +256,7 @@ class AddCard extends GetView<VehicleController> {
                                         autocorrect: true,
                                         obscureText: true,
                                         obscuringCharacter: "X",
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.phone,
                                          inputFormatters: [
                                             MaskedInputFormatter('#####')
                                           ],

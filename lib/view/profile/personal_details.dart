@@ -226,7 +226,10 @@ class PersonalDetails extends GetView<SignUpController> {
                                   SizedBox(height: 50.h,),
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15.h),
-                                    child: FillBtn(ontap: (){}, text: "SAVE CHANGES",
+                                    child: FillBtn(ontap: (){
+                                      controller.SaveProfile(context);
+                                      // controller.
+                                    }, text: "SAVE CHANGES",
                                     Bgcolor: ColorCode.ligthGray,),
                                   ),
                                   SizedBox(height: 20.h,),

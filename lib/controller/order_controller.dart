@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:fuel2u_user/controller/login_controller.dart';
 import 'package:fuel2u_user/model/location_list_model.dart';
@@ -103,7 +104,6 @@ class OrderController extends GetxController {
 Future<void> BusinessDate(List<String>? day
 ) async{
 //  Change this to the number of days you want to add.
-
     log("BusinessDate block");
     log(day.toString());
     dateListofdays.clear();
@@ -190,6 +190,7 @@ Future<void> BusinessDate(List<String>? day
   void onInit() {
     super.onInit();
     getnextDay();
+    
     getOrder();
     selectVehicleIndex = -1;
     selectFuelType = -1;
@@ -213,8 +214,11 @@ Future<void> BusinessDate(List<String>? day
 
   @override
   void onClose() {
+    
     super.onClose();
   }
+
+  
 
   void setVehicle(int index) {
     selectVehicleIndex = index;
@@ -244,14 +248,16 @@ Future<void> BusinessDate(List<String>? day
   SessionManager pref = SessionManager();
   final isLoading = true.obs;
   List<OrderListModelData>? orderList ;
-
   List<FuelTypeModelData>? fuelTypeList;
   final fuelLoaidng = true.obs;
   final orderLoading = true.obs;
 // Order List Api
   Future<void> getOrder() async {
+    if(await ConnectivityWrapper.instance.isConnected){
     List<OrderListModelData>? allorderList;
     orderList = [];
+    allorderList = [];
+    update();
     // try {
     String? token = await pref.getAccessToken();
     if (token == null || token == "") {
@@ -268,18 +274,31 @@ Future<void> BusinessDate(List<String>? day
     }).timeout(Duration(seconds: 30));
     log(response.body);
     if (response.statusCode == 200) {
+      allorderList.clear();
+      orderList?.clear();
       log("orders Api Response=>> " + (response.body).toString());
       OrderListModel res = OrderListModel.fromJson(json.decode(response.body));
       allorderList = res.data;
       for(int i =0 ; i< allorderList!.length; i++){
         log(allorderList[i].status.toString());
-           if(allorderList[i].status == "Completed" || allorderList![i].status == "Cancelled"){
-              
-           }
-           else{
-             orderList!.add(allorderList[i]);
+        log("${allorderList[i].status}==Out for Delivery");
+          //  if(allorderList[i].status == "Completed" || allorderList[i].status == "Cancelled" || allorderList[i].status == "Completed"){
+            if(allorderList[i].status?.removeAllWhitespace == "Received" || 
+            allorderList[i].status?.removeAllWhitespace == "Confirmed" || 
+            allorderList[i].status == "Pre-Auth Successful" ||  
+            allorderList[i].status == "In Progress" || 
+            allorderList[i].status == "Out for Delivery"){
+               orderList!.add(allorderList[i]);
                update();
            }
+           else{
+            // if(orderList!.isEmpty){
+
+            // }
+
+            
+           }
+             update();
 
         }
       // orderList = res.data;
@@ -289,6 +308,15 @@ Future<void> BusinessDate(List<String>? day
       orderLoading.value = false;
       update();
       //  hideLoader(loader);
+    }
+    }
+    else{
+     orderLoading.value = false;
+      update();
+      ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
     }
     // } catch (e) {
     //   orderLoading.value = false;
@@ -340,14 +368,32 @@ Future<void> BusinessDate(List<String>? day
       }
     } catch (e) {
       vehicleListLoading.value = false;
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+          vehicleListLoading.value = false;
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
       update();
-      log(e.toString());
-      // hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // log(e.toString());
+      // // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
   }
 
@@ -368,8 +414,8 @@ Future<void> BusinessDate(List<String>? day
       log(response.body);
       if (response.statusCode == 200) {
         
-        fuelLoaidng.value = false;
-        update();
+       
+        // update();
         minFuelApi();
         log("fuel-Type?limit=10&page=1 Response=>> " +
             (response.body).toString());
@@ -384,12 +430,29 @@ Future<void> BusinessDate(List<String>? day
     } catch (e) {
       fuelLoaidng.value = false;
       update();
-      log(e.toString());
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // log(e.toString());
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
   }
 String? minFuelType;
@@ -427,11 +490,27 @@ String? minFuelType;
       fuelLoaidng.value = false;
       update();
       log(e.toString());
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+   
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
   }
 
@@ -472,11 +551,28 @@ String? minFuelType;
       update();
       log(e.toString());
       // hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 
@@ -485,8 +581,10 @@ String? minFuelType;
   final profileLoading = true.obs;
   Future<void> ProfileApi(BuildContext context) async {
     // try {
+    
     OverlayEntry loader = overlayLoader(context);
     Overlay.of(context).insert(loader);
+    if(await ConnectivityWrapper.instance.isConnected){
     profileLoading.value = true;
     update();
     String? token = await pref.getAccessToken();
@@ -515,6 +613,14 @@ String? minFuelType;
       update();
       hideLoader(loader);
       // return false;
+    }
+    }
+    else{
+      hideLoader(loader);
+      ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
     }
   }
 
@@ -569,12 +675,29 @@ String? minFuelType;
       profileLoading.value = false;
       update();
       log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
   }
 
@@ -625,13 +748,30 @@ String? minFuelType;
     } catch (e) {
       profileLoading.value = false;
       update();
-      log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // log(e.toString());
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
     // /update/promocode
   }
@@ -750,11 +890,28 @@ String? minFuelType;
     } catch (e) {
       log(e.toString());
 
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
       cardLoading.value = false;
       update();
     }
@@ -763,17 +920,23 @@ String? minFuelType;
   void cleanAllData() {
     selectVehicleIndex = -1;
     selectFuelType = -1;
+    selectFuelAmount.value = 0;
     selectPlan = -1;
+    update();
     selectAddress = -1;
     selectPaymentMethod = -1;
     selectdata = {};
+    update();
+    if(orderList != null)
     orderList!.clear();
+    if(fuelTypeList != null)
     fuelTypeList!.clear();
     commentCtrl.clear();
     promoCodeDetail = PromocodeModelData();
+    if(cardDetails != null)
     cardDetails!.clear();
     selectedCardDetails = CardDetailModelData();
-    fuelTypeList!.clear();
+    // fuelTypeList!.clear();
     isEdit.value = false;
 
     Future.delayed(Duration(seconds: 3), () {
@@ -854,12 +1017,23 @@ String? minFuelType;
       profileLoading.value = false;
       update();
       log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 
@@ -920,12 +1094,29 @@ String? minFuelType;
       profileLoading.value = false;
       update();
       log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
   }
 
@@ -1095,9 +1286,10 @@ String? minFuelType;
   SingleOrderModelData? editOrderDetailsData;
   Future<void> GetEditOrderDetailsApi(BuildContext context, String id) async {
 // OverlayEntry loader = overlayLoader(context);
-    try {
-      editLoading.value = true;
+editLoading.value = true;
       update();
+    try {
+      
       editOrderDetailsData = SingleOrderModelData();
       // Overlay.of(context).insert(loader);
       String? token = await pref.getAccessToken();
@@ -1121,10 +1313,12 @@ String? minFuelType;
         if (data.status == true) {
           editOrderDetailsData = data.data;
           editdate = editOrderDetailsData!.orderDeliveryDay!.split(" ");
-          commentCtrl.text = editOrderDetailsData!.instructions.toString();
+          commentCtrl.text = editOrderDetailsData!.instructions ?? "";
           editLoading.value = false;
           update();
         } else {
+        editLoading.value = false;
+        update();
           ToastUi(
             data.message.toString(),
             bgColor: ColorCode.red,
@@ -1149,12 +1343,29 @@ String? minFuelType;
       profileLoading.value = false;
       update();
       log(e.toString());
-      // hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 // update live Location
@@ -1173,8 +1384,10 @@ String? minFuelType;
       map['address'] = streetAddressCtrl.text.trim();
       map['city'] = cityCtrl.text.trim();
       map['zipcode'] = zipCodeCtrl.text.trim();
-      map['latitude'] = currentPositionForAddress!.latitude;
-      map['longitude'] = currentPositionForAddress!.longitude;
+        map['latitude'] = addLanlng != null ? addLanlng!.latitude:currentPositionForAddress!.latitude;
+      map['longitude'] =  addLanlng != null ? addLanlng!.longitude: currentPositionForAddress!.longitude;
+      // map['latitude'] = currentPositionForAddress!.latitude;
+      // map['longitude'] = currentPositionForAddress!.longitude;
       log(map.toString());
       http.Response response = await http.post(
           Uri.parse(ApiUrls.orderLocationUpdate),
@@ -1191,6 +1404,7 @@ String? minFuelType;
         update();
         log("verfiyPromocode Response=>> " + (response.body).toString());
         if (res['status'] == true) {
+          hideLoader(loader);
           ToastUi(
             res['message'],
             bgColor: Colors.green,
@@ -1217,13 +1431,40 @@ String? minFuelType;
     } catch (e) {
       profileLoading.value = false;
       update();
-      log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+         if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+    }
       return false;
     }
   }
@@ -1236,6 +1477,7 @@ String? minFuelType;
   final cityCtrl = TextEditingController();
   final zipCodeCtrl = TextEditingController();
   final addressFormValid = false.obs;
+  LatLng? addLanlng;
 
   Future<void> getCurrentPositionForLive() async {
     // update();
@@ -1471,7 +1713,6 @@ String? minFuelType;
 
   EditOrderDataSet() {
     editLoading.value = true;
-   
     update();
     GetVehicleList().then((val) {
       for(int i =0; i < vehicleList!.length; i++){
@@ -1522,9 +1763,13 @@ String? minFuelType;
         selectdata.clear();
       }
     
-    } 
+    }  
+    //  editOrderDetailsData. =  commentCtrl
+   
     
      });
+           
+     
     // 
     //  update();
     editLoading.value = false;
@@ -1605,13 +1850,30 @@ String? minFuelType;
     } catch (e) {
       profileLoading.value = false;
       update();
-      log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // log(e.toString());
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
    }
 
@@ -1675,13 +1937,30 @@ String? minFuelType;
     } catch (e) {
       profileLoading.value = false;
       update();
-      log(e.toString());
-      hideLoader(loader);
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // log(e.toString());
+      // hideLoader(loader);
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
    }
 
@@ -1731,4 +2010,9 @@ String? minFuelType;
     //   );
     // }
   }
+  final loadingAllData = true.obs;
+void loadingFlase() {
+  loadingAllData.value =  false;
+  update();
+}
 }

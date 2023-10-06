@@ -135,7 +135,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
 
             routeAndNavigatorSettings: RouteAndNavigatorSettings(onGenerateRoute: (sett) {
-                                    PersistentNavBarNavigator.pushNewScreen(
+                                      PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen: _buildScreens[selectedIndex],
                                       withNavBar: true,

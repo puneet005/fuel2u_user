@@ -154,10 +154,17 @@ class OrderHistory extends GetView<OrderController>{
                   children: [
                     Text("Order Number: ${orderList[index].orderNumber!.toString()}", style: Heading5(),),
                     Spacer(),
-                    if(orderList[index].status == "Received" || orderList[index].status == "In Progress" )
+                    if(orderList[index].status == "Received" || orderList[index].status == "In Progress" ||orderList[index].status == "Pre-Auth Successful" 
+                                || orderList[index].status == "Out for Delivery"
+                                || orderList[index].status == "Confirmed"
+                                )
                      InkWell(
                                       onTap: () {
-                                      if(orderList[index].status == "Received" || orderList[index].status == "In Progress" )
+                                      if(orderList[index].status == "Received" || orderList[index].status == "In Progress" ||
+                                      orderList[index].status == "Pre-Auth Successful" 
+                                      || orderList[index].status == "Out for Delivery"
+                                || orderList[index].status == "Confirmed"
+                                       )
                                       //  || orderList[index].status == ""
                                          controller.GetEditOrderDetailsApi(context,orderList[index].id.toString() ).then((value) {
                                         // Future.delayed(Duration.zero,  () => Navigator.of(context).pop());

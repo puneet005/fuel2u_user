@@ -3,7 +3,7 @@ import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/controller/login_controller.dart';
-import 'package:fuel2u_user/routes/app_pages.dart';
+// import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 
@@ -112,7 +112,7 @@ class LoginView extends GetView<LoginController>{
                   style: TextFieldStyle(),
                   controller: controller.phoneNo,                  
                   autocorrect: true,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.emailAddress,
                 
                   onChanged: (val){
                        if(val.isNotEmpty){

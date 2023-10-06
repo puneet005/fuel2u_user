@@ -122,6 +122,7 @@ class MyOrder extends GetView<OrderController> {
         padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 20.h),
         child: FillBtn(
           ontap: () {
+            controller.cleanAllData();
             controller.GetVehicleList();
             PersistentNavBarNavigator.pushNewScreen(
               context,
@@ -180,13 +181,23 @@ class MyOrder extends GetView<OrderController> {
                                 vertical: 15.h, horizontal: 15.h),
                             child: Column(
                               children: [
-                                if(orderList[index].status == "Received" || orderList[index].status == "In Progress")
+                                if(orderList[index].status == "Received" 
+                                || orderList[index].status == "In Progress"
+                                ||orderList[index].status == "Pre-Auth Successful" 
+                                || orderList[index].status == "Out for Delivery"
+                                || orderList[index].status == "Confirmed"
+
+                                 )
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                      if(orderList[index].status == "Received" || orderList[index].status == "In Progress" )
+                                      if(orderList[index].status == "Received" || 
+                                      orderList[index].status == "In Progress" ||
+                                      orderList[index].status == "Pre-Auth Successful" 
+                                ||  orderList[index].status == "Out for Delivery" 
+                                || orderList[index].status == "Confirmed")
                                       //  || orderList[index].status == ""
                                          controller.GetEditOrderDetailsApi(context,orderList[index].id.toString() ).then((value) {
                                         // Future.delayed(Duration.zero,  () => Navigator.of(context).pop());

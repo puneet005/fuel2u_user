@@ -15,6 +15,7 @@ import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import 'login_controller.dart';
@@ -33,6 +34,8 @@ class VehicleController extends GetxController {
     final cityCtrl = TextEditingController();
     final zipCodeCtrl = TextEditingController();
     final addressFormValid = false.obs;
+    LatLng? addLanlng;
+
 
     // Card Variable
   final cardNumber = ''.obs;
@@ -117,7 +120,7 @@ SessionManager pref = SessionManager();
 final vehicleListLoading = true.obs;
 List<VehicleListModelData>? vehicleList;
 var selectVehicleId;
-Future<void> GetVehicleList() async{
+Future<void>  GetVehicleList() async{
   //  try {
       String? token = await pref.getAccessToken(); 
       if(token == null || token == ""){
@@ -188,8 +191,7 @@ Future<bool> _handleLocationPermission() async {
   String? _currentAddress;
   Position? currentPosition;
   final  usecurrentLoading = false.obs;
-   Future<void> getCurrentPosition(bool userLive) async {
-    
+   Future<void> getCurrentPosition(bool userLive) async {    
     // update();
     log("Get Location Permission");
     final hasPermission = await _handleLocationPermission();
@@ -199,7 +201,6 @@ Future<bool> _handleLocationPermission() async {
        await _handleLocationPermission();
     }
     else{
-
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
            currentPosition = position;
@@ -207,8 +208,7 @@ Future<bool> _handleLocationPermission() async {
            log(position.toString());
             if(userLive){
             getAddressFromLatLng(position);
-        }
-        
+    }        
       // _getAddressFromLatLng(_currentPosition!);
     }).catchError((e) {
       debugPrint(e);
@@ -279,10 +279,27 @@ Future<bool> GetStateList() async {
      log(e.toString());
     
     // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
      return false;
     }
    }
@@ -303,8 +320,14 @@ Future<bool> GetStateList() async {
       map['city'] = cityCtrl.text.trim();
       map['state_id'] = stateCodeValue!.id;
       map['zipcode'] =  zipCodeCtrl.text.trim();
-      map['latitude'] = currentPosition!.latitude;
-      map['longitude'] = currentPosition!.longitude;
+      map['latitude'] =   addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
+      map['longitude'] =  addLanlng != null ? addLanlng!.longitude: currentPosition!.longitude;
+      // if(currentPosition != null){
+
+      // }
+     
+
+    
       log(ApiUrls.locations);
       log(map.toString());
       http.Response response = await http.post(
@@ -336,6 +359,12 @@ Future<bool> GetStateList() async {
   } 
   else{
     hideLoader(loader);
+    if(data['message'] == "Null Check Operator used on a null value")
+     ToastUi("Please On Location", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+    else
      ToastUi(data['message'].toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
@@ -343,12 +372,29 @@ Future<bool> GetStateList() async {
      return false;
      }     
   } catch (e) {
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
      return false;
     }
   }
@@ -391,12 +437,29 @@ Future<bool> GetStateList() async {
       }
   } catch (e) {
      isLocationLoading.value = false;
-    //  update();
-     log(e.toString());
+     update();
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    //  log(e.toString());
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
      return false;
     }
    }
@@ -452,12 +515,29 @@ addressFormValid.value = true;
      isLoading.value = false;
          update();
      log(e.toString());
-    
+      if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
     // hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    
+    // // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
      return false;
     }
    }
@@ -481,8 +561,10 @@ addressFormValid.value = true;
       map['city'] = cityCtrl.text.trim();
       map['state_id'] = stateCodeValue!.id;
       map['zipcode'] =  zipCodeCtrl.text.trim();
-      map['latitude'] = currentPosition!.latitude;
-      map['longitude'] = currentPosition!.longitude;
+       map['latitude'] =   addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
+      map['longitude'] =  addLanlng != null ? addLanlng!.longitude: currentPosition!.longitude;
+      // map['latitude'] = currentPosition!.latitude;
+      // map['longitude'] = currentPosition!.longitude;
       log(ApiUrls.locations);
       log(map.toString());
       http.Response response = await http.post(
@@ -521,12 +603,29 @@ addressFormValid.value = true;
      return false;
      }     
   } catch (e) {
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
      return false;
     }
   }
@@ -561,11 +660,28 @@ Future<bool> DeleteLocationApi(BuildContext context, int id) async {
         
       }
   } catch (e) {  
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
      return false;
     }
    }
@@ -713,14 +829,31 @@ void setCardDataInEdit(){
       cardLoading.value = false;
       update();
     } catch (e) {
-      log(e.toString());
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+      // log(e.toString());
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
       cardLoading.value = false;
       update();
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          // hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
     }
   }
 
@@ -766,13 +899,30 @@ void setCardDataInEdit(){
       // cardLoading.value = false;
       update();
     } catch (e) {
-      hideLoader(loader);
-      log(e.toString());
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+       if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // hideLoader(loader);
+      // log(e.toString());
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
       // cardLoading.value = false;
       // update();
     }
@@ -822,13 +972,30 @@ void setCardDataInEdit(){
       // cardLoading.value = false;
       update();
     } catch (e) {
-      hideLoader(loader);
-      log(e.toString());
-      ToastUi(
-        e.toString(),
-        bgColor: ColorCode.red,
-        textColor: ColorCode.white,
-      );
+        if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+      // hideLoader(loader);
+      // log(e.toString());
+      // ToastUi(
+      //   e.toString(),
+      //   bgColor: ColorCode.red,
+      //   textColor: ColorCode.white,
+      // );
     }
   }
 

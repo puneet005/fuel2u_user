@@ -10,10 +10,11 @@ import 'package:fuel2u_user/resources/firebase_service.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'dependencies.dart' as de;
 
 String fcmToken = "";
+String googleMKey = "AIzaSyCxSKrMOXBe-Ur6wVJfCAy4IEGyTOFAVuI";
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

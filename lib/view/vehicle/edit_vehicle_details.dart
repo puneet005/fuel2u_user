@@ -395,6 +395,7 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                    bool res = await controller.EditVehicleApi(context, widget.data.id.toString());
                             if(res){
                               vehicleController.GetVehicleList();
+                              
                               Navigator.of(context).pop();                            
                             } 
                     }

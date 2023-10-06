@@ -185,17 +185,18 @@ class OrderReviewStatus extends GetView<OrderController> {
                                   SizedBox(
                                     height: 5.h,
                                   ),
+                                  if(controller.orderDetailsData!.instructions == null)
                                   Container(
                                     height: 20.h,
                                     child: Text(
-                                      "Delivery Instructions: ${controller.orderDetailsData!.instructions ?? ""}",
+                                      "Delivery Instructions: ${controller.orderDetailsData!.instructions ?? " "}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: Heading5(),
                                     ),
                                   ),
                                   // Cancel Reason
-              
+                                  
                                    if(controller.orderDetailsData?.status ==  "Cancelled")
                                    SizedBox(
                                     height: 2.h,
@@ -204,7 +205,7 @@ class OrderReviewStatus extends GetView<OrderController> {
                                Container(
                                     height: 20.h,
                                     child: Text(
-                                      "Reason: ${controller.orderDetailsData!.reason}",
+                                      "Reason: ${controller.orderDetailsData!.reason != null ? controller.orderDetailsData!.reason  :""}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: Heading5(),

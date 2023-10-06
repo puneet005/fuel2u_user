@@ -184,16 +184,34 @@ void IsSignUpAllField(){
      textColor: ColorCode.white,
      );}     
   } catch (e) {
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
     }
    }
 //  Sign Up Api
 Future<void> SignUpApi(BuildContext context) async {
+
     OverlayEntry loader = overlayLoader(context);
     try {
       
@@ -248,14 +266,42 @@ Future<void> SignUpApi(BuildContext context) async {
      textColor: ColorCode.white,
      );}     
   } catch (e) {
+    if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
     }
    }
+}
 
   //  SignUp Verify
    Future<void> SignUpVerifyApi(BuildContext context, String otp) async {
@@ -312,6 +358,31 @@ Future<void> SignUpApi(BuildContext context) async {
      );
     } 
   } catch (e) {
+   if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
     log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
@@ -319,7 +390,10 @@ Future<void> SignUpApi(BuildContext context) async {
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
     }
+    }
+  
    }
    
    
@@ -376,15 +450,44 @@ Future<void> SignUpApi(BuildContext context) async {
      );}     
   } 
   catch (e) {
-     log(e.toString());
+    if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
-    }
-   }
+    } 
+    } 
+  }
+  } 
+    
+
 
 
 
@@ -503,6 +606,8 @@ String getFormattedPhoneNumber(
       Get.offAllNamed(Routes.WELCOME);
       } 
   else{
+    pref.logOut();
+     Get.offAllNamed(Routes.WELCOME);
     hideLoader(loader);
      ToastUi(data['message'].toString(), 
      bgColor: ColorCode.red,
@@ -510,13 +615,40 @@ String getFormattedPhoneNumber(
      );}     
   } 
   catch (e) {
-     log(e.toString());
+    if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    }
     }
    }
 
@@ -553,15 +685,146 @@ Future<void> deleteAccount(BuildContext context) async {
      );}     
   } 
   catch (e) {
-     log(e.toString());
+    if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+         if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
     hideLoader(loader);
     hideLoader(loader);
      ToastUi(e.toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
+    } 
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+    }
     }
 
+}
+
+// Save Profile
+Future<void> SaveProfile(BuildContext context) async {
+
+    OverlayEntry loader = overlayLoader(context);
+    try {
+      
+      Overlay.of(context).insert(loader);
+       String? token = await pref.getAccessToken();   
+       if(token == null || token == ""){
+       token = oneTimeToken;
+      }   
+      var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
+       var map = <String, dynamic>{};
+      map['first_name']= firstnameCrt.text.tr;
+      map['last_name'] = lastnameCrt.text.tr;
+      map['email'] = emailCrt.text.tr;
+      map['phone_number'] = "${mobileNo.removeAllWhitespace}";
+      log(ApiUrls.signup);
+      log(map.toString());
+      http.Response response = await http.post(
+      Uri.parse(ApiUrls.profile),
+      body: jsonEncode(map),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
+         HttpHeaders.authorizationHeader: 'Bearer $token',
+
+      }).timeout(Duration(seconds: 30));
+      // ignore: unused_local_variable
+        log("Profile Api Response=>> " +
+        json.decode(response.body).toString());
+      var data = json.decode(response.body);
+     
+
+      if (response.statusCode == 200) {
+      hideLoader(loader);    
+       hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: Colors.green,
+     textColor: ColorCode.white,
+     ); 
+      Navigator.pop(context);
+
+    //  SignUpModel res = SignUpModel.fromJson(json.decode(response.body));
+    //   if(res.status == true){
+
+    //   Get.toNamed(Routes.VERIFICATION);
+    //    if(res.data != null){
+    // userDetail = res.data!;
+    // ToastUi(res.data!.otpText.toString(),);
+    // }
+    // }
+    // else{
+    //   hideLoader(loader);
+    //  ToastUi(data['message'].toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );
+    // }
+  } 
+  else{
+    hideLoader(loader);
+     ToastUi(data['message'].toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );}     
+  } catch (e) {
+    if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    // log(e.toString());
+    // hideLoader(loader);
+    // hideLoader(loader);
+    //  ToastUi(e.toString(), 
+    //  bgColor: ColorCode.red,
+    //  textColor: ColorCode.white,
+    //  );  
+     if (e is SocketException) {
+        if ((e as SocketException).osError!.errorCode == 8)
+          hideLoader(loader);
+     ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+      }
+      else{
+    log(e.toString());
+    hideLoader(loader);
+    hideLoader(loader);
+     ToastUi(e.toString(), 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    } 
+    }
+   }
 }
 
 

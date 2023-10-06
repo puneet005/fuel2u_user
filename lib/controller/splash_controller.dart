@@ -1,9 +1,13 @@
 import 'dart:developer';
 
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:fuel2u_user/resources/session_manager.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/color.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+
+import '../utils/ui_hepler.dart';
 
 class SplashController extends GetxController {
 
@@ -33,6 +37,7 @@ class SplashController extends GetxController {
   }
   
   void moveScreen() async{
+    if(await ConnectivityWrapper.instance.isConnected){
      SessionManager pref = SessionManager();
       String? token = await pref.getAccessToken();    
     log(token.toString()); 
@@ -45,13 +50,24 @@ class SplashController extends GetxController {
        Get.offAllNamed(Routes.HOME);
     }
      });
-    //  await Future.delayed(Duration(seconds: 3), (){
-      // if(token != null || token != ""){
-      //    Get.offAllNamed(Routes.HOME);
-      // }
-      // else{
-      //   Get.offAllNamed(Routes.WELCOME);
-      // }
-    // });
+  }else{
+     SessionManager pref = SessionManager();
+      String? token = await pref.getAccessToken();    
+    log(token.toString()); 
+     await Future.delayed(Duration(seconds: 2), (){
+    if(token == null || token == ""){
+      Get.offAllNamed(Routes.WELCOME);
+    }
+    else{
+      // Get.offAllNamed(Routes.BUSINESSFORM);
+       Get.offAllNamed(Routes.HOME);
+    }
+     });
+    ToastUi("No Internet Please Try After Sometime", 
+     bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );  
+    
+  }
   }
 } 

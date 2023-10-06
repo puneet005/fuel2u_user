@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
 import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 
 import '../../controller/order_controller.dart';
 
@@ -175,7 +178,29 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                       border: MainBorder(),
                       enabledBorder: MainBorder(),
                     ),
+                    onTap: () async {
+                       await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>    PlacePicker(
+                                apiKey: googleMKey,              
+                                onPlacePicked: (result) { 
+                                  print(result.adrAddress.toString()); 
+                                  print(result.addressComponents!.toString()); 
+                                  print(result.formattedAddress);                                
+                                  var add =  result.formattedAddress!.split(",");
+                                  print(add.length);
+                                  controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.cityCtrl.text = add[add.length - 3];                                                 
+                                  controller.update();
+                                  Navigator.of(context).pop();
+                                },
+                                initialPosition: LatLng(controller.currentPositionForAddress!.latitude, controller.currentPositionForAddress!.longitude),
+                                useCurrentLocation: true,
+                                resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                              )));
+                    },
                   ),
+                  
                 ),
                 // Add City
                 Padding(
@@ -302,10 +327,9 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                           if(controller.addressFormValid.value) {
                            bool res = await controller.OrderLocaionUpdate(context, widget.id);
                             if(res){
-                              // controller.GetLocationListApi();
+                              controller.getOrder();
                               Navigator.pop(context);
                             }
-
                             // Get.toNamed(Routes.HOME);
                             // Get.find<BottomBarController>().onItemTapped(1);
                           }                        

@@ -97,7 +97,15 @@ class EditCardDetails extends GetView<VehicleController> {
                                         controller: controller.cardNameCtrl,                  
                                         autocorrect: true,
                                         keyboardType: TextInputType.name,
-                                      
+                                       validator: (val){
+                                           if(val!.length >2){
+                                            return null;
+                                          }
+                                          else{
+                                            return "Enter Card Name";
+                                          }
+
+                                        },
                                         onChanged: (val){
                                         },
                                         decoration: InputDecoration(
@@ -257,7 +265,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                         autocorrect: true,
                                         obscureText: true,
                                         obscuringCharacter: "X",
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.phone,
                                          inputFormatters: [
                                             MaskedInputFormatter('#####')
                                           ],
