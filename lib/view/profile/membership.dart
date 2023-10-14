@@ -42,7 +42,7 @@ class Membership extends GetView<PremiunController> {
                                 ),
                                 icon: InkWell(
                                   onTap: () =>
-                                      Get.offNamed(Routes.ALLTRUCKINMAP),
+                                      Get.toNamed(Routes.ALLTRUCKINMAP),
                                   child: Image.asset(
                                     "assets/icons/mytruck.png",
                                     width: 50,

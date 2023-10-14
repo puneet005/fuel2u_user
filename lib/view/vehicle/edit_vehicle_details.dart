@@ -82,7 +82,7 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                                 child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                               ),
                                 icon: InkWell(
-                                  onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+                                  onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                                 child: Image.asset("assets/icons/mytruck.png", width: 50,),
                               )),
                               SizedBox(height: 40.h,),
@@ -140,9 +140,11 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                                 controller: controller.nameCtrl,
                                 autocorrect: true,
                               keyboardType: TextInputType.name,
+                              maxLength: 27,
                       // validator: (val) {},
                       decoration:  InputDecoration(
                         hintText: "Name (optional), ie Frank’s Car",
+                         counterText: "",
                         hintStyle: TextStyle(
                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
@@ -314,7 +316,9 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                                 onChanged: (val) {
                                   controller.checkAllFieldDone();
                                 },
+                                maxLength: 27,
                                 decoration: InputDecoration(
+                                   counterText: "",
                                   hintText: "License Plate Number",
                                   hintStyle: TextStyle(
                                      fontSize: 16.sp,
@@ -564,7 +568,7 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
 //                               child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
 //                             ),
 //                               icon: InkWell(
-//                                 onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+//                                 onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
 //                               child: Image.asset("assets/icons/mytruck.png", width: 50,),
 //                             )),
 //                             SizedBox(height: 40.h,),

@@ -21,6 +21,10 @@ class NotAvaiableArea extends GetView<SignUpController>{
     //  Get.lazyPut<SignUpController>(() => SignUpController());
     // TODO: implement build
     SignUpController controller = Get.put(SignUpController());
+    Future.delayed(Duration.zero,(){
+      controller.phoneNoCrt.clear();
+      // controller.
+    });
    return GetBuilder(
      init: SignUpController(),
      initState: (_) {},

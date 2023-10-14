@@ -122,7 +122,9 @@ class EditLocation extends GetView<OrderController> {
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     children: List.generate(
-                                        4, (index) => ShimmerLoading()),
+                                        2, (index) => ShimmerLoading()),
+                                  ).marginOnly(
+                                    bottom: 50.h
                                   )
                                 : Expanded(
                                     child:

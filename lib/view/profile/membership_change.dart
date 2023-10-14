@@ -1,10 +1,15 @@
 
 
 
+
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/premiun_controller.dart';
+import 'package:fuel2u_user/controller/vehicel_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
@@ -21,6 +26,10 @@ class MemberShipDetail extends GetView{
   @override
   Widget build(BuildContext context) {
   PremiunController controller = Get.find<PremiunController>();
+  //  VehicleController vcontroller = Get.find<VehicleController>();
+  //   Future.delayed(Duration.zero, (){
+  //     vcontroller.GetCardList();
+  //   });  
    return Scaffold(
       body: Padding(
         padding:  EdgeInsets.symmetric(horizontal: 10.h),
@@ -43,7 +52,7 @@ class MemberShipDetail extends GetView{
                                   ),
                                   icon: InkWell(
                                     onTap: () =>
-                                        Get.offNamed(Routes.ALLTRUCKINMAP),
+                                        Get.toNamed(Routes.ALLTRUCKINMAP),
                                     child: Image.asset(
                                       "assets/icons/mytruck.png",
                                       width: 50,
@@ -198,7 +207,7 @@ class MemberShipDetail extends GetView{
         ),
       ) ,
       bottomNavigationBar: SizedBox(
-        height: controller.showPlanIndex.value  == 2? 150.h :100.h,
+        height: controller.showPlanIndex.value  == 2 && controller.promocodeShow.value ? 150.h :100.h,
         child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.h),          child: Column(children: [
             if(controller.showPlanIndex.value == 0)
@@ -212,10 +221,20 @@ class MemberShipDetail extends GetView{
                Padding(
                       padding:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.h),
                       child: FillBtn(ontap: (){
+                        // log(vcontroller.cardDetails.toString());
+                        // if(vcontroller.cardDetails != null || vcontroller.cardDetails != []){
                         controller.UpdatePlan(context);                       
-                      }, text: "GET STARTED"),
+                        // }
+                        // else{
+                        //   ToastUi("Please Add Payment Methods First", 
+                        //    bgColor: ColorCode.red,
+                        //     textColor: ColorCode.white,);
+                        // }
+                      },
+
+                       text: "GET STARTED"),
                     ),  
-               if(controller.showPlanIndex.value  == 2)  
+               if(controller.showPlanIndex.value  == 2 && controller.promocodeShow.value)  
                Padding(
                  padding:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.h),
                  child: BorderBtn(ontap: (){

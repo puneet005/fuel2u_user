@@ -110,8 +110,10 @@ class BusinessForm extends GetView<BusinessController> {
                           return null;
                         
                         },
+                        maxLength: 27,
                         decoration:  InputDecoration(
                           hintText: "Employer Name",
+                           counterText: "",
                             hintStyle: TextStyle(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,

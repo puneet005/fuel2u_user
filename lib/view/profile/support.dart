@@ -46,7 +46,7 @@ class _SupportState extends State<Support> {
                                 ),
                                 icon: InkWell(
                                   onTap: () =>
-                                      Get.offNamed(Routes.ALLTRUCKINMAP),
+                                      Get.toNamed(Routes.ALLTRUCKINMAP),
                                   child: Image.asset(
                                     "assets/icons/mytruck.png",
                                     width: 50,
@@ -97,29 +97,34 @@ class _SupportState extends State<Support> {
                   Divider(
                     color: ColorCode.ligthGray,
                   ),
-                   Row(
-                  children: [
-                    Container(
-                      width: Get.height /8,
-                      height: 70.h,
-                      child: Image.asset("assets/images/phone_icon.png"),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Call", style: Heading1(),),
-                     
-                        Text("XXX-XXX-XXXX", style: HeadingCustomFamliy(
-                          family: "RobotoRegular",
-                          size: 16.sp,
-                          // fbold: 
-                          
-                        ),)
-                      ],
-                    )
-                  ],
-                 ),
+                   InkWell(
+                     onTap: (){
+                        GloballaunchUrl("tel: 9016653385");
+                      },
+                     child: Row(
+                                     children: [
+                      Container(
+                        width: Get.height /8,
+                        height: 70.h,
+                        child: Image.asset("assets/images/phone_icon.png"),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Call", style: Heading1(),),
+                       
+                          Text("901-665-3385", style: HeadingCustomFamliy(
+                            family: "RobotoRegular",
+                            size: 16.sp,
+                            // fbold: 
+                            
+                          ),)
+                        ],
+                      )
+                                     ],
+                                    ),
+                   ),
                   const Divider(
                     color: ColorCode.ligthGray,
                   ),

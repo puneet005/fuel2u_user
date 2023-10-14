@@ -26,6 +26,11 @@ class MyOrder extends GetView<OrderController> {
   @override
   Widget build(BuildContext context) {
     OrderController controller = Get.find<OrderController>();
+    Future.delayed(Duration.zero, (){
+      // controller.orderList = [];
+      // controller.orderList!.clear();
+      controller.update();
+    });
     return Scaffold(
       body: SafeArea(
         child: GetBuilder<OrderController>(
@@ -122,14 +127,20 @@ class MyOrder extends GetView<OrderController> {
         padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 20.h),
         child: FillBtn(
           ontap: () {
+            controller. selectVehicleIndex = -1;
+            controller.update();
             controller.cleanAllData();
             controller.GetVehicleList();
-            PersistentNavBarNavigator.pushNewScreen(
+            Future.delayed(Duration.zero, ()
+            {
+PersistentNavBarNavigator.pushNewScreen(
               context,
               screen: NewOrder(),
               withNavBar: true, // OPTIONAL VALUE. True by default.
               pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
+            });
+            
             // Get.toNamed(Routes.NEWORDER);
           },
           text: 'START NEW ORDER',
@@ -260,6 +271,7 @@ class MyOrder extends GetView<OrderController> {
                                 SizedBox(
                                   height: 5.h,
                                 ),
+                                if(orderList[index].vehicle != null)
                                 Row(
                                   children: [
                                     // SizedBox(width: 10,),
@@ -291,13 +303,26 @@ class MyOrder extends GetView<OrderController> {
                                 SizedBox(
                                   height: 5.h,
                                 ),
+                                if(orderList[index].vehicle != null)
                                 Row(
                                   // mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      "Vehicle Name: ${orderList[index].vehicle!.name ?? ""}",
-                                      style: Heading5(),
-                                    )
+                                    SizedBox(
+                                      height: 15,
+                                      width: Get.width -80,
+                                      child: Text(
+                                        "Vehicle Name: ${orderList[index].vehicle!.name ?? ""}",
+                                        style: Heading5(
+                                          
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    // Text(
+                                    //   "Vehicle Name: ${orderList[index].vehicle!.name ?? ""}",
+                                    //   style: Heading5(),
+                                    // )
                                   ],
                                 ),
                                 SizedBox(
@@ -330,10 +355,22 @@ class MyOrder extends GetView<OrderController> {
                                 Row(
                                   // mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      "Location: ${orderList[index].location!.address}",
-                                      style: Heading5(),
-                                    )
+                                     SizedBox(
+                                      height: 15,
+                                      width: Get.width -80,
+                                      child: Text(
+                                        "Location : ${orderList[index].location!.address}",
+                                        style: Heading5(
+                                        
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    // Text(
+                                    //   "Location: ${orderList[index].location!.address}",
+                                    //   style: Heading5(),
+                                    // )
                                   ],
                                 ),
                                 SizedBox(
@@ -343,10 +380,18 @@ class MyOrder extends GetView<OrderController> {
                                 Row(
                                   // mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      "Delivery Instructions: ${orderList[index].instructions ?? ""}",
-                                      style: Heading5(),
-                                    )
+                                    SizedBox(
+                                      height: 40,
+                                      width: Get.width -80,
+                                      child: Text(
+                                        "Delivery Instructions: ${orderList[index].business!.deliveryInstructions ?? ""}",
+                                        style: Heading5(
+                                          
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 // if(orderList[index].status == "Received" || orderList[index].status == "In Progress")

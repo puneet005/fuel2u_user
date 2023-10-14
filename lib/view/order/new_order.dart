@@ -213,8 +213,11 @@ class NewOrder extends GetView<OrderController> {
                                                                               "" || controller.vehicleList![index].image == null
                                                                           ? Image.asset(
                                                                               "assets/images/car_img.png",
-                                                                               height:
-                                                                                  35.h,
+                                                                                height:
+                                                                                35.h,
+                                                                            width:
+                                                                                70.h,
+
                                                                             )
                                                                           : Image
                                                                               .network(
@@ -342,7 +345,7 @@ class NewOrder extends GetView<OrderController> {
                                                                         },                                                                      
                                                                         // onTap: () => Get.toNamed(Routes.ORDERHISTORY),
                                                                         child: Text(
-                                                                           controller.vehicleList![index].seeMore ? "See Less" : "See More",
+                                                                           controller.vehicleList![index].seeMore ? "See less" : "See more",
                                                                             style:
                                                                                 HeadingCustomFamliy(
                                                                               family:
@@ -394,8 +397,8 @@ class NewOrder extends GetView<OrderController> {
                               Navigator.of(context).pop();
                           }
                           else{
-                          controller.fuelTypeApi();
-                          PersistentNavBarNavigator.pushNewScreen(
+                          controller.fuelTypeApi().then((value) {
+                            PersistentNavBarNavigator.pushNewScreen(
                             context,
                             screen: FuelType(),
                             withNavBar:
@@ -403,6 +406,9 @@ class NewOrder extends GetView<OrderController> {
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                           );
+
+                          });
+                          
                           // Get.toNamed(Routes.FUELTYPE);
                         }
                         }

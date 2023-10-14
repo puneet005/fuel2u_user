@@ -88,10 +88,14 @@ String imagePath = "";
 final _picker = ImagePicker();
 
 Future<void> getImage(bool camerabool) async {
-final pickedFile = camerabool ? await _picker.pickImage(source: ImageSource.camera): await _picker.pickImage(source: ImageSource.gallery);
+final pickedFile = camerabool ? await _picker.pickImage(source: ImageSource.camera,
+ imageQuality: 40,
+): await _picker.pickImage(source: ImageSource.gallery,
+imageQuality: 40,
+);
 
 if (pickedFile != null) {
-  image = File(pickedFile.path);
+  image = File(pickedFile.path, );
   imagePath = pickedFile.path;
   print(imagePath);
   update();
@@ -104,7 +108,11 @@ if (pickedFile != null) {
 
 Future<void> AddVehicleImage(bool camerabool) async {
 imagePath = "";
-final pickedFile = camerabool ? await _picker.pickImage(source: ImageSource.camera): await _picker.pickImage(source: ImageSource.gallery);
+final pickedFile = camerabool ? await _picker.pickImage(source: ImageSource.camera,
+ imageQuality: 40,
+): await _picker.pickImage(source: ImageSource.gallery,
+imageQuality: 40,
+);
 
 if (pickedFile != null) {
   image = File(pickedFile.path);
@@ -405,7 +413,7 @@ Future<bool> GetStateList() async {
       request.headers["Content-Type"] = "application/json";
     
       request.fields.addAll(map);
-hideLoader(loader);
+
     print(":vehicles::::::=> "+request.fields.toString());
     
     var response = await request.send();
@@ -414,13 +422,13 @@ hideLoader(loader);
    
     if (response.statusCode == 200) {
        isLoading.value = false;
-    hideLoader(loader);
+    
      update();
      log("vehicles Api Response=>> "+json.decode(respStr).toString());
      var data = json.decode(respStr);
      AddVehicleModel res = AddVehicleModel.fromJson(data);
       addVehicleModelData = res.data;
-
+        hideLoader(loader);
      return true;
     } 
   else {
@@ -746,9 +754,17 @@ Future<bool> DeleteVehicleApi(BuildContext context, String id) async {
       if (response.statusCode == 200) {
       log("Delete Vehicle Api Response=>> " +
         (response.body).toString());
+        var res = jsonDecode(response.body);
          hideLoader(loader);        
-           ToastUi("Vehicle deleted successfully.", );  
-         update();     
+       if(res['status'] == true){
+          ToastUi("Vehicle deleted successfully.", );  
+       }
+       else{
+        
+           ToastUi(res['message'],bgColor: ColorCode.red, textColor: ColorCode.white );  
+         
+       }
+       update();     
          return true;
       } 
       else{         

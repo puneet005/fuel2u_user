@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,6 +33,7 @@ class PersonalDetails extends GetView<SignUpController> {
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 15.h),
                           child: Form(
+                            key: controller.editProfileKey,
                             child: Column(children: [
                               SizedBox(
                                 height: 20.h,
@@ -51,7 +53,7 @@ class PersonalDetails extends GetView<SignUpController> {
                                     ),
                                     icon: InkWell(
                                       onTap: () =>
-                                          Get.offNamed(Routes.ALLTRUCKINMAP),
+                                          Get.toNamed(Routes.ALLTRUCKINMAP),
                                       child: Image.asset(
                                         "assets/icons/mytruck.png",
                                         width: 50,
@@ -87,6 +89,9 @@ class PersonalDetails extends GetView<SignUpController> {
                                           return "Enter First Name";
                                         }
                                         return null;
+                                      },
+                                       onChanged: (value){
+                                        controller.EditFormValid();
                                       },
                                       decoration: const InputDecoration(
                                         hintText: "First Name",
@@ -125,6 +130,9 @@ class PersonalDetails extends GetView<SignUpController> {
                                         }
                                         return null;
                                       },
+                                       onChanged: (value){
+                                        controller.EditFormValid();
+                                      },
                                       decoration: const InputDecoration(
                                         hintText: "Last Name",
                                          hintStyle: TextStyle(
@@ -158,6 +166,9 @@ class PersonalDetails extends GetView<SignUpController> {
                                       inputFormatters: [
                                         MaskedInputFormatter('###-###-####')
                                       ],
+                                       onChanged: (value){
+                                        controller.EditFormValid();
+                                      },
                                       validator: (val) {
                                         if (val!.length == 12) {
                                           return null;
@@ -196,12 +207,19 @@ class PersonalDetails extends GetView<SignUpController> {
                                       controller: controller.emailCrt,
                                       autocorrect: true,
                                       keyboardType: TextInputType.emailAddress,
-                                      // validator: (val){
-                                      //   if(val == null || val.isEmpty){
-                                      //     return "Enter Last Name";
-                                      //   }
-                                      //   return null;
-                                      // },
+                                      onChanged: (value){
+                                        controller.EditFormValid();
+                                      },
+                                      validator: (val){
+                                         if(val == null || val.isEmpty){
+                            return "Enter Contact Email";
+                          }
+                              if (val.isValidEmail()) {
+                        return null;
+                      }
+                      return "Enter Valid Email";
+                                         
+                                      },
                                       decoration: const InputDecoration(
                                         hintText: "Email",
                                          hintStyle: TextStyle(
@@ -227,10 +245,13 @@ class PersonalDetails extends GetView<SignUpController> {
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15.h),
                                     child: FillBtn(ontap: (){
-                                      controller.SaveProfile(context);
+                                      if(controller.editProfileKey.currentState!.validate()){
+                                          controller.SaveProfile(context);
+                                      }
+                                    
                                       // controller.
                                     }, text: "SAVE CHANGES",
-                                    Bgcolor: ColorCode.ligthGray,),
+                                    Bgcolor: controller.isEdit.value ? ColorCode.orange : ColorCode.ligthGray,),
                                   ),
                                   SizedBox(height: 20.h,),
                                  Padding(
@@ -314,4 +335,6 @@ class PersonalDetails extends GetView<SignUpController> {
                           ))));
             }));
   }
+  
 }
+

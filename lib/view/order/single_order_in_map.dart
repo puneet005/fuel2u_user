@@ -169,7 +169,7 @@ initSocket() async {
                     ),
                      SizedBox(height: 20.h,),
                     Container(
-                      child: Text("${controller.orderData?.driver?.firstName ?? ""} is <X.X> miles away", style: Heading1(),),
+                      child: Text("${controller.orderData?.driver?.firstName ?? ""} is ${controller.orderData?.driverDistance ?? ""} miles away", style: Heading1(),),
                     ),
                      SizedBox(height: 20.h,),
 //                    TextButton(onPressed: (){ 
@@ -204,16 +204,18 @@ initSocket() async {
     socket!.on("getUserOrderResponse", (data) {
       log("getUserOrderResponse");
       log("on ---> \n");
+      
       var res = jsonEncode(data['data']);
       log(res.toString());
       GetUserOrderData orderData = GetUserOrderData.fromJson(data['data']);
       controller.orderData = orderData ; 
-      controller.update();      
+      controller.update();   
+      log(LatLng(double.parse(orderData.location!.latitude!), double.parse(orderData.location!.longitude!)).toString());  
       controller.center =  LatLng(double.parse(orderData.location!.latitude!), double.parse(orderData.location!.longitude!));     
       controller.SetCarLocation(orderData.vehicle!.name ?? "", double.parse(orderData.location!.latitude!),  double.parse(orderData.location!.longitude!) );
       controller.update(); 
       if(orderData.driver!.latitude != null && orderData.driver!.longitude != null){
-         controller.SetTruckLocation(orderData.vehicle!.name ?? "", double.parse(orderData.location!.latitude!),  double.parse(orderData.location!.longitude!) );
+         controller.SetTruckLocation(orderData.vehicle!.name ?? "", double.parse(orderData.driver!.latitude!),  double.parse(orderData.driver!.longitude!) );
          controller.mapController!.animateCamera(
         CameraUpdate.newLatLng(
           LatLng(double.parse(orderData.location!.latitude!),  double.parse(orderData.location!.longitude!)),

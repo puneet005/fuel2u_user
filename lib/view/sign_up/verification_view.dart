@@ -60,7 +60,7 @@ class _VerificationViewState extends State<VerificationView> {
                           vertical: 10.r, 
                           horizontal: 15.r
                         ),
-                        child: Text("Sent to <XXX-XXX-XXXX or example@email.com>", 
+                        child: Text("Sent to XXX-XXX-${controlller.phoneNoCrt.text.trim().substring(8)} ${controlller.emailCrt.text.isEmpty ? "" : controlller.emailCrt.text}", 
                             maxLines: 3,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,

@@ -74,7 +74,7 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                             child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                           ),
                             icon: InkWell(
-                              onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+                              onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                             child: Image.asset("assets/icons/mytruck.png", width: 50,),
                       )),
                       SizedBox(height: 20.h,),
@@ -215,7 +215,9 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                       controller.addressFormCheck();
 
                     },
+                    maxLength: 27,
                     decoration: InputDecoration(
+                       counterText: "",
                       hintText: "City",
                        hintStyle: TextStyle(
                     color: ColorCode.ligthGray,
@@ -297,9 +299,10 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                     // validator: (val) {},
                      onChanged: (val){
                       controller.addressFormCheck();
-
                     },
+                    maxLength: 27,
                     decoration: InputDecoration(
+                       counterText: "",
                       hintText: "Zip Code",
                        hintStyle: TextStyle(
                     color: ColorCode.ligthGray,

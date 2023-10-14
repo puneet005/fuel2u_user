@@ -76,7 +76,7 @@ class _EditLocationState extends State<EditLocation> {
                                   ),
                                   icon: InkWell(
                                     onTap: () =>
-                                        Get.offNamed(Routes.ALLTRUCKINMAP),
+                                        Get.toNamed(Routes.ALLTRUCKINMAP),
                                     child: Image.asset(
                                       "assets/icons/mytruck.png",
                                       width: 50,
@@ -153,7 +153,9 @@ class _EditLocationState extends State<EditLocation> {
                                   autocorrect: true,
                                   keyboardType: TextInputType.name,
                                   // validator: (val) {},
+                                  maxLength: 27,
                                   decoration: InputDecoration(
+                                     counterText: "",
                                     hintText: "Name (optional), ie Home",
                                     hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
@@ -214,15 +216,18 @@ class _EditLocationState extends State<EditLocation> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.r, horizontal: 15.r),
                                 child: TextFormField(
+                                  
                                   style: TextFieldStyle(),
                                   controller: controller.cityCtrl,
                                   autocorrect: true,
                                   keyboardType: TextInputType.name,
+                                  maxLength: 25,
                                   // validator: (val) {},
                                   onChanged: (val) {
                                     controller.addressFormCheck();
                                   },
                                   decoration: InputDecoration(
+                                     counterText: "",
                                     hintText: "City",
                                     hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
@@ -444,7 +449,7 @@ class _EditLocationState extends State<EditLocation> {
 //                             child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
 //                           ),
 //                             icon: InkWell(
-//                               onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+//                               onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
 //                             child: Image.asset("assets/icons/mytruck.png", width: 50,),
 //                       )),
 //                       SizedBox(height: 20.h,),

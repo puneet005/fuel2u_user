@@ -144,7 +144,10 @@ class EditOrder extends GetView<OrderController> {
                                                  controller.vehicleList![controller.selectVehicleIndex].image ==
                                                                             "" || controller.vehicleList![controller.selectVehicleIndex].image == null
                                                                         ? Image.asset(
-                                                                            "assets/images/car_img.png")
+                                                                            "assets/images/car_img.png",  height:
+                                                                                35.h,
+                                                                            width:
+                                                                                70.h,)
                                                                         : Image
                                                                             .network(
                                                                             ApiUrls.domain +

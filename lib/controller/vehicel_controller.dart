@@ -649,8 +649,16 @@ Future<bool> DeleteLocationApi(BuildContext context, int id) async {
       if (response.statusCode == 200) {
       log("Delete Vehicle Api Response=>> " +
         (response.body).toString());
-         hideLoader(loader);        
-           ToastUi("Vehicle deleted successfully.", );  
+         var res = jsonDecode(response.body);
+         hideLoader(loader);       
+         if(res['status'] == true){
+          ToastUi("Location deleted successfully.", );  
+       }
+       else{        
+           ToastUi(res['message'],bgColor: ColorCode.red, textColor: ColorCode.white );  
+         
+       } 
+          //  ToastUi("Location deleted successfully.", );  
          update();     
          return true;
       } 

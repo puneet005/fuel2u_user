@@ -24,7 +24,7 @@ class SelectDate extends GetView<OrderController>{
   Widget build(BuildContext context) {
     OrderController controller = Get.find<OrderController>();
     Future.delayed(Duration.zero,(){
-      controller.selectdata.clear();      
+      // controller.selectdata.clear();      
       if(!controller.isEdit.value){
         log(controller.profileData!.userType!.toString());
         log("${controller.profileData!.userType} == Family User");
@@ -35,7 +35,9 @@ class SelectDate extends GetView<OrderController>{
       else{
          log("else part");         
           log(controller.profileData!.deliveryDay.toString());  
-          if(controller.planId == 3){
+          log(controller.planId.toString());
+          log(controller.payAsGo.value.toString());
+          if(!controller.payAsGo.value){
           controller.BusinessDate(controller.profileData!.deliveryDay);
           }
           else{
@@ -64,8 +66,8 @@ class SelectDate extends GetView<OrderController>{
       }
       else{
          log("else part");         
-          log(controller.profileData!.deliveryDay.toString());  
-          if(controller.planId == 3){
+          log(controller.selectPlan.toString());  
+          if(!controller.payAsGo.value){
           controller.BusinessDate(controller.profileData!.deliveryDay);
           }
           else{

@@ -123,7 +123,9 @@ class OrderReviewStatus extends GetView<OrderController> {
                                                   .image == "" ||  controller.orderDetailsData!.vehicle!
                                                   .image == null
                                           ? Image.asset(
-                                              "assets/images/car_img.png")
+                                              "assets/images/car_img.png",
+                                               height: 35.h,
+                                              width: 70.h,)
                                           : Image.network(
                                               ApiUrls.domain +
                                                   controller.orderDetailsData!
@@ -141,10 +143,22 @@ class OrderReviewStatus extends GetView<OrderController> {
                                   Row(
                                     // mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text(
+                                       SizedBox(
+                                      height: 15,
+                                      width: Get.width -80,
+                                      child: Text(
                                         "Vehicle Name: ${controller.orderDetailsData!.vehicle!.name ?? ""}",
-                                        style: Heading5(),
-                                      )
+                                        style: Heading5(
+                                          
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                      // Text(
+                                      //   "Vehicle Name: ${controller.orderDetailsData!.vehicle!.name ?? ""}",
+                                      //   style: Heading5(),
+                                      // )
                                     ],
                                   ),
                                   SizedBox(
@@ -175,8 +189,10 @@ class OrderReviewStatus extends GetView<OrderController> {
                                     height: 5.h,
                                   ),
                                   Container(
+                                    height: 15,
                                     child: Text(
                                       "Location: ${controller.orderDetailsData!.location!.address}",
+                                      
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: Heading5(),
@@ -214,14 +230,14 @@ class OrderReviewStatus extends GetView<OrderController> {
 
                                   // 
                                   // Text("${controller.orderDetailsData?.driver}"),
-                                  if(controller.orderDetailsData?.driver !=  null)
-                                   controller.orderDetailsData!.driver!.averageRating! > 0 ? SizedBox(
+                                  if(controller.orderDetailsData?.orderRating !=  null)
+                                   controller.orderDetailsData!.orderRating!.rating! > 0 ? SizedBox(
                                     height: 5.h,
                                   ):SizedBox(height: 0,),
-                                   if(controller.orderDetailsData?.driver != null)
-                                controller.orderDetailsData!.driver!.averageRating! > 0 ?    Row(
+                                   if(controller.orderDetailsData?.orderRating != null)
+                                controller.orderDetailsData!.orderRating!.rating! > 0 ?    Row(
                                     children: List.generate(5, (index) => 
-                                      Icon(index < controller.orderDetailsData!.driver!.averageRating!   ? Icons.star : Icons.star_border,
+                                      Icon(index < controller.orderDetailsData!.orderRating!.rating!  ? Icons.star : Icons.star_border,
                               size: 20,
                               color: ColorCode.orange )),                                  
                                   ): SizedBox(height: 0,),
@@ -241,7 +257,7 @@ class OrderReviewStatus extends GetView<OrderController> {
       ),
       // if()
       bottomNavigationBar: controller.orderDetailsData!.status == "Completed"  &&
-      controller.orderDetailsData!.driver!.averageRating == 0
+      controller.orderDetailsData!.orderRating == null
           
           ? Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 15.h),

@@ -1145,6 +1145,7 @@ class GetUserOrderData {
     "updated_at": "2023-09-20T05:41:02.000000Z",
     "deleted_at": null,
     "user_type": "User",
+
     "delivery_day": "",
     "subscription": {
       "id": 12,
@@ -1339,6 +1340,7 @@ class GetUserOrderData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  double? driverDistance;
   String? orderDeliveryDay;
   GetUserOrderDataUser? user;
   GetUserOrderDataLocation? location;
@@ -1378,6 +1380,7 @@ class GetUserOrderData {
     this.updatedAt,
     this.deletedAt,
     this.orderDeliveryDay,
+    this.driverDistance,
     this.user,
     this.location,
     this.driver,
@@ -1415,6 +1418,7 @@ class GetUserOrderData {
     createdAt = json['created_at']?.toString();
     updatedAt = json['updated_at']?.toString();
     deletedAt = json['deleted_at']?.toString();
+    driverDistance = json['driver_distance']?.toDouble();
     orderDeliveryDay = json['order_delivery_day']?.toString();
     user = (json['user'] != null) ? GetUserOrderDataUser.fromJson(json['user']) : null;
     location = (json['location'] != null) ? GetUserOrderDataLocation.fromJson(json['location']) : null;
@@ -1454,6 +1458,7 @@ class GetUserOrderData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['driver_distance'] = driverDistance;
     data['order_delivery_day'] = orderDeliveryDay;
     if (user != null) {
       data['user'] = user!.toJson();

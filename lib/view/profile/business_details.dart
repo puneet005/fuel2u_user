@@ -82,7 +82,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                                   ),
                                   icon: InkWell(
                                     onTap: () =>
-                                        Get.offNamed(Routes.ALLTRUCKINMAP),
+                                        Get.toNamed(Routes.ALLTRUCKINMAP),
                                     child: Image.asset(
                                       "assets/icons/mytruck.png",
                                       width: 50,
@@ -115,6 +115,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 10.r, horizontal: 15.r),
                               child: TextFormField(
+
                                 style: TextFieldStyle(),
                                 textInputAction: TextInputAction.next,
                                 controller: controller.employerNameCtrl,
@@ -129,8 +130,10 @@ class _BusinessDetailsState extends State<BusinessDetails> {
                                   }
                                   return null;
                                 },
+                                maxLength: 27,
                                 decoration: InputDecoration(
                                   hintText: "Employer Name",
+                                  counterText: "",
                                   hintStyle: TextStyle(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,
@@ -793,7 +796,7 @@ class _BusinessDetailsState extends State<BusinessDetails> {
     //                                   ),
     //                                   icon: InkWell(
     //                                     onTap: () =>
-    //                                         Get.offNamed(Routes.ALLTRUCKINMAP),
+    //                                         Get.toNamed(Routes.ALLTRUCKINMAP),
     //                                     child: Image.asset(
     //                                       "assets/icons/mytruck.png",
     //                                       width: 50,

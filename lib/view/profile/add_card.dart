@@ -61,7 +61,7 @@ class AddCard extends GetView<VehicleController> {
                                       ),
                                       icon: InkWell(
                                         onTap: () =>
-                                            Get.offNamed(Routes.ALLTRUCKINMAP),
+                                            Get.toNamed(Routes.ALLTRUCKINMAP),
                                         child: Image.asset(
                                           "assets/icons/mytruck.png",
                                           width: 50,
@@ -96,7 +96,9 @@ class AddCard extends GetView<VehicleController> {
                                       
                                         onChanged: (val){
                                         },
+                                        maxLength: 27,
                                         decoration: InputDecoration(
+                                           counterText: "",
                                           hintText: "Card Name",
                          hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
@@ -150,7 +152,7 @@ class AddCard extends GetView<VehicleController> {
 
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXXX-XXXX-XXXX-XXXX",
+                                          hintText: "Card Number",
                          hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700
@@ -231,12 +233,12 @@ class AddCard extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "CVV";
+                                            return "CSV";
                                           }
 
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXX",
+                                          hintText: "CSV",
                          hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700
@@ -277,7 +279,7 @@ class AddCard extends GetView<VehicleController> {
                                           }
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXXXX",
+                                          hintText: "ZIP",
                                           hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700

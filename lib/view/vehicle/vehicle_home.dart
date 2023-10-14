@@ -181,7 +181,9 @@ class _VehicleHomeState extends State<VehicleHome> {
                                           children: [
                                             vehicleList[index].image == "" ||  vehicleList[index].image == null
                                                 ? Image.asset(
-                                                    "assets/images/car_img.png")
+                                                    "assets/images/car_img.png",
+                                                     height: 35.h,
+                                                    width: 60.h,)
                                                 : Image.network(
                                                     ApiUrls.domain +
                                                         controller

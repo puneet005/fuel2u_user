@@ -76,7 +76,7 @@ class DeliveryZipCode extends GetView<DeliveryZipCodeController> {
                           height: 20,
                         ),
                       ),
-                      hintText: "Delivery Fual to ?",
+                      hintText: "Deliver Fuel to?",
                       hintStyle: TextStyle(
                           color: ColorCode.ligthGray,
                           fontWeight: FontWeight.w700),

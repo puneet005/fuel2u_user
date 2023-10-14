@@ -133,11 +133,19 @@ class ReviewOrder extends GetView<OrderController>{
                                                 children: [
                                                   // SizedBox(width: 10,),
                                                 controller.vehicleList! == null ? Image.asset(
-                                                                            "assets/images/car_img.png"):
+                                                                            "assets/images/car_img.png",
+                                                                             height:
+                                                                                35.h,
+                                                                            width:
+                                                                                70.h,):
                                                  controller.vehicleList![controller.selectVehicleIndex].image == null ||    controller.vehicleList![controller.selectVehicleIndex].image ==
                                                                           ""
                                                                         ? Image.asset(
-                                                                            "assets/images/car_img.png")
+                                                                            "assets/images/car_img.png",
+                                                                              height:
+                                                                                35.h,
+                                                                            width:
+                                                                                70.h,)
                                                                         : Image
                                                                             .network(
                                                                             ApiUrls.domain +
@@ -156,7 +164,19 @@ class ReviewOrder extends GetView<OrderController>{
                                                Row(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
-                                                  Text("Vehicle Name: ${controller.vehicleList![controller.selectVehicleIndex].name ?? ""}", style: Heading5(),)
+                                                    SizedBox(
+                                      height: 15,
+                                      width: Get.width -80,
+                                      child: Text(
+                                        "Vehicle Name: ${controller.vehicleList![controller.selectVehicleIndex].name ?? ""}",
+                                        style: Heading5(
+                                          
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                                  // Text("Vehicle Name: ${controller.vehicleList![controller.selectVehicleIndex].name ?? ""}", style: Heading5(),)
                                                 ],
                                               ),
                                                 SizedBox(height: 5.h,),
@@ -191,27 +211,27 @@ class ReviewOrder extends GetView<OrderController>{
                                                 style: Heading5(),),
                                               ),
                                     
-                                              Padding(
-                                          padding:  EdgeInsets.symmetric(
-                                            vertical: 10.r, 
-                                            horizontal: 0.r
-                                          ),
-                                          child: Row(
+                      //                         Padding(
+                      //                     padding:  EdgeInsets.symmetric(
+                      //                       vertical: 10.r, 
+                      //                       horizontal: 0.r
+                      //                     ),
+                      //                     child: Row(
                                             
-                                          children: [
-                                            SvgPicture.asset("assets/icons/location_icon.svg",height: 25.h,  color: ColorCode.orange),
-                                            SizedBox(width: 10.h,),
-                                            Text("Use Your Current Location", style: HeadingCustomFamliy(
-                        family: "RobotoRegular",
-                        color: ColorCode.orange,
-                        size: 16.sp,
-                        fbold: FontWeight.w700,
-                        // decoration: TextDecoration.underline
+                      //                     children: [
+                      //                       SvgPicture.asset("assets/icons/location_icon.svg",height: 25.h,  color: ColorCode.orange),
+                      //                       SizedBox(width: 10.h,),
+                      //                       Text("Use Your Current Location", style: HeadingCustomFamliy(
+                      //   family: "RobotoRegular",
+                      //   color: ColorCode.orange,
+                      //   size: 16.sp,
+                      //   fbold: FontWeight.w700,
+                      //   // decoration: TextDecoration.underline
 
-                      ),)
-                                          ],
-                                          ),
-                                        ),
+                      // ),)
+                      //                     ],
+                      //                     ),
+                      //                   ),
                                               
                                           
                                         

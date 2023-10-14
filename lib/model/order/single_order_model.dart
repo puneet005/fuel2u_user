@@ -207,7 +207,7 @@ class SingleOrderModelDataBusiness {
   String? deliveryZipcode;
   String? deliveryInstructions;
   String? promocode;
-  String? deliveryDay;
+  List<String>? deliveryDay;
   String? status;
   String? contactName;
   String? contactEmail;
@@ -217,6 +217,7 @@ class SingleOrderModelDataBusiness {
   String? billingCity;
   String? billingStateId;
   String? billingZipcode;
+  // List<String>? deliveryDay;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
@@ -253,7 +254,7 @@ class SingleOrderModelDataBusiness {
     deliveryZipcode = json['delivery_zipcode']?.toString();
     deliveryInstructions = json['delivery_instructions']?.toString();
     promocode = json['promocode']?.toString();
-    deliveryDay = json['delivery_day']?.toString();
+    // deliveryDay = json['delivery_day']?.toString();
     status = json['status']?.toString();
     contactName = json['contact_name']?.toString();
     contactEmail = json['contact_email']?.toString();
@@ -266,6 +267,14 @@ class SingleOrderModelDataBusiness {
     createdAt = json['created_at']?.toString();
     updatedAt = json['updated_at']?.toString();
     deletedAt = json['deleted_at']?.toString();
+    if (json['delivery_day'] != null) {
+  final v = json['delivery_day'];
+  final arr0 = <String>[];
+  v.forEach((v) {
+  arr0.add(v.toString());
+  });
+    deliveryDay = arr0;
+    }
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -290,6 +299,14 @@ class SingleOrderModelDataBusiness {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+     if (deliveryDay != null) {
+      final v = deliveryDay;
+      final arr0 = [];
+  v!.forEach((v) {
+  arr0.add(v);
+  });
+      data['delivery_day'] = arr0;
+    }
     return data;
   }
 }
@@ -1257,6 +1274,7 @@ class SingleOrderModelData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  String? orderSubscription;
   SingleOrderModelDataUser? user;
   SingleOrderModelDataLocation? location;
   SingleOrderModelDataDriver? driver;
@@ -1303,6 +1321,7 @@ class SingleOrderModelData {
     this.business,
     this.subscription,
     this.orderRating,
+    this.orderSubscription,
   });
   SingleOrderModelData.fromJson(Map<String, dynamic> json) {
     id = json['id']?.toInt();
@@ -1331,6 +1350,7 @@ class SingleOrderModelData {
     createdAt = json['created_at']?.toString();
     updatedAt = json['updated_at']?.toString();
     deletedAt = json['deleted_at']?.toString();
+    orderSubscription = json['order_subscription']?.toString();
     user = (json['user'] != null) ? SingleOrderModelDataUser.fromJson(json['user']) : null;
     location = (json['location'] != null) ? SingleOrderModelDataLocation.fromJson(json['location']) : null;
     // driver = (json['driver'] != null) ? SingleOrderModelDataDriver.fromJson(json['driver']) : null;
@@ -1339,7 +1359,7 @@ class SingleOrderModelData {
     // vehicle = (json['vehicle'] != null) ? SingleOrderModelDataVehicle.fromJson(json['vehicle']) : null;
     // business = (json['business'] != null) ? SingleOrderModelDataBusiness.fromJson(json['business']) : null;
     // subscription = (json['subscription'] != null) ? SingleOrderModelDataSubscription.fromJson(json['subscription']) : null;
-     driver = (json['driver'] != null && json['driver'] != "") ? SingleOrderModelDataDriver.fromJson(json['driver']) : null;
+    driver = (json['driver'] != null && json['driver'] != "") ? SingleOrderModelDataDriver.fromJson(json['driver']) : null;
     truck = (json['truck'] != null && json['truck'] != "") ? SingleOrderModelDataTruck.fromJson(json['truck']) : null;
     fuelType = (json['fuel_type'] != null && json['fuel_type'] != "") ? SingleOrderModelDataFuelType.fromJson(json['fuel_type']) : null;
     vehicle = (json['vehicle'] != null && json['vehicle'] != "" )  ? SingleOrderModelDataVehicle.fromJson(json['vehicle']) : null;
@@ -1376,6 +1396,7 @@ class SingleOrderModelData {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['deleted_at'] = deletedAt;
+    data['order_subscription'] =orderSubscription;
     if (user != null) {
       data['user'] = user!.toJson();
     }

@@ -47,7 +47,7 @@ class ViewCarImage extends GetView{
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Upload your profile photo",
+                                "Upload your vehicle photo",
                                 style: Heading1(color: ColorCode.darkGray),
                               )
                             ],

@@ -40,6 +40,7 @@ class OrderController extends GetxController {
   final confirmNextBth = false.obs;
   late int selectVehicleIndex;
   late int selectPlan;
+  final payAsGo = false.obs;  
   late int selectAddress;
   late int selectPaymentMethod;
   late Map selectdata;
@@ -94,7 +95,7 @@ class OrderController extends GetxController {
         "shortData": formattedDate2
       });
       // print('$date :::::: ${getDayOfWeek(date)}');
-      print(dateListofdays.toString());
+      // print(dateListofdays.toString());
       // getDayOfWeek(date);
       update();
     }
@@ -103,6 +104,7 @@ class OrderController extends GetxController {
 // Business Date
 Future<void> BusinessDate(List<String>? day
 ) async{
+  
 //  Change this to the number of days you want to add.
     log("BusinessDate block");
     log(day.toString());
@@ -184,7 +186,7 @@ Future<void> BusinessDate(List<String>? day
 // All Google Map variable and location
   GoogleMapController? mapController;
 
-  LatLng center = const LatLng(0, 0);
+  LatLng center = const LatLng(35.1281495, -90.5809757);
   final Set<Marker> markers = {};
   @override
   void onInit() {
@@ -192,11 +194,11 @@ Future<void> BusinessDate(List<String>? day
     getnextDay();
     
     getOrder();
-    selectVehicleIndex = -1;
-    selectFuelType = -1;
-    selectPlan = -1;
-    selectAddress = -1;
-    selectPaymentMethod = -1;
+    // selectVehicleIndex = -1;
+    // selectFuelType = -1;
+    // selectPlan = -1;
+    // selectAddress = -1;
+    // selectPaymentMethod = -1;
     selectdata = {};
     Future.delayed(Duration(seconds: 3), () {
       emptyOrder.value = false;
@@ -256,6 +258,7 @@ Future<void> BusinessDate(List<String>? day
     if(await ConnectivityWrapper.instance.isConnected){
     List<OrderListModelData>? allorderList;
     orderList = [];
+    orderList!.clear();
     allorderList = [];
     update();
     // try {
@@ -287,7 +290,8 @@ Future<void> BusinessDate(List<String>? day
             allorderList[i].status?.removeAllWhitespace == "Confirmed" || 
             allorderList[i].status == "Pre-Auth Successful" ||  
             allorderList[i].status == "In Progress" || 
-            allorderList[i].status == "Out for Delivery"){
+            allorderList[i].status == "Out for Delivery"|| 
+            allorderList[i].status == "Delivered"){
                orderList!.add(allorderList[i]);
                update();
            }
@@ -419,9 +423,10 @@ Future<void> BusinessDate(List<String>? day
         minFuelApi();
         log("fuel-Type?limit=10&page=1 Response=>> " +
             (response.body).toString());
-        fuelLoaidng.value = false;
+        // fuelLoaidng.value = false;
         FuelTypeModel res = FuelTypeModel.fromJson(json.decode(response.body));
         fuelTypeList = res.data;
+        fuelLoaidng.value = false;
         update();
       } else {
         fuelLoaidng.value = false;
@@ -439,6 +444,7 @@ Future<void> BusinessDate(List<String>? day
      );  
       }
       else{
+    fuelLoaidng.value = false;
     log(e.toString());
     // hideLoader(loader);
     // hideLoader(loader);
@@ -603,8 +609,17 @@ String? minFuelType;
       log("profile Response=>> " + (response.body).toString());
       ProfileModel res = ProfileModel.fromJson(json.decode(response.body));
       profileData = res.data;
-      if(res.data!.userType != "User" && res.data!.userType != "Family User"){
-      VerifyPromoCode(context, profileData!.promocode.toString());
+      update();
+      // if(res.data!.userType != "User" && res.data!.userType != "Family User"){
+      // VerifyPromoCode(context, profileData!.promocode.toString());
+      // }
+      if(res.data!.userType == "Employee"){
+        VerifyPromoCode(context, profileData!.promocode.toString());
+      }
+      if(res.data!.userType == "Employer"){
+          selectPlan = 1;
+          isPromoCodevalid.value = true;
+          update();
       }
       update();
       hideLoader(loader);
@@ -958,9 +973,11 @@ String? minFuelType;
       }
       log(ApiUrls.orders);
       var map = <String, dynamic>{};
-      if(planId != 3){
+      if(payAsGo.value){
+      
       map['location_id'] = selectLocation!.id.toString();
-      }
+
+      }     
       map['vehicle_id'] = vehicleList![selectVehicleIndex].id;
       map['fuel_type_id'] = selectfuelTypeId;
       map['fuel_quantity'] = selectFuelAmount.value == 1
@@ -1192,7 +1209,7 @@ String? minFuelType;
         withNavBar: true, // OPTIONAL VALUE. True by default.
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
       );
-    } else if (data.status == "Pre-Auth Request")
+    } else if (data.status == "In Progress")
       PersistentNavBarNavigator.pushNewScreen(
         context,
         screen: DriverAccpetRequest(),
@@ -1215,30 +1232,32 @@ String? minFuelType;
   final alltruckinMap = true.obs;
   List<AllTruckInMapModelData> driverList = [];
   final selectDriver = 0.obs;
+  final mapFullLoading = true.obs;
   Future<bool> getCurrentPosition() async {
-    // markers.clear();
+    markers.clear();
     BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       "assets/images/location.png",
     );
     log("Get Location Permission");
-    try {
+    // try {
       final hasPermission = await _handleLocationPermission();
-      log(hasPermission.toString());
-      // if (!hasPermission) {};
-      await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high)
-          .then((Position position) {
-        currentPosition = position;
-        mapController!.animateCamera(
-          CameraUpdate.newLatLng(
-            LatLng(position.latitude, position.longitude),
-          ),
-        );
+  
+      Position position = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );  
+  log(position.toString()); 
+  if(position != null){
+    currentPosition = position;
         center = LatLng(position.latitude, position.longitude);
         update();
-        log(LatLng(position.latitude, position.longitude).toString());
+        // log(LatLng(position.latitude, position.longitude).toString());
         // markers.add()
+        //  mapController!.animateCamera(
+        //   CameraUpdate.newLatLng(
+        //     LatLng(position.latitude, position.longitude),
+        //   ),
+        // ); 
         markers.add(Marker(
           // This marker id wan be anything that uniquely identifies each marker.
           markerId: MarkerId("1"),
@@ -1248,14 +1267,44 @@ String? minFuelType;
         update();
         initSocket();
         return true;
-      }).catchError((e) {
-        debugPrint(e);
-        return false;
-      });
+  }
+else{
+  log("Not Getting Location");
+   return false;
+}
+      // await Geolocator.getCurrentPosition(
+      //         desiredAccuracy: LocationAccuracy.high)
+      //     .then((Position position) {
+      //   currentPosition = position;
+      //   mapController!.animateCamera(
+      //     CameraUpdate.newLatLng(
+      //       LatLng(position.latitude, position.longitude),
+      //     ),
+      //   );
+      //   center = LatLng(position.latitude, position.longitude);
+      //   update();
+      //   // log(LatLng(position.latitude, position.longitude).toString());
+      //   // markers.add()
+      //   markers.add(Marker(
+      //     // This marker id wan be anything that uniquely identifies each marker.
+      //     markerId: MarkerId("1"),
+      //     position: LatLng(position.latitude, position.longitude),
+      //     icon: markerbitmap,
+      //   ));
+      //   update();
+      //   initSocket();
+      //   return true;
+      // })
+      // .catchError((e) {
+      //   log("catch Error Location");
+      //   log(e.toString());
+      //   return false;
+      // });
       return true;
-    } catch (e) {
-      return false;
-    }
+    // } catch (e) {
+    //   log(e.toString());
+    //   return false;
+    // }
   }
 
 // Add Location
@@ -1643,6 +1692,7 @@ editLoading.value = true;
   }
 
   ShowTruckInMap() {
+    
     alltruckinMap.value = true;
     if (markers.isNotEmpty) {
       markers.removeWhere((element) => element.markerId != MarkerId("1"));
@@ -1658,6 +1708,7 @@ editLoading.value = true;
     });
 
     socket!.on("nearByDriverResponse", (data) {
+     
       driverList.clear();
       log("nearByDriverResponse ---> \n $data");
       var res = jsonEncode(data);
@@ -1693,6 +1744,23 @@ editLoading.value = true;
         update();
       }
     });
+
+
+    /**
+        log('getUserOrders');
+    log(profileData!.id.toString());
+     socket!.emitWithAck("getUserOrders", {
+      "user_id": profileData!.id.toString()
+    }, ack: (val) {
+      log(val);
+    });
+
+     socket!.on("getUserOrdersResponse", (data) {
+
+
+      log("getUserOrdersResponse ---> \n $data");
+     });
+     */
   }
 
   ShowAllDriverLocation(
@@ -1751,23 +1819,37 @@ editLoading.value = true;
       selectLocation = null;
        
     }
-     mainDate().then((value)  {
+    if(editOrderDetailsData!.user!.userType == "User" || editOrderDetailsData!.user!.userType ==  "Family User"){
+         mainDate().then((value)  {
         for(int j = 0; j < dateListofdays.length; j++){
-          log(dateListofdays[j]['date'].toString()  + "==" + editOrderDetailsData!.deliveryDate.toString());
+          // log(dateListofdays[j]['date'].toString()  + "==" + editOrderDetailsData!.deliveryDate.toString());
       if(dateListofdays[j]['date'] ==  editOrderDetailsData!.deliveryDate){
         selectdata = dateListofdays[j];
         
 
       }
-      else{
-        selectdata.clear();
-      }
+      // else{
+      //   selectdata.clear();
+      // }
     
     }  
-    //  editOrderDetailsData. =  commentCtrl
+    // //  editOrderDetailsData. =  commentCtrl
    
     
      });
+    }
+    else{
+      BusinessDate(editOrderDetailsData!.business!.deliveryDay).then((value) => {
+        for(int j = 0; j < dateListofdays.length; j++){
+          // log(dateListofdays[j]['date'].toString()  + "==" + editOrderDetailsData!.deliveryDate.toString());
+      if(dateListofdays[j]['date'] ==  editOrderDetailsData!.deliveryDate){
+        selectdata = dateListofdays[j]
+      }} 
+        
+      });
+
+    }
+    
            
      
     // 

@@ -152,7 +152,12 @@ class OrderEditAfterCreate extends GetView<OrderController> {
                                                 controller.vehicleList![controller.selectVehicleIndex].image ==
                                                                             "" || controller.vehicleList![controller.selectVehicleIndex].image == null
                                                                         ? Image.asset(
-                                                                            "assets/images/car_img.png")
+                                                                            "assets/images/car_img.png", 
+                                                                             height:
+                                                                                35.h,
+                                                                            width:
+                                                                                70.h,
+                                                                            )
                                                                         : Image
                                                                             .network(
                                                                             ApiUrls.domain +
@@ -549,7 +554,7 @@ class OrderEditAfterCreate extends GetView<OrderController> {
                                                 children: [
                                                   SizedBox(height: 5.h,),
                                                   Text(
-                                                   controller.editOrderDetailsData!.subscription!.plan!.name.toString() ?? "",
+                                                   controller.editOrderDetailsData!.orderSubscription ?? "",
                                                     style: Heading4Medium(),
                                                   ),
                                                   //  SizedBox(height: 5.h,),
@@ -645,14 +650,15 @@ class OrderEditAfterCreate extends GetView<OrderController> {
                                                       
                                                       Text(
                                                         "${
-                                                      controller.selectLocation ==  null ?
+                                                         controller.selectLocation ==  null ?
                                                         controller.editOrderDetailsData?.location!.name ?? "" : controller.selectLocation!.name ?? ""}",
                                                         style: Heading4Medium(),
                                                       ),
                                                       // if(controller.editOrderDetailsData!.user!.userType != "")
+                                                      if(controller.editOrderDetailsData!.locationId != null)
                                                       InkWell(
                                                         onTap: (){
-                                                          controller.isEdit.value = true;
+                                                          // controller.isEdit.value = true;
                                                           controller.update();  
                                                           controller.ProfileApi(context).then((value) => {
                                                           PersistentNavBarNavigator.pushNewScreen(
@@ -904,12 +910,14 @@ class OrderEditAfterCreate extends GetView<OrderController> {
                               padding: EdgeInsets.symmetric(
                                   vertical: 10.r, horizontal: 15.r),
                               child: TextFormField(
+                                maxLength: 27,
                                 style: TextFieldStyle(),
                                 controller: controller.commentCtrl,
                                 autocorrect: true,
                                 keyboardType: TextInputType.name,
                                 // validator: (val) {},
                                 decoration:  InputDecoration(
+                                   counterText: "",
                                   hintText: "Comments (optional)",
                                    hintStyle: TextStyle(
                     color: ColorCode.ligthGray,

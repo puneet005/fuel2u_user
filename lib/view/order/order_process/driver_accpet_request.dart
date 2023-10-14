@@ -1,4 +1,8 @@
 
+
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +19,7 @@ class DriverAccpetRequest extends GetView<OrderController> {
   @override
   Widget build(BuildContext context) {
     OrderController controller = Get.find<OrderController>();
+    log("${ApiUrls.domain}${controller.orderDetailsData!.driver!.image}");
     return Scaffold(
       body: SafeArea(
           child: GetBuilder(
@@ -47,15 +52,15 @@ class DriverAccpetRequest extends GetView<OrderController> {
                           SizedBox(
                             height: 40.h,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Review Your Order",
-                                style: Heading1(color: ColorCode.darkGray),
-                              )
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Text(
+                          //       "Review Your Order",
+                          //       style: Heading1(color: ColorCode.darkGray),
+                          //     )
+                          //   ],
+                          // ),
                            Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -94,8 +99,9 @@ class DriverAccpetRequest extends GetView<OrderController> {
             children: [
               CircleAvatar(
                 radius: 70,
+                backgroundColor: Colors.transparent,
                 child: 
-                controller.orderDetailsData!.driver != "" ? controller.orderDetailsData!.driver!.image != "" ? Image.network(
+                controller.orderDetailsData!.driver != "" ? controller.orderDetailsData!.driver!.image != null && controller.orderDetailsData!.driver!.image != ""  ? Image.network(
                     "${ApiUrls.domain}${controller.orderDetailsData!.driver!.image}",
                      loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent? loadingProgress) {

@@ -39,6 +39,7 @@ class SignUpController extends GetxController {
   final phoneNoCrt = TextEditingController();
   final emailCrt = TextEditingController();
   final signupkey = GlobalKey<FormState>();
+  final editProfileKey = GlobalKey<FormState>();
   final acceptTeam = false.obs;
   final zipCodeVaild = false.obs;
 
@@ -334,7 +335,11 @@ Future<void> SignUpApi(BuildContext context) async {
         if(result.status == true){
          userVerftyDetail = result.data!;
       pref.setAccessToken(userVerftyDetail.accessToken);
-      hideLoader(loader);   
+      hideLoader(loader);
+      phoneNoCrt.clear();
+firstnameCrt.clear();
+lastnameCrt.clear();
+emailCrt.clear();
        Get.toNamed(Routes.PROMOCODE);
       ToastUi(data['message'].toString(), 
       bgColor: Colors.green,
@@ -825,6 +830,17 @@ Future<void> SaveProfile(BuildContext context) async {
     } 
     }
    }
+}
+final isEdit = false.obs;
+EditFormValid(){
+  if(firstnameCrt.text.isEmpty|| lastnameCrt.text.isEmpty || phoneNoCrt.text.isEmpty|| emailCrt.text.isEmpty ){
+    isEdit.value = false;
+    update();
+  }
+  else{
+     isEdit.value = true;
+    update();
+  }
 }
 
 

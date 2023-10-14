@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
 import 'package:fuel2u_user/model/location_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
@@ -48,7 +49,31 @@ Future.delayed(Duration.zero,() =>  controller.GetLocationListApi());
                       ),)
                     ],
                   ),
-                  SizedBox(height: 20.h,),
+                  SizedBox(height: 10.h,),                
+                   Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10.h, horizontal: 10.h),
+                     child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  "assets/icons/location_icon.svg",
+                                                  height: 30.h,
+                                                  color: ColorCode.orange),
+                                              SizedBox(
+                                                width: 10.h,
+                                              ),
+                                              Text(
+                                                "Use Your Current Location",
+                                                style: HeadingRobotoBold(
+                                                    color: ColorCode.orange,
+                                                    size: 16.sp),
+                                              )
+                                            ],
+                                          ),
+                   ),
+                  SizedBox(height: 10.h,),
                   //  EmptyUi()
                   controller.isLocationLoading.value ? ListView(
                                 shrinkWrap: true,

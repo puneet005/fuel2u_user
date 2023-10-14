@@ -25,7 +25,7 @@ class LoginController extends GetxController {
       // final promoCodeFormKey = GlobalKey<FormState>();
       final phoneVaild = false.obs;
       final otpVaild = false.obs;
-      final reminderMe = false.obs;
+      final reminderMe = true.obs;
       final onlyNumber = false.obs;
       // final promodeYesOrNo = 0.obs;
       SessionManager pref = SessionManager();
@@ -171,7 +171,7 @@ Future<void> SignInApi(BuildContext context) async {
       // var mobileNo =  phoneNoCrt.text.trim().replaceAll("-"," ");
        var map = <String, dynamic>{};
       map['token']= loginUserDetail.token;
-      map['otp'] = otp;
+      map['otp'] = otp; 
       map['device_token'] = fcmToken;
       // map['phone_number'] = "+1${mobileNo.removeAllWhitespace}";
       log(ApiUrls.signInVerify);

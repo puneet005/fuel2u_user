@@ -46,7 +46,7 @@ class AddPromoCode extends GetView<PremiunController> {
                                 ),
                               ),
                               icon: InkWell(
-                                onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+                                onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                                 child: Image.asset(
                                   "assets/icons/mytruck.png",
                                   width: 50,

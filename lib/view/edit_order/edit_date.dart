@@ -15,8 +15,9 @@ class EditDate extends GetView<OrderController>{
   @override
   Widget build(BuildContext context) {
     OrderController controller = Get.find<OrderController>();
-    Future.delayed(Duration.zero,(){
-      // if(!controller.isEdit.value)
+    Future.delayed(Duration.zero,(){    
+      // log(controller.)  
+      if(!controller.isEdit.value)
       if(controller.profileData!.userType == "User"){
           controller.mainDate();
       }

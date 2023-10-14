@@ -198,8 +198,8 @@ update();
   Future<void> BusinessFormApi(BuildContext context) async {
     OverlayEntry loader = overlayLoader(context);
     try {
-      var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
-      log(locations.toString());
+      // var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
+      // log(locations.toString());
       Overlay.of(context).insert(loader);
       var mobileNo = contactNumberCtrl.text.trim().replaceAll("-", " ");
       String? token = await pref.getAccessToken();
@@ -345,6 +345,7 @@ BusinessModelData? editBusinessData;
             contactNameCtrl.text =  res.data!.contactName!;
             contactEmailCtrl.text = res.data!.contactEmail!;
             contactNumberCtrl.text = getFormattedPhoneNumber(res.data!.contactPhoneNumber!);
+
             update();
             billingAddressCtrl.text = res.data!.billingAddress ?? "";
             billingCityCtrl.text = res.data!.billingCity!;
@@ -398,8 +399,8 @@ BusinessModelData? editBusinessData;
     OverlayEntry loader = overlayLoader(context);
     //  getAddressFromLatLng("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
     try {
-    var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
-      log(locations.toString());
+    // var locations = await locationFromAddress("${deliveryAddressCtrl.text.tr},${cityCtrl.text.tr},${stateValue!.name} ${zipCodeCtrl.text.tr}");
+    //   log(locations.toString());
       Overlay.of(context).insert(loader);
       var mobileNo = contactNumberCtrl.text.trim().replaceAll("-", " ");
       String? token = await pref.getAccessToken();

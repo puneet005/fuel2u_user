@@ -28,14 +28,10 @@ class _NearYourTruckState extends State<NearYourTruck> {
     // TODO: implement initState
     getLocation();
     super.initState();
-    Future.delayed(Duration(
-      seconds: 3
-    ),(){
-      loadingis = false;
+    Future.delayed(Duration.zero,(){
       setState(() {
-        
+        loadingis = true;
       });
-      
     });
    
 }
@@ -48,10 +44,33 @@ class _NearYourTruckState extends State<NearYourTruck> {
 // }
 
 Future<void> getLocation() async {
-     bool res = await controller.getCurrentPosition();
+     bool res = 
+     await controller.getCurrentPosition();
      if(res){
-      // log("calling getLocation");
+        Future.delayed(Duration(
+      seconds: 3
+    ),(){
+      loadingis = false;
+      setState(() {
+
+      });
+      
+    });
+      
+      print("calling getLocation");            
+      
       controller.ShowTruckInMap();
+     }
+     else{
+         Future.delayed(Duration(
+      seconds: 3
+    ),(){
+      loadingis = false;
+      setState(() {
+        
+      });
+      
+    });
      }
   }
 
@@ -77,10 +96,10 @@ Future<void> getLocation() async {
                   onMapCreated:
                   // controller.onMapCreated,
                   (mapControl) {
-            setState(() {
+            // setState(() {
               controller.mapController = mapControl;
               controller.update();
-            });
+            // });
           },
                     initialCameraPosition: CameraPosition(
                         target: controller.center,
@@ -93,7 +112,8 @@ Future<void> getLocation() async {
                       right: 30,
                       child: GestureDetector(
                         onTap: () {
-                          Get.back();
+                          
+                         Get.back();
                         },
                         child: const CircleAvatar(
                           backgroundColor: ColorCode.yellow,
@@ -176,9 +196,14 @@ double calculateDistance(lat1, lon1, lat2, lon2){
 }
 @override
 void dispose() {
-  if(controller.socket!.connected){
+  // if(controller.socket!.connected){
+  // if(controller.socket != null){
   controller.socket!.disconnected;
-  }
+  // }
+  // }
+  // else{
+  //    controller.socket!.disconnected;
+  // }
   super.dispose();
 }
 

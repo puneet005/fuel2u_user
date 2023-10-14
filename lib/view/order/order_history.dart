@@ -64,7 +64,8 @@ class OrderHistory extends GetView<OrderController>{
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             children: List.generate(5, (index) => ShimmerLoading())
-                          ): OrderList(
+                          ): controller.orderHistoryList!.isEmpty ?EmptyOrder():
+                           OrderList(
                             controller.orderHistoryList!,
                             context
                           )
@@ -119,7 +120,7 @@ class OrderHistory extends GetView<OrderController>{
   }
   
   OrderList(List<OrderListModelData> orderList, BuildContext context) {
-    return orderList.isNotEmpty || orderList != null ?  ListView(
+    return  ListView(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       children: List.generate(orderList.length, (index) => 
@@ -208,7 +209,6 @@ class OrderHistory extends GetView<OrderController>{
                         size: 13.sp,
                         decoration: TextDecoration.underline,
                         fbold: FontWeight.w500
-
                       )),
                     )
                ],)
@@ -219,7 +219,7 @@ class OrderHistory extends GetView<OrderController>{
           ),
         ),
       )),
-    ): EmptyOrder();
+    );
   }
 
 }

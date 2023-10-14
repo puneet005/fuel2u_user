@@ -193,6 +193,7 @@ ToastUi(
         msg: massage,        
         backgroundColor: bgColor,
         textColor: textColor,
+        
         fontSize: size);
 }
 
@@ -241,4 +242,10 @@ String getFormattedPhoneNumber(
   }
   return updatedNumber;
  
+}
+
+extension StringExtension on String {
+    String capitalize() {
+      return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    }
 }

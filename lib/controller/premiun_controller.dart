@@ -24,6 +24,7 @@ class PremiunController extends GetxController {
   final isLoading = true.obs;
   SessionManager pref = SessionManager();
   List<PlanListModelData>? plansList;
+  final promocodeShow = true.obs;
   @override
   void onInit() {
     super.onInit();
@@ -162,6 +163,11 @@ class PremiunController extends GetxController {
      
 
       }
+      else{
+         ToastUi(data['message'].toString(), bgColor: ColorCode.red,
+     textColor: ColorCode.white,
+     );
+      }
     
       //
   } 
@@ -282,10 +288,10 @@ class PremiunController extends GetxController {
       Overlay.of(context).insert(loader);
       var map = <String, dynamic>{};
       map['plan_id']= plansList![showPlanIndex.value].id;
-      log(ApiUrls.plans);
+      log("${ApiUrls.plans}?type=update");
       log(map.toString());
       http.Response response = await http.post(
-      Uri.parse(ApiUrls.plans),
+      Uri.parse("${ApiUrls.plans}?type=update"),
       body: jsonEncode(map),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
@@ -307,15 +313,17 @@ class PremiunController extends GetxController {
      );
        Navigator.pop(context);
       }
-    
-      //
-  } 
-  else{
+    else{
     hideLoader(loader);
      ToastUi(data['message'].toString(), 
      bgColor: ColorCode.red,
+     
      textColor: ColorCode.white,
-     );}     
+     );}   
+    
+      //
+  } 
+    
   } catch (e) {
     //  log(e.toString());
     // hideLoader(loader);
@@ -402,7 +410,11 @@ Future<bool> SendCardDetailsApi(BuildContext context) async {
       if (response.statusCode == 200) {
       hideLoader(loader);          
      AddLocationModel res = AddLocationModel.fromJson(json.decode(response.body));
-    if(res.status == true){   
+    if(res.status == true){ 
+      ToastUi(data['message'].toString(), 
+     bgColor: Colors.green,
+     textColor: ColorCode.white,
+     );  
       return true;
     }
     else{      
@@ -415,7 +427,7 @@ Future<bool> SendCardDetailsApi(BuildContext context) async {
     }
   } 
   else{
-    hideLoader(loader);
+      hideLoader(loader);
      ToastUi(data['message'].toString(), 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,

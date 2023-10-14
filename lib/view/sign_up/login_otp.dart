@@ -50,7 +50,7 @@ class _LoginOTPState extends State<LoginOTP> {
                         vertical: 10.r, 
                         horizontal: 15.r
                       ),
-                      child: Text("Sent to <XXX-XXX-XXXX or example@email.com>", 
+                      child: Text("Sent to ${controlller.onlyNumber.value ? "XXX-XXX-": ""}${controlller.onlyNumber.value ?  controlller.phoneNo.text.substring(8) : controlller.phoneNo.text }", 
                           maxLines: 3,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,

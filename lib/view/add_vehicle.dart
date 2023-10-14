@@ -24,6 +24,7 @@ class AddVehicle extends GetView<AddVehicleController> {
   Widget build(BuildContext context) {
     AddVehicleController controller = Get.find<AddVehicleController>();
    Future.delayed(Duration.zero, (){
+    controller.CleanAllData();
     controller.checkAllFieldDone();
     controller.update();
     controller. MakeApi();
@@ -71,12 +72,15 @@ class AddVehicle extends GetView<AddVehicleController> {
                             padding:
                                 EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
                             child: TextFormField(
+
                               style: TextFieldStyle(),
                               controller: controller.nameCtrl,
                               autocorrect: true,
                             keyboardType: TextInputType.name,
+                            maxLength: 35,
                     // validator: (val) {},
                     decoration:  InputDecoration(
+                      counterText: "",
                       hintText: "Name (optional), ie Frank’s Car",
                       hintStyle: TextStyle(
                          fontSize: 16.sp,
@@ -244,6 +248,7 @@ class AddVehicle extends GetView<AddVehicleController> {
                         Expanded(
                             flex: 3,
                             child: TextFormField(
+                               maxLength: 27,
                               style: TextFieldStyle(),
                               controller: controller.licensePlateNoCtrl,
                               autocorrect: true,
@@ -255,9 +260,11 @@ class AddVehicle extends GetView<AddVehicleController> {
                                 return "Enter Number";
                               },
                               onChanged: (val) {
+                                
                                 controller.checkAllFieldDone();
                               },
                               decoration: InputDecoration(
+                                counterText: "",
                                 hintText: "License Plate Number",
                                 hintStyle: TextStyle(
                                    fontSize: 16.sp,

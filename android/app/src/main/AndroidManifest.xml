@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
-        android:label="2u Fuel User"
+        android:label="2u Fuel"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true">
@@ -36,5 +36,17 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/launcher_icon"/>
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:value="#F8F4E9"/>
+                <!-- #F8F4E9 -->
+               
+         <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="pushnotificationapp"/>
     </application>
 </manifest>
+ 

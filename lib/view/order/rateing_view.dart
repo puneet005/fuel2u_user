@@ -92,11 +92,42 @@ class DriveRating extends GetView<OrderController>{
                       controller.orderDetailsData!.driver!.image == null|| controller.orderDetailsData!.driver!.image == "" ?
                       CircleAvatar(
                         radius: 40,
-                        backgroundImage: AssetImage("assets/images/driver_img.png"),
-                      ): CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage("${ApiUrls.domain}${controller.orderDetailsData!.driver!.image}"),
-                      ) ,
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage("assets/images/driver_img.png"),):
+                        CircleAvatar(
+                             radius: 40,
+                             backgroundImage: NetworkImage("${ApiUrls.domain}${controller.orderDetailsData!.driver!.image}",),
+                       
+                          ),
+                        
+                        // :Container(
+                        //   width: 90,
+                        //   height: 80,
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(60),
+                        //     // shape: BoxShape.circle
+                        //   ),
+                          
+
+                        // ),
+                    //   ): 
+                  //   CircleAvatar(
+                  //       radius: 40,
+                  //       backgroundImage: NetworkImage("${ApiUrls.domain}${controller.orderDetailsData!.driver!.image}",
+                  //       loadingBuilder: (BuildContext context, Widget child,
+                  //     ImageChunkEvent? loadingProgress) {
+                  //   if (loadingProgress == null) return child;
+                  //   return Center(
+                  //     child: CircularProgressIndicator(
+                  //       value: loadingProgress.expectedTotalBytes != null
+                  //           ? loadingProgress.cumulativeBytesLoaded /
+                  //               loadingProgress.expectedTotalBytes!
+                  //           : null,
+                  //     ),
+                  //   );
+                  // },
+                  //       ),
+                  //     ) ,
                       SizedBox(height: 30.h,),
                       Container(
                         child: Row(

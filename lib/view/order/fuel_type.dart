@@ -18,10 +18,15 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class FuelType extends  GetView<OrderController>{
   const FuelType({super.key});
+
   @override
   Widget build(BuildContext context) {
-    SignUpController profilecontroller = Get.find<SignUpController>(); 
-    Future.delayed(Duration(seconds: 5), (){
+    // SignUpController profilecontroller = Get.find<SignUpController>(); 
+    Future.delayed(Duration.zero, (){
+        controller.loadingAllData.value = true;
+        controller.update();
+    });
+    Future.delayed(Duration(seconds: 2), (){
       controller.loadingFlase();
     });
       return Scaffold(
@@ -221,6 +226,7 @@ class FuelType extends  GetView<OrderController>{
                                            controller.update();
                     controller.ProfileApi(context).then((value) {                    
                       if(controller.profileData!.userType == "Family User"){
+                            controller.payAsGo.value = true;
                             controller.planId = controller.profileData!.subscription!.planId ?? 2;
                             controller.update();
                              PersistentNavBarNavigator
@@ -238,6 +244,7 @@ class FuelType extends  GetView<OrderController>{
                           // controller.GetPlan(context, controller.profileData!.subscription!.planId!);                         
                       }
                       else{
+                        
                         PersistentNavBarNavigator
                                                       .pushNewScreen(
                                                     context,
@@ -266,7 +273,6 @@ class FuelType extends  GetView<OrderController>{
 
     );
   }
-
 }
 
 /*

@@ -31,9 +31,9 @@ class AddVehicleInVehicleView extends GetView<AddVehicleController> {
   Widget build(BuildContext context) {
     AddVehicleController controller = Get.find<AddVehicleController>();
     controller.checkAllFieldDone();
-controller. MakeApi();
-    controller. ColorApi();
-    controller. GetStateList();
+    controller. MakeApi();
+    controller.ColorApi();
+    controller.GetStateList();
     // TODO: implement build
     return Scaffold(
       body: SafeArea(
@@ -66,7 +66,7 @@ controller. MakeApi();
                         ),
                       ),
                       icon: InkWell(
-                        onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+                        onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                         child: Image.asset(
                           "assets/icons/mytruck.png",
                           width: 50,
@@ -99,10 +99,18 @@ controller. MakeApi();
                               controller: controller.nameCtrl,
                               autocorrect: true,
                             keyboardType: TextInputType.name,
+                            maxLength: 30,
+                            
+                            
+
+
                     // validator: (val) {},
                     decoration:  InputDecoration(
+                       counterText: "",
                       hintText: "Name (optional), ie Frank’s Car",
+                      
                       hintStyle: TextStyle(
+                        
                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                           color: ColorCode.ligthGray),

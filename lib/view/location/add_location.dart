@@ -79,7 +79,7 @@ class _AddLocationState extends State<AddLocation> {
                             child: SvgPicture.asset("assets/icons/backarrow.svg", width: 30,),
                           ),
                             icon: InkWell(
-                              onTap: () => Get.offNamed(Routes.ALLTRUCKINMAP),
+                              onTap: () => Get.toNamed(Routes.ALLTRUCKINMAP),
                             child: Image.asset("assets/icons/mytruck.png", width: 50,),
                       )),
                       SizedBox(height: 20.h,),
@@ -141,13 +141,15 @@ class _AddLocationState extends State<AddLocation> {
                 // Add Home Name
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: TextFormField(                    
+                  child: TextFormField( 
+                    maxLength: 27,                   
                     style: TextFieldStyle(),
                     controller: controller.homename,
                     autocorrect: true,
                     keyboardType: TextInputType.name,
                     // validator: (val) {},
                     decoration: InputDecoration(
+                       counterText: "",
                       hintText: "Name (optional), ie Home",
                        hintStyle: TextStyle(
                     color: ColorCode.ligthGray,
@@ -163,7 +165,7 @@ class _AddLocationState extends State<AddLocation> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
                   child: TextFormField(
-                    
+                    // maxLength: 27,
                     style: TextFieldStyle(),
                     controller: controller.streetAddressCtrl,
                     autocorrect: true,
@@ -194,7 +196,7 @@ class _AddLocationState extends State<AddLocation> {
                                   var add =  result.formattedAddress!.split(",");
                                   print(add.length);
                                   controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
-                                  controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.streetAddressCtrl.text  =  add.length <= 4 ? add[0] : add[0]+","+add[1];
                                   controller.cityCtrl.text = add[add.length - 3];                                                 
                                   controller.update();
                                   Navigator.of(context).pop();
@@ -210,6 +212,7 @@ class _AddLocationState extends State<AddLocation> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
                   child: TextFormField(
+                    maxLength: 27,
                     style: TextFieldStyle(),
                     controller: controller.cityCtrl,
                     autocorrect: true,
@@ -220,6 +223,8 @@ class _AddLocationState extends State<AddLocation> {
 
                     },
                     decoration: InputDecoration(
+                      
+                       counterText: "",
                       hintText: "City",
                        hintStyle: TextStyle(
                     color: ColorCode.ligthGray,
@@ -313,6 +318,7 @@ class _AddLocationState extends State<AddLocation> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
                   child: TextFormField(
+                    maxLength: 27,
                     style: TextFieldStyle(),
                     controller: controller.zipCodeCtrl,
                     autocorrect: true,
@@ -323,6 +329,7 @@ class _AddLocationState extends State<AddLocation> {
 
                     },
                     decoration: InputDecoration(
+                       counterText: "",
                       hintText: "Zip Code",
                        hintStyle: TextStyle(
                     color: ColorCode.ligthGray,

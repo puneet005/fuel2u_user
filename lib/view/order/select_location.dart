@@ -32,7 +32,7 @@ class SelectLocation extends GetView<OrderController> {
       controller.GetLocationList();
     });
     // TODO: implement build
-    return Scaffold(
+    return Scaffold(  
         body: SafeArea(
             child: GetBuilder(
                 init: OrderController(),
@@ -78,7 +78,7 @@ class SelectLocation extends GetView<OrderController> {
                             SizedBox(
                               height: 20.h,
                             ),
-                            if(controller.profileData!.userType == "User" || controller.profileData!.userType == "Family User" )
+                            // if(controller.profileData!.userType == "User" || controller.profileData!.userType == "Family User" )
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 10.r, horizontal: 10.r),
@@ -128,9 +128,10 @@ class SelectLocation extends GetView<OrderController> {
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     children: List.generate(
-                                        4, (index) => ShimmerLoading()),
+                                        2, (index) => ShimmerLoading()),
                                   )
                                 : Expanded(
+                                  flex: 2,
                                     child:
                                         controller.locationList != null ||
                                                 controller

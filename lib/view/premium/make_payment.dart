@@ -63,14 +63,17 @@ class MakePayment extends GetView<PremiunController> {
                                         horizontal: 15.r
                                       ),
                                       child: TextFormField(
+                                        
                                         style: TextFieldStyle(),
                                         controller: controller.cardNameCtrl,                  
                                         autocorrect: true,
                                         keyboardType: TextInputType.name,
-                                      
+                                    
                                         onChanged: (val){
                                         },
+                                        maxLength: 27,
                                         decoration: InputDecoration(
+                                           counterText: "",
                                           hintText: "Card Name",
                          hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
@@ -115,7 +118,7 @@ class MakePayment extends GetView<PremiunController> {
 
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXXX-XXXX-XXXX-XXXX",
+                                          hintText: "Card Number",
                          hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700
@@ -196,12 +199,12 @@ class MakePayment extends GetView<PremiunController> {
                                             return null;
                                           }
                                           else{
-                                            return "CVV";
+                                            return "CSV";
                                           }
 
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXX",
+                                          hintText: "CSV",
                          hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700
@@ -221,7 +224,7 @@ class MakePayment extends GetView<PremiunController> {
                                         autocorrect: true,
                                         obscureText: true,
                                         obscuringCharacter: "X",
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.phone,
                                          inputFormatters: [
                                             MaskedInputFormatter('#####')
                                           ],
@@ -242,7 +245,7 @@ class MakePayment extends GetView<PremiunController> {
                                           }
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXXXX",
+                                          hintText: "Zip Code",
                                           hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700

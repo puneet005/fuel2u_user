@@ -19,9 +19,8 @@ class SignUpView extends GetView<SignUpController>{
   Widget build(BuildContext context) {
     
       Get.lazyPut<SignUpController>(() => SignUpController());
-    return Scaffold(
-     
-        body: SingleChildScrollView(
+    return Scaffold(     
+      body: SingleChildScrollView(
       child: GetBuilder<SignUpController>(
         init: SignUpController(),
         initState: (_) {},
@@ -209,7 +208,7 @@ class SignUpView extends GetView<SignUpController>{
                     //   if(val == null || val.isEmpty){
                     //     return "Enter Last Name";
                     //   }
-                    //   return null;
+                    //   return null;   
                     // },
                     decoration:  InputDecoration(
                       hintText: "Email",

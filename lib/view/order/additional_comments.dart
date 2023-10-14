@@ -89,7 +89,7 @@ class AdditionalComments extends GetView<OrderController>{
                       horizontal: 20.h
                      ),
                      child: FillBtn(
-                                Bgcolor: ColorCode.ligthGray,
+                                Bgcolor: ColorCode.orange,
                                  ontap: (){
                                    PersistentNavBarNavigator
                                                         .pushNewScreen(

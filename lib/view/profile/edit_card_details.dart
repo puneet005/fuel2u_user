@@ -65,7 +65,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                     ),
                                     icon: InkWell(
                                       onTap: () =>
-                                          Get.offNamed(Routes.ALLTRUCKINMAP),
+                                          Get.toNamed(Routes.ALLTRUCKINMAP),
                                       child: Image.asset(
                                         "assets/icons/mytruck.png",
                                         width: 50,
@@ -153,10 +153,9 @@ class EditCardDetails extends GetView<VehicleController> {
                                           else{
                                             return "Wrong Card Number";
                                           }
-
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXXX-XXXX-XXXX-XXXX",
+                                          hintText: "Card Number",
                          hintStyle: TextStyle(
                                         color: ColorCode.darkGray,
                                         fontWeight: FontWeight.w700
@@ -238,13 +237,13 @@ class EditCardDetails extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "CVV";
+                                            return "CSV";
                                           }
 
                                         },
                                         readOnly: true,
                                         decoration: InputDecoration(
-                                          hintText: "XXX",
+                                          hintText: "CSV",
                          hintStyle: TextStyle(
                                         color: ColorCode.darkGray,
                                         fontWeight: FontWeight.w700
@@ -286,7 +285,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                           }
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "XXXXX",
+                                          hintText: "ZIP",
                                           hintStyle: TextStyle(
                                         color: ColorCode.ligthGray,
                                         fontWeight: FontWeight.w700
@@ -426,7 +425,7 @@ class EditCardDetails extends GetView<VehicleController> {
     //                                 ),
     //                                 icon: InkWell(
     //                                   onTap: () =>
-    //                                       Get.offNamed(Routes.ALLTRUCKINMAP),
+    //                                       Get.toNamed(Routes.ALLTRUCKINMAP),
     //                                   child: Image.asset(
     //                                     "assets/icons/mytruck.png",
     //                                     width: 50,

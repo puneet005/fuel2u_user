@@ -25,7 +25,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                 builder: (_) {
                   return  Scaffold(
         body: SafeArea(
-            child: GestureDetector(
+            child: GestureDetector( 
                     onTap: ()
                     {
                       FocusManager.instance.primaryFocus?.unfocus();
@@ -110,6 +110,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                                             : false,
                                                     onChanged: (newValue) {
                                                       controller.selectPlan = 1;
+                                                      controller.payAsGo.value = false;
                                                       controller.update();
                                                       // controller.setVehicle(index);
                                                     },
@@ -191,6 +192,7 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                                             : false,
                                                     onChanged: (newValue) {
                                                       controller.selectPlan = 2;
+                                                      controller.payAsGo.value = true;
                                                       controller.update();
                                                       // controller.setVehicle(index);
                                                     },
