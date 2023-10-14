@@ -334,7 +334,9 @@ class _CreditCardFormState extends State<CreditCardForm> {
                   obscureText: widget.obscureNumber,
                   obscuringCharacter:  "X",
                   controller: _cardNumberController,
-                  
+                  //  inputFormatters: [
+                  //    MaskedInputFormatter('####-####-####-####')
+                  // ],
                   onChanged: (String value) {
                     setState(() {
                       cardNumber = _cardNumberController.text;
