@@ -86,12 +86,18 @@ class NewOrder extends GetView<OrderController> {
                               height: 15.h,
                             ),
                             controller.vehicleListLoading.value
-                                ? ListView(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: List.generate(
-                                        5, (index) => ShimmerLoading()),
-                                  )
+                                ? 
+                                Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                )
+                                // ListView(
+                                //     shrinkWrap: true,
+                                //     physics: NeverScrollableScrollPhysics(),
+                                //     children: List.generate(
+                                //         5, (index) => ShimmerLoading()),
+                                //   )
                                 : controller.vehicleList == null || controller.vehicleList!.isEmpty 
                                     ? SizedBox(
                                         height: 150.h,
@@ -115,261 +121,276 @@ class NewOrder extends GetView<OrderController> {
                                             (index) => Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child: Container(
-                                                    height: controller.vehicleList![index].seeMore ? 200.sp : 143.sp,
-                                                    decoration: BoxDecoration(
-                                                        // color: ColorCode.orange,
-                                                        border: Border.all(
-                                                            color:
-                                                                ColorCode.orange,
-                                                            width: 2),
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                bottomRight:
-                                                                    Radius
-                                                                        .circular(
-                                                                            24))),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Container(
-                                                            color: controller
-                                                                        .selectVehicleIndex ==
-                                                                    index
-                                                                ? ColorCode.orange
-                                                                : Colors
-                                                                    .transparent,
-                                                            child: Column(
-                                                              children: [
-                                                                Checkbox(
-                                                                  activeColor:
-                                                                      ColorCode
-                                                                          .orange,
-                                                                  focusColor:
-                                                                      ColorCode
-                                                                          .orange,
-                                                                  side:
-                                                                      BorderSide(
-                                                                    color: ColorCode
-                                                                        .orange,
-                                                                  ),
-                                                                  shape: RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              3)),
-                                                                  value: controller
-                                                                              .selectVehicleIndex ==
-                                                                          index
-                                                                      ? true
-                                                                      : false,
-                                                                  onChanged:
-                                                                      (newValue) {
-                                                                    controller
-                                                                        .setVehicle(
-                                                                            index);
-                                                                    controller
-                                                                            .selectVehicleId =
-                                                                        controller
-                                                                            .vehicleList![
-                                                                                index]
-                                                                            .id;
-                                                                    controller
-                                                                        .update();
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                            flex: 5,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                vertical: 10,
-                                                                horizontal: 10,
-                                                              ),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [                                                                    
-                                                                      controller.vehicleList![index].image == 
-                                                                              "" || controller.vehicleList![index].image == null
-                                                                          ? Image.asset(
-                                                                              "assets/images/car_img.png",
-                                                                                height:
-                                                                                35.h,
-                                                                            width:
-                                                                                70.h,
+                                                  child: GestureDetector(
+                                                    onTap: (){ controller
+                                                                          .setVehicle(
+                                                                              index);
+                                                                      controller
+                                                                              .selectVehicleId =
+                                                                          controller
+                                                                              .vehicleList![
+                                                                                  index]
+                                                                              .id;
+                                                                      controller
+                                                                          .update();
 
-                                                                            )
-                                                                          : Image
-                                                                              .network(
-                                                                              ApiUrls.domain +
-                                                                                  controller.vehicleList![index].image.toString(),
-                                                                              height:
-                                                                                  35.h,
-                                                                              width:
-                                                                                  70.h,
-                                                                              fit:
-                                                                                  BoxFit.fill,
-                                                                            ),
-                                                                      Align(
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .topRight,
-                                                                        child: InkWell(
-                                                                          onTap: (){
-                                                                            PersistentNavBarNavigator
-                                                          .pushNewScreen(
-                                                        context,
-                                                        screen:
-                                                            EditVehicleDetails(
-                                                              data:  controller.vehicleList![index]
-                                                            ),
-                                                        withNavBar: true,
-                                                        pageTransitionAnimation:
-                                                            PageTransitionAnimation
-                                                                .cupertino,
-                                                      ).then((value) {
-                                                        controller.GetVehicleList();
-                                                        controller.update();
-                
-                                                      });
-                                                                          },
-                                                                          child: Image
-                                                                              .asset(
-                                                                                  "assets/icons/edit_icon.png"),
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 10.h,
-                                                                  ),
-                                                                  Row(
-                                                                    // mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        controller.vehicleList![index].name ==
-                                                                                "" ||  controller.vehicleList![index].name == null
-                                                                            ? "Name of Vehicle"
-                                                                            : controller
-                                                                                .vehicleList![index]
-                                                                                .name
-                                                                                .toString(),
-                                                                        style:
-                                                                            Heading3Medium(),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 5.h,
-                                                                  ),
-                                                                  Row(
-                                                                    // mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        "${controller.vehicleList![index].licensePlate}",
-                                                                        style:
-                                                                            Heading5(),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  if(controller.vehicleList![index].seeMore)
-                                                                   SizedBox(
-                                                                    height: 5.h,
-                                                                  ),
-                                                                  if(controller.vehicleList![index].seeMore)          
-                                                                   Row(
-                                                                    // mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        "${controller.vehicleList![index].make!.name}",
-                                                                        style:
-                                                                            Heading5(),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  if(controller.vehicleList![index].seeMore)
-                                                                   SizedBox(
-                                                                    height: 5.h,
-                                                                  ),
-                                                                  if(controller.vehicleList![index].seeMore)          
-                                                                   Row(
-                                                                    // mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        "${controller.vehicleList![index].model!.name}",
-                                                                        style:
-                                                                            Heading5(),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                   if(controller.vehicleList![index].seeMore)          
-                                                                   Row(
-                                                                    // mainAxisAlignment: MainAxisAlignment.end,
-                                                                    children: [
-                                                                      Text(
-                                                                        "${controller.vehicleList![index].color!.name}",
-                                                                        style:
-                                                                            Heading5(),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(height: 10.h,),
-                                                                  Row(
-                                                                    children: [
-                                                                      InkWell(
-                                                                        onTap: (){       
-                                                                            controller.vehicleList![index].seeMore =  !  controller.vehicleList![index].seeMore;
-                                                                            controller.update();
-                                    //   return null;
-                                    // }) ;
-                                                                        },                                                                      
-                                                                        // onTap: () => Get.toNamed(Routes.ORDERHISTORY),
-                                                                        child: Text(
-                                                                           controller.vehicleList![index].seeMore ? "See less" : "See more",
-                                                                            style:
-                                                                                HeadingCustomFamliy(
-                                                                              family:
-                                                                                  "RabotoRegular",
-                                                                              size:
-                                                                                  12.sp,
-                                                                              color:
-                                                                                  ColorCode.orange,
-                                                                              decoration:
-                                                                                  TextDecoration.underline,
-                                                                              fbold:
-                                                                                  FontWeight.w500,
-                                                                            )),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 10.h,
+                                                    },
+                                                    child: Container(
+                                                      height: controller.vehicleList![index].seeMore ? 200.sp : 143.sp,
+                                                      decoration: BoxDecoration(
+                                                          // color: ColorCode.orange,
+                                                          border: Border.all(
+                                                              color:
+                                                                  ColorCode.orange,
+                                                              width: 2),
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  bottomRight:
+                                                                      Radius
+                                                                          .circular(
+                                                                              24))),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment.start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Container(
+                                                              color: controller
+                                                                          .selectVehicleIndex ==
+                                                                      index
+                                                                  ? ColorCode.orange
+                                                                  : Colors
+                                                                      .transparent,
+                                                              child: Column(
+                                                                children: [
+                                                                  Checkbox(
+                                                                    activeColor:
+                                                                        ColorCode
+                                                                            .orange,
+                                                                    focusColor:
+                                                                        ColorCode
+                                                                            .orange,
+                                                                    side:
+                                                                        BorderSide(
+                                                                      color: ColorCode
+                                                                          .orange,
+                                                                    ),
+                                                                    shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                3)),
+                                                                    value: controller
+                                                                                .selectVehicleIndex ==
+                                                                            index
+                                                                        ? true
+                                                                        : false,
+                                                                    onChanged:
+                                                                        (newValue) {
+                                                                      controller
+                                                                          .setVehicle(
+                                                                              index);
+                                                                      controller
+                                                                              .selectVehicleId =
+                                                                          controller
+                                                                              .vehicleList![
+                                                                                  index]
+                                                                              .id;
+                                                                      controller
+                                                                          .update();
+                                                                    },
                                                                   ),
                                                                 ],
                                                               ),
-                                                            )),
-                                                       
-                                                      ],
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                              flex: 5,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                  vertical: 10,
+                                                                  horizontal: 10,
+                                                                ),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [                                                                    
+                                                                        controller.vehicleList![index].image == 
+                                                                                "" || controller.vehicleList![index].image == null
+                                                                            ? Image.asset(
+                                                                                "assets/images/car_img.png",
+                                                                                  height:
+                                                                                  35.h,
+                                                                              width:
+                                                                                  70.h,
+                                                  
+                                                                              )
+                                                                            : Image
+                                                                                .network(
+                                                                                ApiUrls.domain +
+                                                                                    controller.vehicleList![index].image.toString(),
+                                                                                height:
+                                                                                    35.h,
+                                                                                width:
+                                                                                    70.h,
+                                                                                fit:
+                                                                                    BoxFit.contain,
+                                                                              ),
+                                                                        Align(
+                                                                          alignment:
+                                                                              Alignment
+                                                                                  .topRight,
+                                                                          child: InkWell(
+                                                                            onTap: (){
+                                                                              PersistentNavBarNavigator
+                                                            .pushNewScreen(
+                                                          context,
+                                                          screen:
+                                                              EditVehicleDetails(
+                                                                data:  controller.vehicleList![index]
+                                                              ),
+                                                          withNavBar: true,
+                                                          pageTransitionAnimation:
+                                                              PageTransitionAnimation
+                                                                  .cupertino,
+                                                        ).then((value) {
+                                                          controller.GetVehicleList();
+                                                          controller.update();
+                                                                  
+                                                        });
+                                                                            },
+                                                                            child: Image
+                                                                                .asset(
+                                                                                    "assets/icons/edit_icon.png"),
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 10.h,
+                                                                    ),
+                                                                    Row(
+                                                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                                                      children: [
+                                                                        Text(
+                                                                          controller.vehicleList![index].name ==
+                                                                                  "" ||  controller.vehicleList![index].name == null
+                                                                              ? "Name of Vehicle"
+                                                                              : controller
+                                                                                  .vehicleList![index]
+                                                                                  .name
+                                                                                  .toString(),
+                                                                          style:
+                                                                              Heading3Medium(),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 5.h,
+                                                                    ),
+                                                                    Row(
+                                                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                                                      children: [
+                                                                        Text(
+                                                                          "${controller.vehicleList![index].licensePlate}",
+                                                                          style:
+                                                                              Heading5(),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    if(controller.vehicleList![index].seeMore)
+                                                                     SizedBox(
+                                                                      height: 5.h,
+                                                                    ),
+                                                                    if(controller.vehicleList![index].seeMore)          
+                                                                     Row(
+                                                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                                                      children: [
+                                                                        Text(
+                                                                          "${controller.vehicleList![index].make!.name}",
+                                                                          style:
+                                                                              Heading5(),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    if(controller.vehicleList![index].seeMore)
+                                                                     SizedBox(
+                                                                      height: 5.h,
+                                                                    ),
+                                                                    if(controller.vehicleList![index].seeMore)          
+                                                                     Row(
+                                                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                                                      children: [
+                                                                        Text(
+                                                                          "${controller.vehicleList![index].model!.name}",
+                                                                          style:
+                                                                              Heading5(),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                     if(controller.vehicleList![index].seeMore)          
+                                                                     Row(
+                                                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                                                      children: [
+                                                                        Text(
+                                                                          "${controller.vehicleList![index].color!.name}",
+                                                                          style:
+                                                                              Heading5(),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(height: 10.h,),
+                                                                    Row(
+                                                                      children: [
+                                                                        InkWell(
+                                                                          onTap: (){       
+                                                                              controller.vehicleList![index].seeMore =  !  controller.vehicleList![index].seeMore;
+                                                                              controller.update();
+                                                                                      //   return null;
+                                                                                      // }) ;
+                                                                          },                                                                      
+                                                                          // onTap: () => Get.toNamed(Routes.ORDERHISTORY),
+                                                                          child: Text(
+                                                                             controller.vehicleList![index].seeMore ? "See less" : "See more",
+                                                                              style:
+                                                                                  HeadingCustomFamliy(
+                                                                                family:
+                                                                                    "RabotoRegular",
+                                                                                size:
+                                                                                    12.sp,
+                                                                                color:
+                                                                                    ColorCode.orange,
+                                                                                decoration:
+                                                                                    TextDecoration.underline,
+                                                                                fbold:
+                                                                                    FontWeight.w500,
+                                                                              )),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height: 10.h,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )),
+                                                         
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 )),

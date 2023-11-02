@@ -104,11 +104,16 @@ class MyOrder extends GetView<OrderController> {
                         Container(
                             // height: Get.height * 0.49,
                             child: controller.orderLoading.value
-                                ? ListView(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    children: List.generate(
-                                        5, (index) => ShimmerLoading()))
+                                // ? ListView(
+                                //     shrinkWrap: true,
+                                //     physics: const NeverScrollableScrollPhysics(),
+                                //     children: List.generate(
+                                //         5, (index) => ShimmerLoading()))
+                                ?Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                )
                                 : OrderList(context, controller.orderList ?? [])
                             //  controller.emptyOrder.value
                             //     ? EmptyOrder()

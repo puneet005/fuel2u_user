@@ -147,7 +147,7 @@ Future<void> SignInApi(BuildContext context) async {
   }
    else{
       hideLoader(loader);
-      ToastUi("No Internet Please Try After Sometime", 
+      ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -235,7 +235,7 @@ Future<void> SignInApi(BuildContext context) async {
    }
     else{
     hideLoader(loader);
-    ToastUi("No Internet Please Try After Sometime", 
+    ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

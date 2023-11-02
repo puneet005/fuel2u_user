@@ -8,6 +8,7 @@ import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -44,7 +45,7 @@ class BusinessForm extends GetView<BusinessController> {
             initState: (_) {},
             builder: (_) {
 
-              return controller.isLoading.value ? Container(
+              return controller.isLoading ? Container(
                 height: Get.height,
                 child: Column
                 (
@@ -69,6 +70,7 @@ class BusinessForm extends GetView<BusinessController> {
                           SizedBox(height: 40.h,), 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+
                           children: [
                             Text("Business Information", style: Heading1(
                               color: ColorCode.darkGray
@@ -95,11 +97,12 @@ class BusinessForm extends GetView<BusinessController> {
                       ),
                       child: TextFormField(
                         style: TextFieldStyle(),
+                        textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         controller: controller.employerNameCtrl,
                         
                         autocorrect: true,
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.text,
                         onChanged: (val){
                         controller.checkFormValied();
                         },
@@ -110,6 +113,9 @@ class BusinessForm extends GetView<BusinessController> {
                           return null;
                         
                         },
+                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                         maxLength: 27,
                         decoration:  InputDecoration(
                           hintText: "Employer Name",
@@ -137,25 +143,45 @@ class BusinessForm extends GetView<BusinessController> {
                         child: TextFormField(
                           onTap: () async {
                              await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>    PlacePicker(
+                          builder: (_) =>    PlacePicker(
                                 apiKey: googleMKey,              
                                 onPlacePicked: (result) { 
-                                  print(result.adrAddress.toString()); 
-                                  print(result.addressComponents!.toString()); 
-                                  print(result.formattedAddress);
-                                  // log(result.f)
-                      
+                                    if(result.formattedAddress!.contains(",")) {                         
                                   var add =  result.formattedAddress!.split(",");
                                   print(add.length);
-                                  controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
-                                  controller.deliveryAddressCtrl.text = add.length >= 4 ? add[0] : add[0]+","+add[1];
-                                  controller.cityCtrl.text = add[add.length - 3];
-                                  // var pin = add[2].split(" ");
-                                  // log(pin.toString());
-                                  // controller.zipCodeCtrl.text = pin[2];
-                      
+                                   controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  if(add.isNotEmpty){                                
+                                  
+                                  if(add.length == 1){
+                                    controller.deliveryAddressCtrl.text  =  add[0];
+                                     controller.cityCtrl.text = add[0];
+                                  }
+                                  else{
+                                  controller.deliveryAddressCtrl.text  =  add.length <= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.cityCtrl.text = add.length <= 2 ? add[add.length - 1] :  add[add.length - 3];                                                 
+                                  }
+                                  }
+                                  }
+                                  else{
+                                    controller.deliveryAddressCtrl.text  =  result.formattedAddress!.toString();
+                                    // controller.cityCtrl.text =  result.formattedAddress!.toString();
+                                  }
+                                  // controller.streetAddressCtrl.text  =  result.formattedAddress.toString() ?? "";
                                   controller.update();
-                                  Navigator.of(context).pop();
+                                  Future.delayed(Duration(seconds: 0), ()=>  Navigator.of(_).pop());
+                                  
+                      
+                                  // var add =  result.formattedAddress!.split(",");
+                                  // print(add.length);
+                                  // controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  // controller.deliveryAddressCtrl.text = add.length >= 4 ? add[0] : add[0]+","+add[1];
+                                  // controller.cityCtrl.text = add[add.length - 3];
+                                  // // var pin = add[2].split(" ");
+                                  // // log(pin.toString());
+                                  // // controller.zipCodeCtrl.text = pin[2];
+                      
+                                  // controller.update();
+                                  // Navigator.of(context).pop();
                                 },
                                 initialPosition: LatLng(controller.currentPosition!.latitude, controller.currentPosition!.longitude),
                                 useCurrentLocation: true,
@@ -167,7 +193,7 @@ class BusinessForm extends GetView<BusinessController> {
                           controller: controller.deliveryAddressCtrl,
                           
                           autocorrect: true,
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.text,
                                onChanged: (val){
                           controller.checkFormValied();
                           },
@@ -178,6 +204,9 @@ class BusinessForm extends GetView<BusinessController> {
                             return null;
                           
                           },
+                         inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                           decoration:  InputDecoration(
                             hintText: "Delivery Address",
                               hintStyle: TextStyle(
@@ -201,7 +230,7 @@ class BusinessForm extends GetView<BusinessController> {
                          style: TextFieldStyle(),
                          textInputAction: TextInputAction.next,
                         controller: controller.cityCtrl,
-                        
+                        textCapitalization: TextCapitalization.words,
                         autocorrect: true,
                         keyboardType: TextInputType.name,
                              onChanged: (val){
@@ -214,6 +243,9 @@ class BusinessForm extends GetView<BusinessController> {
                           return null;
                         
                         },
+                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                         decoration:  InputDecoration(
                           hintText: "City",
                            hintStyle: TextStyle(
@@ -383,7 +415,7 @@ class BusinessForm extends GetView<BusinessController> {
                                 }
                                  controller.stateAndZipCodeHeight = 80;
                                                     controller.update();
-                                return "Wrong Zip Code";
+                                return "Enter Valid Zip Code";
                                 
                               },
                               
@@ -415,7 +447,7 @@ class BusinessForm extends GetView<BusinessController> {
                         controller: controller.deliveryInstructionsCtrl,
                         
                         autocorrect: true,
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.text,
                         
                         decoration:  InputDecoration(
                           hintText: "Delivery Instructions (optional)",
@@ -476,7 +508,7 @@ class BusinessForm extends GetView<BusinessController> {
                         controller: controller.contactNameCtrl,
                         
                         autocorrect: true,
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.text,
                              onChanged: (val){
                         controller.checkFormValied();
                         },
@@ -487,6 +519,9 @@ class BusinessForm extends GetView<BusinessController> {
                           return null;
                         
                         },
+                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                         decoration:  InputDecoration(
                           hintText: "Contact Name",
                            hintStyle: TextStyle(
@@ -563,7 +598,7 @@ class BusinessForm extends GetView<BusinessController> {
                           }
                           else if(val.isEmpty){
                             return "Enter Phone Number";
-                          }
+                          } 
                        
                           return "Enter Valid Number";
                         
@@ -619,10 +654,14 @@ class BusinessForm extends GetView<BusinessController> {
                       ),
                       child: TextFormField(
                         style: TextFieldStyle(),
+                        textCapitalization: TextCapitalization.words,
                         controller: controller.billingAddressCtrl,
                         
                         autocorrect: true,
                         keyboardType: TextInputType.name,
+                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                         // validator: (val){     
                         //   if(val == null || val.isEmpty){
                         //     return "Enter Billing Address";
@@ -652,9 +691,13 @@ class BusinessForm extends GetView<BusinessController> {
                         controller: controller.billingCityCtrl,
                         
                         autocorrect: true,
-                        keyboardType: TextInputType.name,                      
+                        keyboardType: TextInputType.text,  
+                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],                    
                         decoration:  InputDecoration(
                           hintText: "City",
+                          
                            hintStyle: TextStyle(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.bold,
@@ -960,7 +1003,7 @@ class BusinessForm extends GetView<BusinessController> {
           //                       if(val!.length == 6){
           //                         return null;
           //                       }
-          //                       return "Wrong Zip Code";
+          //                       return "Enter Valid Zip Code";
         
           //                     },
                         
@@ -1356,7 +1399,7 @@ class BusinessForm extends GetView<BusinessController> {
           //                       if(val!.length == 6){
           //                         return null;
           //                       }
-          //                       return "Wrong Zip Code";
+          //                       return "Enter Valid Zip Code";
         
           //                     },
                         

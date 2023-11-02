@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/view/order/new_order.dart';
@@ -187,6 +188,7 @@ class EditOrder extends GetView<OrderController> {
                                               Row(
                                                 // mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
+                                                  controller.vehicleList![controller.selectVehicleIndex].name == null ? Text ("Name of Vehicle",  style: Heading4Medium(),):
                                                   Text(
                                                     "${controller.vehicleList![controller.selectVehicleIndex].name.toString()} ",
                                                     style: Heading4Medium(),
@@ -561,7 +563,7 @@ class EditOrder extends GetView<OrderController> {
                               height: 40.h,
                             ),
                             // Location Ui
-                             if(controller.planId != 3)
+                             if(controller.planId != 3 )
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -898,10 +900,14 @@ class EditOrder extends GetView<OrderController> {
                                 style: TextFieldStyle(),
                                 controller: controller.commentCtrl,
                                 autocorrect: true,
-                                keyboardType: TextInputType.name,
+                                keyboardType: TextInputType.text,
                                 // validator: (val) {},
+                               inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                 decoration:  InputDecoration(
                                   hintText: "Comments (optional)",
+                                  
                                    hintStyle: TextStyle(
                     color: ColorCode.ligthGray,
                     fontWeight: FontWeight.bold
@@ -937,28 +943,52 @@ class EditOrder extends GetView<OrderController> {
                 title:  Text("Cancel Order", style: Heading1(),),
                 content:  Text("Are your sure to cancel your order", style: Heading3Regular(),),
                 actions: <Widget>[
-                   ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
-               
-                onPressed: 
-                
-                () {
-                  Navigator.of(ctx).pop(); 
-                },             // function used to perform after pressing the button
-                child: Text('NO'),
-              ),
-              ElevatedButton(
-                // textColor: Colors.black,
-                onPressed: ()
-                async{
-                   Navigator.of(ctx).pop(); 
+                   Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                               Expanded(
+                                                flex: 2,
+                                                 child: 
+                                                 BorderBtn(ontap: () {  
+                                                  Navigator.of(ctx).pop();
+                                                 }, text: 'NO',
+                                                  
+                                                 ),
+                                           
+                                               ),
+                                               SizedBox(width: 20.h,),
+                                            Expanded(
+                                                flex: 2,
+                                                child: FillBtn(ontap: () async{
+                                                    Navigator.of(ctx).pop(); 
                    controller.cleanAllData();
                    Get.offAllNamed(Routes.HOME);
-                  // logOutcontroller.SignOutApi(context);
+                                                }, text: 'YES'),
+                                          
+                                              ),
+                                             ],)
+              //      ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
+               
+              //   onPressed: 
+                
+              //   () {
+              //     Navigator.of(ctx).pop(); 
+              //   },             // function used to perform after pressing the button
+              //   child: Text('NO'),
+              // ),
+              // ElevatedButton(
+              //   // textColor: Colors.black,
+              //   onPressed: ()
+              //   async{
+              //      Navigator.of(ctx).pop(); 
+              //      controller.cleanAllData();
+              //      Get.offAllNamed(Routes.HOME);
+              //     // logOutcontroller.SignOutApi(context);
               
 
-                },
-                child: Text('YES')
-              ),
+              //   },
+              //   child: Text('YES')
+              // ),
                   
                 ],
               ),

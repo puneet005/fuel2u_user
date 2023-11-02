@@ -9,6 +9,7 @@ import 'package:fuel2u_user/controller/vehicel_controller.dart';
 import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -116,7 +117,40 @@ class _AddLocationState extends State<AddLocation> {
               horizontal: 10.h
             ),
             child: GestureDetector(
-              onTap: (){
+              onTap: () async{
+                 await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) =>  PlacePicker(
+                                apiKey: googleMKey,              
+                                onPlacePicked: (result) {                                   
+                                  if(result.formattedAddress!.contains(",")) {                         
+                                  var add =  result.formattedAddress!.split(",");
+                                  print(add.length);
+                                   controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  if(add.isNotEmpty){                                
+                                  
+                                  if(add.length == 1){
+                                    controller.streetAddressCtrl.text  =  add[0];
+                                     controller.cityCtrl.text = add[0];
+                                  }
+                                  else{
+                                  controller.streetAddressCtrl.text  =  add.length <= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.cityCtrl.text = add.length <= 2 ? add[add.length - 1] :  add[add.length - 3];                                                 
+                                  }
+                                  }
+                                  }
+                                  else{
+                                    controller.streetAddressCtrl.text  =  result.formattedAddress!.toString();
+                                    // controller.cityCtrl.text =  result.formattedAddress!.toString();
+                                  }
+                                  // controller.streetAddressCtrl.text  =  result.formattedAddress.toString() ?? "";
+                                  controller.update();
+                                  Future.delayed(Duration(seconds: 0), ()=>  Navigator.of(_).pop());
+                                 
+                                },
+                                initialPosition: LatLng(controller.currentPosition!.latitude, controller.currentPosition!.longitude),
+                                useCurrentLocation: true,
+                                resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+                              )));
                 // controller.getAddressFromLatLng(controller.currentPosition!);
               },
               child: controller.usecurrentLoading.value ? Row(
@@ -145,9 +179,13 @@ class _AddLocationState extends State<AddLocation> {
                     maxLength: 27,                   
                     style: TextFieldStyle(),
                     controller: controller.homename,
+                    // textCapitalization: TextCapitalization,
                     autocorrect: true,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.text,
                     // validator: (val) {},
+                   inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     decoration: InputDecoration(
                        counterText: "",
                       hintText: "Name (optional), ie Home",
@@ -155,6 +193,7 @@ class _AddLocationState extends State<AddLocation> {
                     color: ColorCode.ligthGray,
                     fontWeight: FontWeight.bold
                   ),
+                  
                       focusedBorder: MainBorder(),
                       border: MainBorder(),
                       enabledBorder: MainBorder(),
@@ -169,11 +208,14 @@ class _AddLocationState extends State<AddLocation> {
                     style: TextFieldStyle(),
                     controller: controller.streetAddressCtrl,
                     autocorrect: true,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.text,
                     onChanged: (val){
                       controller.addressFormCheck();
 
                     },
+                   inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     // validator: (val) {},
                     decoration: InputDecoration(
                       hintText: "Street Address",
@@ -186,20 +228,65 @@ class _AddLocationState extends State<AddLocation> {
                       enabledBorder: MainBorder(),
                     ),
                     onTap: () async {
+
+//                       await Navigator.of(context).push(MaterialPageRoute(
+//   builder: (_) => PlacePicker(
+//     apiKey: googleMKey,
+//     onPlacePicked: (result) {
+//       if (result.formattedAddress != null) { // Check if formattedAddress is not null
+//         if (result.formattedAddress!.contains(",")) {
+//           var add = result.formattedAddress!.split(",");
+//           print(add.length);
+//           controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+//           if (add.isNotEmpty) {
+//             if (add.length == 1) {
+//               controller.streetAddressCtrl.text = add[0];
+//               controller.cityCtrl.text = add[0];
+//             } else {
+//               controller.streetAddressCtrl.text = add.length <= 4 ? add[0] : add[0] + "," + add[1];
+//               controller.cityCtrl.text = add.length <= 2 ? add[add.length - 1] : add[add.length - 3];
+//             }
+//           }
+//         } else {
+//           controller.streetAddressCtrl.text = result.formattedAddress.toString();
+//         }
+//         controller.update();
+//         Future.delayed(Duration(seconds: 0), () => Navigator.of(_).pop());
+//       }
+//     },
+//     initialPosition: LatLng(controller.currentPosition!.latitude, controller.currentPosition!.longitude),
+//     useCurrentLocation: true,
+//     resizeToAvoidBottomInset: false, // only works in page mode, less flickery, remove if wrong offsets
+//   ),
+// ));
                         await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>    PlacePicker(
+                          builder: (_) =>  PlacePicker(
                                 apiKey: googleMKey,              
-                                onPlacePicked: (result) { 
-                                  print(result.adrAddress.toString()); 
-                                  print(result.addressComponents!.toString()); 
-                                  print(result.formattedAddress);                                
+                                onPlacePicked: (result) {                                   
+                                  if(result.formattedAddress!.contains(",")) {                         
                                   var add =  result.formattedAddress!.split(",");
                                   print(add.length);
-                                  controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                   controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  if(add.isNotEmpty){                                
+                                  
+                                  if(add.length == 1){
+                                    controller.streetAddressCtrl.text  =  add[0];
+                                     controller.cityCtrl.text = add[0];
+                                  }
+                                  else{
                                   controller.streetAddressCtrl.text  =  add.length <= 4 ? add[0] : add[0]+","+add[1];
-                                  controller.cityCtrl.text = add[add.length - 3];                                                 
+                                  controller.cityCtrl.text = add.length <= 2 ? add[add.length - 1] :  add[add.length - 3];                                                 
+                                  }
+                                  }
+                                  }
+                                  else{
+                                    controller.streetAddressCtrl.text  =  result.formattedAddress!.toString();
+                                    // controller.cityCtrl.text =  result.formattedAddress!.toString();
+                                  }
+                                  // controller.streetAddressCtrl.text  =  result.formattedAddress.toString() ?? "";
                                   controller.update();
-                                  Navigator.of(context).pop();
+                                  Future.delayed(Duration(seconds: 0), ()=>  Navigator.of(_).pop());
+                                 
                                 },
                                 initialPosition: LatLng(controller.currentPosition!.latitude, controller.currentPosition!.longitude),
                                 useCurrentLocation: true,
@@ -222,6 +309,9 @@ class _AddLocationState extends State<AddLocation> {
                       controller.addressFormCheck();
 
                     },
+                   inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     decoration: InputDecoration(
                       
                        counterText: "",

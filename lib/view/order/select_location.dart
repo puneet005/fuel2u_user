@@ -123,13 +123,17 @@ class SelectLocation extends GetView<OrderController> {
                             SizedBox(
                               height: 10.h,
                             ),
-                            controller.locationLoading.value
-                                ? ListView(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: List.generate(
-                                        2, (index) => ShimmerLoading()),
-                                  )
+                            controller.locationLoading.value ?Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                )
+                                // ? ListView(
+                                //     shrinkWrap: true,
+                                //     physics: NeverScrollableScrollPhysics(),
+                                //     children: List.generate(
+                                //         2, (index) => ShimmerLoading()),
+                                //   )
                                 : Expanded(
                                   flex: 2,
                                     child:
@@ -146,115 +150,124 @@ class SelectLocation extends GetView<OrderController> {
                                                         EdgeInsets.symmetric(
                                                             vertical: 10.h,
                                                             horizontal: 10.h),
-                                                    child: Container(
+                                                    child: GestureDetector(
+                                                      onTap: (){
+                                                           controller.selectLocation =
+                                                                            controller.locationList![index];
+                                                                        controller
+                                                                            .update();
+                                                        },
+                                                      child: Container(
                                                         height: Get.height / 10,
                                                         decoration:
-                                                            BoxDecoration(
-                                                                // color: ColorCode.orange,
-                                                                border: Border.all(
-                                                                    color: ColorCode
-                                                                        .orange,
-                                                                    width: 2),
-                                                                borderRadius: BorderRadius.only(
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            24))),
+                                                              BoxDecoration(
+                                                                  // color: ColorCode.orange,
+                                                                  border: Border.all(
+                                                                      color: ColorCode
+                                                                          .orange,
+                                                                      width: 2),
+                                                                  borderRadius: BorderRadius.only(
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              24))),
                                                         child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    Container(
-                                                                  color:  controller.selectLocation ==
-                                                                          controller.locationList![index]
-                                                                      ? ColorCode
-                                                                          .orange
-                                                                      : Colors
-                                                                          .transparent,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      Checkbox(
-                                                                        activeColor:
-                                                                            ColorCode.orange,
-                                                                        focusColor:
-                                                                            ColorCode.orange,
-                                                                        side:
-                                                                            BorderSide(
-                                                                          color:
-                                                                              ColorCode.orange,
-                                                                        ),
-                                                                        shape: RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(3)),
-                                                                        value: controller.selectLocation ==
-                                                                                controller.locationList![index]
-                                                                            ? true
-                                                                            : false,
-                                                                        // value: controller.selectAddress == index ? true : false,
-                                                                        onChanged:
-                                                                            (newValue) {
-                                                                          // controller.selectAddress =  index;
-                                                                          controller.selectLocation =
-                                                                              controller.locationList![index];
-                                                                          controller
-                                                                              .update();
-                                                                          // controller.setVehicle(index);
-                                                                        },
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                  flex: 5,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Expanded(
+                                                                  flex: 1,
                                                                   child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.fromLTRB(
-                                                                            8,
-                                                                            12,
-                                                                            8,
-                                                                            8),
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
+                                                                      Container(
+                                                                    color:  controller.selectLocation ==
+                                                                            controller.locationList![index]
+                                                                        ? ColorCode
+                                                                            .orange
+                                                                        : Colors
+                                                                            .transparent,
+                                                                    child: Column(
                                                                       children: [
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.spaceBetween,
-                                                                          children: [
-                                                                            Text(
-                                                                              controller.locationList![index].name ?? "",
-                                                                              style: Heading4Medium(),
-                                                                            ),
-                                                                            // Image.asset("assets/icons/edit_icon.png"),
-                                                                            // Icon(Icons.edit_square, color: Colors.grey[400],)
-                                                                          ],
+                                                                        Checkbox(
+                                                                          activeColor:
+                                                                              ColorCode.orange,
+                                                                          focusColor:
+                                                                              ColorCode.orange,
+                                                                          side:
+                                                                              BorderSide(
+                                                                            color:
+                                                                                ColorCode.orange,
+                                                                          ),
+                                                                          shape: RoundedRectangleBorder(
+                                                                              borderRadius:
+                                                                                  BorderRadius.circular(3)),
+                                                                          value: controller.selectLocation ==
+                                                                                  controller.locationList![index]
+                                                                              ? true
+                                                                              : false,
+                                                                          // value: controller.selectAddress == index ? true : false,
+                                                                          onChanged:
+                                                                              (newValue) {
+                                                                            // controller.selectAddress =  index;
+                                                                            controller.selectLocation =
+                                                                                controller.locationList![index];
+                                                                            controller
+                                                                                .update();
+                                                                            // controller.setVehicle(index);
+                                                                          },
                                                                         ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              5.h,
-                                                                        ),
-                                                                        Text(
-                                                                          controller.locationList![index].address ?? "",
-                                                                          style:
-                                                                              Heading5(fbold: FontWeight.normal),
-                                                                        )
                                                                       ],
                                                                     ),
-                                                                  ))
-                                                            ])),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                    flex: 5,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.fromLTRB(
+                                                                              8,
+                                                                              12,
+                                                                              8,
+                                                                              8),
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment
+                                                                                .start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment
+                                                                                .start,
+                                                                        children: [
+                                                                          Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            children: [
+                                                                              Text(
+                                                                                controller.locationList![index].name ?? "",
+                                                                                style: Heading4Medium(),
+                                                                              ),
+                                                                              // Image.asset("assets/icons/edit_icon.png"),
+                                                                              // Icon(Icons.edit_square, color: Colors.grey[400],)
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                5.h,
+                                                                          ),
+                                                                          Text(
+                                                                            controller.locationList![index].address ?? "",
+                                                                            style:
+                                                                                Heading5(fbold: FontWeight.normal),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ))
+                                                              ]),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               )

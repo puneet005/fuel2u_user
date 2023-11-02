@@ -69,12 +69,17 @@ class PaymentDetails extends GetView<VehicleController> {
             SizedBox(height: 20.h,),
             // SizedBox(height: ,)
              controller.cardLoading.value
-                                ? ListView(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: List.generate(
-                                        3, (index) => ShimmerLoading()),
-                                  ):
+             ?Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                ):
+                                // ? ListView(
+                                //     shrinkWrap: true,
+                                //     physics: NeverScrollableScrollPhysics(),
+                                //     children: List.generate(
+                                //         3, (index) => ShimmerLoading()),
+                                //   ):
                           controller.cardDetails!.isEmpty || controller.cardDetails == null 
                               ? EmptyUi()
                               : PaymentList(context, controller.cardDetails!),                                                  

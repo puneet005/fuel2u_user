@@ -60,11 +60,19 @@ class OrderHistory extends GetView<OrderController>{
                     ],
                   ),
                  SizedBox(height: 20.h,),
-                 controller.orderHistoryLoading.value ? ListView(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: List.generate(5, (index) => ShimmerLoading())
-                          ): controller.orderHistoryList!.isEmpty ?EmptyOrder():
+                 controller.orderHistoryLoading.value ? 
+                 Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                )
+                //  ListView(
+                //             shrinkWrap: true,
+                //             physics: const NeverScrollableScrollPhysics(),
+                //             children: List.generate(5, (index) => ShimmerLoading())
+                //           )
+                          : 
+                          controller.orderHistoryList!.isEmpty ?EmptyOrder():
                            OrderList(
                             controller.orderHistoryList!,
                             context

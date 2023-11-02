@@ -63,7 +63,7 @@ class SplashController extends GetxController {
        Get.offAllNamed(Routes.HOME);
     }
      });
-    ToastUi("No Internet Please Try After Sometime", 
+    ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

@@ -75,12 +75,18 @@ Future.delayed(Duration.zero,() =>  controller.GetLocationListApi());
                    ),
                   SizedBox(height: 10.h,),
                   //  EmptyUi()
-                  controller.isLocationLoading.value ? ListView(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                children: List.generate(
-                                    5, (index) => ShimmerLoading()),
-                              )
+                  controller.isLocationLoading.value ? 
+                  Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                )
+                  // ListView(
+                  //               shrinkWrap: true,
+                  //               physics: NeverScrollableScrollPhysics(),
+                  //               children: List.generate(
+                  //                   5, (index) => ShimmerLoading()),
+                  //             )
                             : LocationList(context, controller.locationListData)
                   ])));}),
                   

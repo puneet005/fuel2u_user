@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 // import 'package:fuel2u_user/routes/app_pages.dart';
 
 import 'package:fuel2u_user/utils/color.dart';
@@ -59,9 +60,13 @@ class AdditionalComments extends GetView<OrderController>{
               padding: EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
               child: TextFormField(
                 style: TextFieldStyle(),
+                textCapitalization: TextCapitalization.words,
                 controller: controller.commentCtrl,
                 autocorrect: true,
-                keyboardType: TextInputType.name,
+               inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
+                keyboardType: TextInputType.text,
                 // validator: (val) {},
                 decoration:  InputDecoration(
                   hintText: "Comments (optional)",

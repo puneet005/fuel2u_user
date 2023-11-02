@@ -7,6 +7,7 @@ import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/model/location_list_model.dart';
 import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -149,11 +150,15 @@ class _EditLocationState extends State<EditLocation> {
                                     vertical: 10.r, horizontal: 15.r),
                                 child: TextFormField(
                                   style: TextFieldStyle(),
+                                  textCapitalization: TextCapitalization.words,
                                   controller: controller.homename,
                                   autocorrect: true,
-                                  keyboardType: TextInputType.name,
+                                  keyboardType: TextInputType.text,
                                   // validator: (val) {},
                                   maxLength: 27,
+                                 inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                   decoration: InputDecoration(
                                      counterText: "",
                                     hintText: "Name (optional), ie Home",
@@ -165,6 +170,7 @@ class _EditLocationState extends State<EditLocation> {
                                     enabledBorder: MainBorder(),
                                   ),
                                 ),
+                                
                               ),
                               // Add Street Address
                               Padding(
@@ -174,7 +180,7 @@ class _EditLocationState extends State<EditLocation> {
                                   style: TextFieldStyle(),
                                   controller: controller.streetAddressCtrl,
                                   autocorrect: true,
-                                  keyboardType: TextInputType.name,
+                                  keyboardType: TextInputType.text,
                                   onChanged: (val) {
                                     controller.addressFormCheck();
                                   },
@@ -190,18 +196,41 @@ class _EditLocationState extends State<EditLocation> {
                                   ),
                                    onTap: () async {
                         await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>    PlacePicker(
+                          builder: (_) =>    PlacePicker(
                                 apiKey: googleMKey,              
                                 onPlacePicked: (result) { 
-                                  print(result.adrAddress.toString()); 
-                                  print(result.addressComponents!.toString()); 
-                                  print(result.formattedAddress);                                
+                                   if(result.formattedAddress!.contains(",")) {                         
                                   var add =  result.formattedAddress!.split(",");
                                   print(add.length);
-                                  controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
-                                  controller.cityCtrl.text = add[add.length - 3];                                                 
+                                   controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  if(add.isNotEmpty){                                
+                                  
+                                  if(add.length == 1){
+                                    controller.streetAddressCtrl.text  =  add[0];
+                                     controller.cityCtrl.text = add[0];
+                                  }
+                                  else{
+                                  controller.streetAddressCtrl.text  =  add.length <= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.cityCtrl.text = add.length <= 2 ? add[add.length - 1] :  add[add.length - 3];                                                 
+                                  }
+                                  }
+                                  }
+                                  else{
+                                    controller.streetAddressCtrl.text  =  result.formattedAddress!.toString();
+                                    // controller.cityCtrl.text =  result.formattedAddress!.toString();
+                                  }
+                                  // controller.streetAddressCtrl.text  =  result.formattedAddress.toString() ?? "";
                                   controller.update();
-                                  Navigator.of(context).pop();
+                                  Future.delayed(Duration(seconds: 0), ()=>  Navigator.of(_).pop());
+                                  // print(result.adrAddress.toString()); 
+                                  // print(result.addressComponents!.toString()); 
+                                  // print(result.formattedAddress);                                
+                                  // var add =  result.formattedAddress!.split(",");
+                                  // print(add.length);
+                                  // controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
+                                  // controller.cityCtrl.text = add[add.length - 3];                                                 
+                                  // controller.update();
+                                  // Navigator.of(context).pop();
                                 },
                                 initialPosition: LatLng(controller.currentPosition!.latitude, controller.currentPosition!.longitude),
                                 useCurrentLocation: true,
@@ -220,7 +249,7 @@ class _EditLocationState extends State<EditLocation> {
                                   style: TextFieldStyle(),
                                   controller: controller.cityCtrl,
                                   autocorrect: true,
-                                  keyboardType: TextInputType.name,
+                                  keyboardType: TextInputType.text,
                                   maxLength: 25,
                                   // validator: (val) {},
                                   onChanged: (val) {
@@ -236,6 +265,9 @@ class _EditLocationState extends State<EditLocation> {
                                     border: MainBorder(),
                                     enabledBorder: MainBorder(),
                                   ),
+                                 inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                 ),
                               ),
                               // Add State
@@ -358,27 +390,24 @@ class _EditLocationState extends State<EditLocation> {
                                             style: Heading3Regular(),
                                           ),
                                           actions: <Widget>[
-                                            Row(
+                                              Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                            Expanded(
-                                              flex: 2,
-                                              child: ElevatedButton(
-                                                // FlatButton widget is used to make a text to work like a button
-                                                // textColor: Colors.black,
-                                                onPressed: () {
+                                               Expanded(
+                                                flex: 2,
+                                                 child: 
+                                                 BorderBtn(ontap: () {  
                                                   Navigator.of(ctx).pop();
-                                                }, // function used to perform after pressing the button
-                                                child: Text('CANCEL'),
-                                              ),
-                                            ),
-                                            SizedBox(width: 20.h,),
+                                                 }, text: 'CANCEL',
+                                                  
+                                                 ),
+                                           
+                                               ),
+                                               SizedBox(width: 20.h,),
                                             Expanded(
-                                              flex: 2,
-                                              child: ElevatedButton(
-                                                // textColor: Colors.black,
-                                                onPressed: () async {
-                                                  Navigator.of(ctx).pop();
+                                                flex: 2,
+                                                child: FillBtn(ontap: () async {
+                                                         Navigator.of(ctx).pop();
                                                   bool res = await controller
                                                       .DeleteLocationApi(
                                                           context,
@@ -389,12 +418,48 @@ class _EditLocationState extends State<EditLocation> {
                                                         .GetLocationListApi();
                                                     Navigator.of(context).pop();
                                                   }
-                                                },
-                                                child: Text('CONFIRM'),
+                                            //     },
+                                                }, text: 'CONFIRM'),
+                                          
                                               ),
-                                            ),
-                                            ],
-                                            )
+                                             ],)
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.center,
+                                            //   children: [
+                                            // Expanded(
+                                            //   flex: 2,
+                                            //   child: ElevatedButton(
+                                            //     // FlatButton widget is used to make a text to work like a button
+                                            //     // textColor: Colors.black,
+                                            //     onPressed: () {
+                                            //       Navigator.of(ctx).pop();
+                                            //     }, // function used to perform after pressing the button
+                                            //     child: Text('CANCEL'),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(width: 20.h,),
+                                            // Expanded(
+                                            //   flex: 2,
+                                            //   child: ElevatedButton(
+                                            //     // textColor: Colors.black,
+                                            //     onPressed: () async {
+                                            //       Navigator.of(ctx).pop();
+                                            //       bool res = await controller
+                                            //           .DeleteLocationApi(
+                                            //               context,
+                                            //               widget.locationDetails
+                                            //                   .id!);
+                                            //       if (res) {
+                                            //         controller
+                                            //             .GetLocationListApi();
+                                            //         Navigator.of(context).pop();
+                                            //       }
+                                            //     },
+                                            //     child: Text('CONFIRM'),
+                                            //   ),
+                                            // ),
+                                            // ],
+                                            // )
                                           ],
                                         ),
                                       );

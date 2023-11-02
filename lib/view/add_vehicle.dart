@@ -8,6 +8,7 @@ import 'package:fuel2u_user/controller/add_vehicle_controller.dart';
 import 'package:fuel2u_user/model/vehicle/car_model.dart';
 import 'package:fuel2u_user/model/vehicle/color_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -23,6 +24,7 @@ class AddVehicle extends GetView<AddVehicleController> {
   @override
   Widget build(BuildContext context) {
     AddVehicleController controller = Get.find<AddVehicleController>();
+    
    Future.delayed(Duration.zero, (){
     controller.CleanAllData();
     controller.checkAllFieldDone();
@@ -36,359 +38,378 @@ class AddVehicle extends GetView<AddVehicleController> {
     // TODO: implement build
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: GetBuilder(
-            init: AddVehicleController(),
-            initState: (_) {},
-            builder: (_) {
-              return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.h),
-                      child: controller.isLoading.value ? Container(
-                        height: Get.height,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ):
-                      Column(
-                        children: [
-                          ImageLogo(),
-                          SizedBox(
-                            height: 40.h,
+        child: Form(
+          key: controller.vehicleKey,
+          child: SingleChildScrollView(
+            child: GetBuilder(
+              init: AddVehicleController(),
+              initState: (_) {},
+              builder: (_) {
+                return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.h),
+                        child: controller.isLoading.value ? Container(
+                          height: Get.height,
+                          child: Center(
+                            child: CircularProgressIndicator(),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Add a Vehicle",
-                                style: Heading1(color: ColorCode.darkGray),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          // Add Name
-                          Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                            child: TextFormField(
-
-                              style: TextFieldStyle(),
-                              controller: controller.nameCtrl,
-                              autocorrect: true,
-                            keyboardType: TextInputType.name,
-                            maxLength: 35,
-                    // validator: (val) {},
-                    decoration:  InputDecoration(
-                      counterText: "",
-                      hintText: "Name (optional), ie Frank’s Car",
-                      hintStyle: TextStyle(
-                         fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: ColorCode.ligthGray),
-                      focusedBorder:  MainBorder(),
-                      border:  MainBorder(),
-                      enabledBorder:  MainBorder(),
+                        ):
+                        Column(
+                          children: [
+                            ImageLogo(),
+                            SizedBox(
+                              height: 40.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Add a Vehicle",
+                                  style: Heading1(color: ColorCode.darkGray),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            // Add Name
+                            Padding(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                              child: TextFormField(
+                                textCapitalization: TextCapitalization.sentences,
+                                style: TextFieldStyle(),
+                                controller: controller.nameCtrl,
+                                autocorrect: true,
+                                keyboardType: TextInputType.text,
+                              maxLength: 35,
+                      // validator: (val) {},
+                      decoration:  InputDecoration(
+                        counterText: "",
+                        hintText: "Name (optional), ie Frank’s Car",
+                        hintStyle: TextStyle(
+                           fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: ColorCode.ligthGray),
+                        focusedBorder:  MainBorder(),
+                        border:  MainBorder(),
+                        enabledBorder:  MainBorder(),
+                      ),
+                     inputFormatters: [
+            TextCapitalizationFormatter(TextCapitalization.sentences),
+          ],
                     ),
                   ),
-                ),
-
-                // Brand Name DropDown
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: DropdownButtonFormField<MakeModelData>(
-                    
-                    onChanged: (newValue) {
-                      log(newValue.toString());
+        
+                  // Brand Name DropDown
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: DropdownButtonFormField<MakeModelData>(
                       
-                      controller.makeValue= newValue;
-                      controller.update();
-                      // controller.carmodelList?.clear();                      
-                      controller.carModelValue  = null;
-                      // controller.updateBrand(newValue.toString());
-                      controller.checkAllFieldDone();
-                      controller.ModelApi();
-                      log(controller.carModelValue.toString());
-                      log(controller.carmodelList.toString());
-                    },
-                    value: controller.makeValue ?? null,                  
-                    hint: Text(
-                      "Make",
-                      style: HeadingCustom(
-                        size: 16.sp,
-                        color: ColorCode.ligthGray,
-                        fbold: FontWeight.bold,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: controller.makeList == null ? null :[
-                      for (var value in controller.makeList!)
-                        DropdownMenuItem(
-                          child: Text(
-                            value.name!,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              color: ColorCode.darkGray,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          value:  value,
-                        ),
-                    ],
-                    decoration:  InputDecoration(
-                      fillColor: Colors.transparent,
-                      border: MainBorder(),
-                      enabledBorder:  MainBorder(),
-                    ),
-                  ),
-                ),
-                // Model Name DropDown
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: controller.loadingmodel.value ?Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator()
-                    ],
-                  ) :DropdownButtonFormField<CarModelData>(
-                 
-                    onChanged: controller.carmodelList == null ? null: (newValue) {
-                      controller.carModelValue = newValue;
-                      // controller.selectedModel.value = newValue.toString();
-                      // controller.update();
-                      controller.checkAllFieldDone();
-                     
-                    },
-                    value: controller.carModelValue ?? null,                   
-                    hint: Text(
-                      "Model ",
-                      style: HeadingCustom(
-                        size: 16.sp,
-                        color: ColorCode.ligthGray,
-                        fbold: FontWeight.bold,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items:controller.carmodelList != null?  [
-                      // if(controller.makeValue != null && controller.carmodelList != null)
-                    
-                      for (var value in controller.carmodelList!)
-                        DropdownMenuItem(
-                          child: new Text(
-                            value.name!,
-                            style: TextStyle(
-                                fontSize: 16.sp,
-                              color: ColorCode.darkGray,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          value: value,
-                        )
-                    
-                    ]: null,
-                    decoration:  InputDecoration(
-                      fillColor: Colors.transparent,
-                      border: MainBorder(),
-                      enabledBorder:  MainBorder(),
-                    ),
-                  ),
-                ),
-                // Color Name DropDown
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: DropdownButtonFormField<ColorModelData>(
-                    // iconSize: ,
-                    onChanged: (newValue) {
-                      controller.colorsModelValue = newValue;
-                      controller.update();
-                      controller.checkAllFieldDone();
-                    },
-                    value: controller.colorsModelValue ??  null,                  
-                    hint: Text(
-                      "Color ",
-                      style: HeadingCustom(
-                        size: 16.sp,
-                        color: ColorCode.ligthGray,
-                        fbold: FontWeight.bold,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: controller.colorsList == null ? null: [
-                      for (var value in controller.colorsList!)
-                        DropdownMenuItem(
-                          child: new Text(
-                            value.name!,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                        color: ColorCode.darkGray,
-                        fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          value: value,
-                        ),
-                    ],
-                    decoration:  InputDecoration(
-                      fillColor: Colors.transparent,
-                      border: MainBorder(),
-                      enabledBorder: MainBorder()
-                    ),
-                  ),
-                ),
-                // License Plate Number and State
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
-                  child: Container(
-                    height: 55.h,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 3,
-                            child: TextFormField(
-                               maxLength: 27,
-                              style: TextFieldStyle(),
-                              controller: controller.licensePlateNoCtrl,
-                              autocorrect: true,
-                              keyboardType: TextInputType.name,
-                              validator: (val) {
-                                if (val!.isNotEmpty) {
-                                  return null;
-                                }
-                                return "Enter Number";
-                              },
-                              onChanged: (val) {
-                                
-                                controller.checkAllFieldDone();
-                              },
-                              decoration: InputDecoration(
-                                counterText: "",
-                                hintText: "License Plate Number",
-                                hintStyle: TextStyle(
-                                   fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorCode.ligthGray),
-                                focusedBorder:   MainBorder(),
-                                border:   MainBorder(),
-                                enabledBorder:   MainBorder(),
-                              ),
-                            )),
-                        SizedBox(
-                          width: 15.h,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          // width: Get.width/2.5,
-                          child: DropdownButtonFormField(
-                            // iconSize: ,
-                                              
-                            onChanged: (newValue) {
-                              controller.stateCodeValue = newValue;
-                              controller.update();
-                              controller.checkAllFieldDone();
-                              
-                            },
-                            value: controller.stateCodeValue ?? null,
-                           
-                            hint: Text(
-                              "State",
-                              style: HeadingCustom(
-                                size: 16.sp,
-                                color: ColorCode.ligthGray,
-                                fbold: FontWeight.bold,
-                              ),
-                            ),
-                            isExpanded: true,
-                            items: controller.stateCodeList ==  null ? null :[
-                              for (var value in controller.stateCodeList!)
-                                DropdownMenuItem(
-                                  child: new Text(
-                                    value.code.toString(),
-                                    style: TextStyle(
-                                       fontSize: 16.sp,
-                        color: ColorCode.darkGray,
-                        fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  value: value,
-                                ),
-                            ],
-                            decoration:  InputDecoration(
-                              
-                              fillColor: Colors.transparent,
-                              border:  MainBorder(),
-                              enabledBorder:  MainBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // upload Phote Code
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.r),
-                    child: InkWell(
-                      onTap: () => _addPictureSheet(context),
-                      child: Text(
-                        "+ Upload a photo of your vehicle (optional)",
-                        textAlign: TextAlign.center,
-                        style: HeadingCustomFamliy(
-                          family: "RobotoMedium",
-                          
+                      onChanged: (newValue) {
+                        log(newValue.toString());
+                        
+                        controller.makeValue= newValue;
+                        controller.update();
+                        // controller.carmodelList?.clear();                      
+                        controller.carModelValue  = null;
+                        // controller.updateBrand(newValue.toString());
+                        controller.checkAllFieldDone();
+                        controller.ModelApi();
+                        log(controller.carModelValue.toString());
+                        log(controller.carmodelList.toString());
+                      },
+                      value: controller.makeValue ?? null,                  
+                      hint: Text(
+                        "Make",
+                        style: HeadingCustom(
                           size: 16.sp,
-                          color: ColorCode.orange,
-                          decoration: TextDecoration.underline
-                        )
-                    )),),
-                // Spacer(),
-                SizedBox(
-                  height: 30.h,
-                ),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.h),
-                  child: Obx(
-                    () => !controller.allFiledTrue.value
-                        ? FillBtn(
-                            ontap: () {},
-                            text: "+ ADD VEHICLE",
-                            Bgcolor: ColorCode.ligthGray,
-                          )
-                        : FillBtn(
-                            ontap: ()  async{
-                              
-                             bool res = await controller.AddVehicleApi(context);
-                             if(res){
-                              Get.offAllNamed(Routes.HOME);
-
-                             }
-                              
-                            },
-                            text: "+ ADD VEHICLE"),
+                          color: ColorCode.ligthGray,
+                          fbold: FontWeight.bold,
+                        ),
+                      ),
+                      isExpanded: true,
+                      items: controller.makeList == null ? null :[
+                        for (var value in controller.makeList!)
+                          DropdownMenuItem(
+                            child: Text(
+                              value.name!,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: ColorCode.darkGray,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            value:  value,
+                          ),
+                      ],
+                      decoration:  InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: MainBorder(),
+                        enabledBorder:  MainBorder(),
+                      ),
+                    ),
                   ),
-                ),
+                  // Model Name DropDown
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: controller.loadingmodel.value ?Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator()
+                      ],
+                    ) :DropdownButtonFormField<CarModelData>(
+                   
+                      onChanged: controller.carmodelList == null ? null: (newValue) {
+                        controller.carModelValue = newValue;
+                        // controller.selectedModel.value = newValue.toString();
+                        // controller.update();
+                        controller.checkAllFieldDone();
+                       
+                      },
+                      value: controller.carModelValue ?? null,                   
+                      hint: Text(
+                        "Model ",
+                        style: HeadingCustom(
+                          size: 16.sp,
+                          color: ColorCode.ligthGray,
+                          fbold: FontWeight.bold,
+                        ),
+                      ),
+                      isExpanded: true,
+                      items:controller.carmodelList != null?  [
+                        // if(controller.makeValue != null && controller.carmodelList != null)
+                      
+                        for (var value in controller.carmodelList!)
+                          DropdownMenuItem(
+                            child: new Text(
+                              value.name!,
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                color: ColorCode.darkGray,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            value: value,
+                          )
+                      
+                      ]: null,
+                      decoration:  InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: MainBorder(),
+                        enabledBorder:  MainBorder(),
+                      ),
+                    ),
+                  ),
+                  // Color Name DropDown
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: DropdownButtonFormField<ColorModelData>(
+                      // iconSize: ,
+                      onChanged: (newValue) {
+                        controller.colorsModelValue = newValue;
+                        controller.update();
+                        controller.checkAllFieldDone();
+                      },
+                      value: controller.colorsModelValue ??  null,                  
+                      hint: Text(
+                        "Color ",
+                        style: HeadingCustom(
+                          size: 16.sp,
+                          color: ColorCode.ligthGray,
+                          fbold: FontWeight.bold,
+                        ),
+                      ),
+                      isExpanded: true,
+                      items: controller.colorsList == null ? null: [
+                        for (var value in controller.colorsList!)
+                          DropdownMenuItem(
+                            child: new Text(
+                              value.name!,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                          color: ColorCode.darkGray,
+                          fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            value: value,
+                          ),
+                      ],
+                      decoration:  InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: MainBorder(),
+                        enabledBorder: MainBorder()
+                      ),
+                    ),
+                  ),
+                  // License Plate Number and State
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
+                    child: Container(
+                      height: 55.h,
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 3,
+                              child: TextFormField(
+                                 maxLength: 27,
+                                style: TextFieldStyle(),
+                                controller: controller.licensePlateNoCtrl,
+                                autocorrect: true,
+                                keyboardType: TextInputType.name,
+                                validator: (val) {
+                                  if (val!.trim().isNotEmpty) {
+                                    return null;
+                                  }
+                                  return "Enter Plate Number";
+                                },
+                                onChanged: (val) {
+                                  
+                                  controller.checkAllFieldDone();
+                                },
+                                decoration: InputDecoration(
+                                  counterText: "",
+                                  hintText: "License Plate Number",
+                                  hintStyle: TextStyle(
+                                     fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorCode.ligthGray),
+                                  focusedBorder:   MainBorder(),
+                                  border:   MainBorder(),
+                                  enabledBorder:   MainBorder(),
+                                ),
+                              )),
+                          SizedBox(
+                            width: 15.h,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            // width: Get.width/2.5,
+                            child: DropdownButtonFormField(
+                              // iconSize: ,
+                                                
+                              onChanged: (newValue) {
+                                controller.stateCodeValue = newValue;
+                                controller.update();
+                                controller.checkAllFieldDone();
+                                
+                              },
+                              value: controller.stateCodeValue ?? null,
+                             
+                              hint: Text(
+                                "State",
+                                style: HeadingCustom(
+                                  size: 16.sp,
+                                  color: ColorCode.ligthGray,
+                                  fbold: FontWeight.bold,
+                                ),
+                              ),
+                              isExpanded: true,
+                              items: controller.stateCodeList ==  null ? null :[
+                                for (var value in controller.stateCodeList!)
+                                  DropdownMenuItem(
+                                    child: new Text(
+                                      value.code.toString(),
+                                      style: TextStyle(
+                                         fontSize: 16.sp,
+                          color: ColorCode.darkGray,
+                          fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    value: value,
+                                  ),
+                              ],
+                              decoration:  InputDecoration(
+                                
+                                fillColor: Colors.transparent,
+                                border:  MainBorder(),
+                                enabledBorder:  MainBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // upload Phote Code
+                  Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.r),
+                      child: InkWell(
+                        onTap: () => _addPictureSheet(context),
+                        child: Text(
+                          "+ Upload a photo of your vehicle (optional)",
+                          textAlign: TextAlign.center,
+                          style: HeadingCustomFamliy(
+                            family: "RobotoMedium",
+                            
+                            size: 16.sp,
+                            color: ColorCode.orange,
+                            decoration: TextDecoration.underline
+                          )
+                      )),),
+                  // Spacer(),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+        
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.h),
+                    child: Obx(
+                      () => !controller.allFiledTrue.value
+                          ? FillBtn(
+                              ontap: () {
+                                if(controller.licensePlateNoCtrl.value.text.trim().isEmpty){
+                                ToastUi('Enter Plate Number', 
+                                  bgColor: ColorCode.red,
+                                  textColor: ColorCode.white);
+                               }
+                                // if(controller.licensePlateNoCtrl.text.isEmpty){
+                                //   ToastUi('Enter Plate Number', 
+                                //   bgColor: ColorCode.red);
+                                // }
 
-                SizedBox(
-                  height: 20.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.h),
-                  child: BorderBtn(ontap: () {
-                      Get.offAllNamed(Routes.HOME);
-                  }, text: "SKIP FOR NOW"),
-                ),
-
-                SizedBox(
-                  height: 40.h,
-                ),
-              ],
-            ),
-          ) ; 
-            },
-          ) 
+                              },
+                              text: "+ ADD VEHICLE",
+                              Bgcolor: ColorCode.ligthGray,
+                            )
+                          : FillBtn(
+                              ontap: ()  async{
+                              
+                                    bool res = await controller.AddVehicleApi(context);
+                               if(res){
+                                Get.offAllNamed(Routes.HOME);
+        
+                              
+                                }
+                               
+                                
+                              },
+                              text: "+ ADD VEHICLE"),
+                    ),
+                  ),
+        
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.h),
+                    child: BorderBtn(ontap: () {
+                        Get.offAllNamed(Routes.HOME);
+                    }, text: "SKIP FOR NOW"),
+                  ),
+        
+                  SizedBox(
+                    height: 40.h,
+                  ),
+                ],
+              ),
+            ) ; 
+              },
+            ) 
+          ),
         )
       ),
     );

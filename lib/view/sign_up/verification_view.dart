@@ -149,7 +149,11 @@ class _VerificationViewState extends State<VerificationView> {
                   controlller.SignUpVerifyApi(context, otptext);
                           //
                       }, text: "LOG IN"
-                  ): FillBtn(ontap: (){}, text: "LOG IN",
+                  ): FillBtn(ontap: (){
+                     ToastUi('Please Enter Validation Code', bgColor: ColorCode.red, 
+                textColor: ColorCode.white,
+                );
+                  }, text: "LOG IN",
                   Bgcolor: ColorCode.ligthGray,)),
              ),
               SizedBox(height: 40.h,),

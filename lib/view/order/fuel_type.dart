@@ -154,62 +154,78 @@ class FuelType extends  GetView<OrderController>{
                     ],
                     ),
                      SizedBox(height: 20.h,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
+                      GestureDetector(
                                                             onTap: (){
                                                               controller.fuelQuantity = "I only want \$${controller.minFuelType} of fuel";
                                                               controller.update();
                                                               controller.changeFuelAmount(1);
                                                               // controller.changePlan(index);
                                                             },
-                                                            child: Container(
-                                                              height: 20,
-                                                              width: 20,
-                                                              decoration: BoxDecoration(
-                                                                shape: BoxShape.circle,
-                                                                border: Border.all(color: ColorCode.orange),
-                                                                color: controller.selectFuelAmount.value == 1 ? ColorCode.orange : ColorCode.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                                                              onTap: (){
+                                                                controller.fuelQuantity = "I only want \$${controller.minFuelType} of fuel";
+                                                                controller.update();
+                                                                controller.changeFuelAmount(1);
+                                                                // controller.changePlan(index);
+                                                              },
+                                                              child: Container(
+                                                                height: 20,
+                                                                width: 20,
+                                                                decoration: BoxDecoration(
+                                                                  shape: BoxShape.circle,
+                                                                  border: Border.all(color: ColorCode.orange),
+                                                                  color: controller.selectFuelAmount.value == 1 ? ColorCode.orange : ColorCode.white,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                        SizedBox(width: 10.h,),
-                        Text("I only want \$${controller.minFuelType} of fuel", style: Heading5(
-                        color: ColorCode.black,
-                        fbold: FontWeight.w600
-                        
-                      ),)
-                      ],
+                          SizedBox(width: 10.h,),
+                          Text("I only want \$${controller.minFuelType} of fuel", style: Heading5(
+                          color: ColorCode.black,
+                          fbold: FontWeight.w600
+                          
+                        ),)
+                        ],
+                      ),
                     ),
                      SizedBox(height: 10.h,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                                                            onTap: (){
-                                                            controller.fuelQuantity = "Fill the tank";
-                                                            controller.update();
-                                                              controller.changeFuelAmount(2);
-                                                              // controller.changePlan(index);
-                                                            },
-                                                            child: Container(
-                                                              height: 20,
-                                                              width: 20,
-                                                              decoration: BoxDecoration(
-                                                                shape: BoxShape.circle,
-                                                                border: Border.all(color: ColorCode.orange),
-                                                                color: controller.selectFuelAmount.value == 2 ? ColorCode.orange : ColorCode.white,
+                     GestureDetector(
+                                                              onTap: (){
+                                                              controller.fuelQuantity = "Fill the tank";
+                                                              controller.update();
+                                                                controller.changeFuelAmount(2);
+                                                                // controller.changePlan(index);
+                                                              },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                                                              onTap: (){
+                                                              controller.fuelQuantity = "Fill the tank";
+                                                              controller.update();
+                                                                controller.changeFuelAmount(2);
+                                                                // controller.changePlan(index);
+                                                              },
+                                                              child: Container(
+                                                                height: 20,
+                                                                width: 20,
+                                                                decoration: BoxDecoration(
+                                                                  shape: BoxShape.circle,
+                                                                  border: Border.all(color: ColorCode.orange),
+                                                                  color: controller.selectFuelAmount.value == 2 ? ColorCode.orange : ColorCode.white,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                           SizedBox(width: 10.h,),                      
-                                                            Text("Fill the tank                   ", 
-                                                            style: Heading5(
-                        color: ColorCode.black,
-                        fbold:  FontWeight.w600
-                      ),)
-                      ],
+                                                             SizedBox(width: 10.h,),                      
+                                                              Text("Fill the tank                   ", 
+                                                              style: Heading5(
+                          color: ColorCode.black,
+                          fbold:  FontWeight.w600
+                        ),)
+                        ],
+                      ),
                     ),
                       SizedBox(height: 20.h,), 
                     // Spacer(),                   

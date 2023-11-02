@@ -118,14 +118,19 @@ class EditLocation extends GetView<OrderController> {
                               height: 10.h,
                             ),
                             controller.locationLoading.value
-                                ? ListView(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: List.generate(
-                                        2, (index) => ShimmerLoading()),
-                                  ).marginOnly(
-                                    bottom: 50.h
-                                  )
+                                ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                )
+                                // ListView(
+                                //     shrinkWrap: true,
+                                //     physics: NeverScrollableScrollPhysics(),
+                                //     children: List.generate(
+                                //         2, (index) => ShimmerLoading()),
+                                //   ).marginOnly(
+                                //     bottom: 50.h
+                                //   )
                                 : Expanded(
                                     child:
                                         controller.locationList != null ||

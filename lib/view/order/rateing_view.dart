@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -162,11 +163,14 @@ class DriveRating extends GetView<OrderController>{
                     style: TextFieldStyle(),
                     controller: controller.ratingCommentCtrl,
                     autocorrect: true,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.text,
                     // validator: (val) {},
                     onChanged: (val){ 
                       controller.checkRateing();                            
                     },
+                   inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     decoration:  InputDecoration(
                       hintText: "Comments",
                        hintStyle: TextStyle(

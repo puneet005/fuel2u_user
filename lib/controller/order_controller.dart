@@ -317,7 +317,7 @@ Future<void> BusinessDate(List<String>? day
     else{
      orderLoading.value = false;
       update();
-      ToastUi("No Internet Please Try After Sometime", 
+      ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -375,7 +375,7 @@ Future<void> BusinessDate(List<String>? day
       if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -438,7 +438,7 @@ Future<void> BusinessDate(List<String>? day
       if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -499,7 +499,7 @@ String? minFuelType;
       if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -565,7 +565,7 @@ String? minFuelType;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -632,7 +632,7 @@ String? minFuelType;
     }
     else{
       hideLoader(loader);
-      ToastUi("No Internet Please Try After Sometime", 
+      ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -693,7 +693,7 @@ String? minFuelType;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -766,7 +766,7 @@ String? minFuelType;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -913,7 +913,7 @@ String? minFuelType;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -1037,7 +1037,7 @@ String? minFuelType;
       if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -1114,7 +1114,7 @@ String? minFuelType;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -1401,7 +1401,7 @@ editLoading.value = true;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -1483,7 +1483,7 @@ editLoading.value = true;
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -1492,7 +1492,7 @@ editLoading.value = true;
          if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -1839,14 +1839,23 @@ editLoading.value = true;
      });
     }
     else{
+      log("delivery Date :");
+      if(editOrderDetailsData!.business != null)
+      
       BusinessDate(editOrderDetailsData!.business!.deliveryDay).then((value) => {
         for(int j = 0; j < dateListofdays.length; j++){
           // log(dateListofdays[j]['date'].toString()  + "==" + editOrderDetailsData!.deliveryDate.toString());
       if(dateListofdays[j]['date'] ==  editOrderDetailsData!.deliveryDate){
         selectdata = dateListofdays[j]
-      }} 
-        
+      }}         
       });
+      else
+         mainDate().then((value)  {
+        for(int j = 0; j < dateListofdays.length; j++){
+          // log(dateListofdays[j]['date'].toString()  + "==" + editOrderDetailsData!.deliveryDate.toString());
+      if(dateListofdays[j]['date'] ==  editOrderDetailsData!.deliveryDate){
+        selectdata = dateListofdays[j];
+      }}});
 
     }
     
@@ -1861,8 +1870,7 @@ editLoading.value = true;
 
   }
 
-   Future<void>  editOrderApi(BuildContext context) async{
-   
+   Future<void>  editOrderApi(BuildContext context) async{   
     OverlayEntry loader = overlayLoader(context);
     try {
       Overlay.of(context).insert(loader);
@@ -1873,7 +1881,7 @@ editLoading.value = true;
       log(ApiUrls.orders);
       var map = <String, dynamic>{};
       map['id'] = editOrderDetailsData!.id;
-      map['location_id'] = selectLocation == null ? editOrderDetailsData!.location!.id : selectLocation!.id.toString();
+      map['location_id'] = selectLocation == null ? "" : selectLocation!.id.toString();
       map['vehicle_id'] = selectVehicleIndex == null ? editOrderDetailsData!.vehicle!.id : vehicleList![selectVehicleIndex].id;
       map['fuel_type_id'] = selectfuelTypeId;
       map['fuel_quantity'] = selectFuelAmount.value == 1
@@ -1942,7 +1950,7 @@ editLoading.value = true;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -2029,7 +2037,7 @@ editLoading.value = true;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

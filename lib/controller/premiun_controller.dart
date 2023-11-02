@@ -9,8 +9,10 @@ import 'package:fuel2u_user/model/sign_up_model/promocode_model.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
+import 'package:fuel2u_user/view/profile/membership_change.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../resources/session_manager.dart';
 import '../routes/app_pages.dart';
@@ -43,7 +45,18 @@ class PremiunController extends GetxController {
 
   void changePlan(int index) {
     selectPlan.value = index;
+    showPlanIndex.value = index;
     update(); 
+    // PersistentNavBarNavigator
+    //                                                     .pushNewScreen(
+    //                                                   context,
+    //                                                   screen: MemberShipDetail(),
+    //                                                   withNavBar:
+    //                                                   true, // OPTIONAL VALUE. True by default.
+    //                                                   pageTransitionAnimation:
+    //                                                   PageTransitionAnimation
+    //                                                       .cupertino,
+    //                                                 );
   } 
   void viewPlan(int index){
     showPlanIndex.value = index;
@@ -91,7 +104,7 @@ class PremiunController extends GetxController {
           if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -259,7 +272,7 @@ class PremiunController extends GetxController {
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -335,7 +348,7 @@ class PremiunController extends GetxController {
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

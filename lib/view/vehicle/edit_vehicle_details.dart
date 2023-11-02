@@ -17,6 +17,7 @@ import 'package:fuel2u_user/model/vehicle/make_model.dart';
 import 'package:fuel2u_user/model/vehicle/vehicle_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
 import 'package:fuel2u_user/utils/api_constant.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -139,7 +140,7 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                                 style: TextFieldStyle(),
                                 controller: controller.nameCtrl,
                                 autocorrect: true,
-                              keyboardType: TextInputType.name,
+                              keyboardType: TextInputType.text,
                               maxLength: 27,
                       // validator: (val) {},
                       decoration:  InputDecoration(
@@ -153,8 +154,12 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                         border:  MainBorder(),
                         enabledBorder:  MainBorder(),
                       ),
+                     inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     ),
                   ),
+
                     Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 10.r, horizontal: 15.r),
@@ -419,25 +424,24 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                     title:  Text("Delete Vehicle", style: Heading1(),),
                     content:  Text("Are you sure to Delete this vehicle", style: Heading3Regular(),),
                     actions: <Widget>[
-                        Row(
+                       Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
+                                               Expanded(
+                                                flex: 2,
+                                                 child: 
+                                                 BorderBtn(ontap: () {  
+                                                  Navigator.of(ctx).pop();
+                                                 }, text: 'NO',
+                                                  
+                                                 ),
+                                           
+                                               ),
+                                               SizedBox(width: 20.h,),
                                             Expanded(
-                                              flex: 2,
-                     child:  ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
-                    // textColor: Colors.black,
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },             // function used to perform after pressing the button
-                    child: Text('CANCEL'),
-                  ),),
-                  SizedBox(width: 20.h,),
-                    Expanded(
-                    flex: 2,
-                    child: ElevatedButton(
-                      // textColor: Colors.black,
-                      onPressed: () async{
-                        Navigator.of(ctx).pop();
+                                                flex: 2,
+                                                child: FillBtn(ontap: () async{
+                                                  Navigator.of(ctx).pop();
                          VehicleController vehicleController = Get.put(VehicleController());
                        bool res = await  controller.DeleteVehicleApi(context, widget.data.id.toString());
                        if(res){
@@ -446,11 +450,42 @@ class _EditVehicleDetailsState extends State<EditVehicleDetails> {
                                   
                        }
                                   
-                      },
-                      child: Text('DELETE'),
-                    ),
-                  ),
-                                              ]),
+                                                }, text: 'CONFIRM'),
+                                          
+                                              ),
+                                             ],)
+                  //       Row(
+                  //                             mainAxisAlignment: MainAxisAlignment.center,
+                  //                             children: [
+                  //                           Expanded(
+                  //                             flex: 2,
+                  //    child:  ElevatedButton(                     // FlatButton widget is used to make a text to work like a button
+                  //   // textColor: Colors.black,
+                  //   onPressed: () {
+                  //     Navigator.of(ctx).pop();
+                  //   },             // function used to perform after pressing the button
+                  //   child: Text('CANCEL'),
+                  // ),),
+                  // SizedBox(width: 20.h,),
+                  //   Expanded(
+                  //   flex: 2,
+                  //   child: ElevatedButton(
+                  //     // textColor: Colors.black,
+                  //     onPressed: () async{
+                  //       Navigator.of(ctx).pop();
+                  //        VehicleController vehicleController = Get.put(VehicleController());
+                  //      bool res = await  controller.DeleteVehicleApi(context, widget.data.id.toString());
+                  //      if(res){
+                  //        vehicleController.GetVehicleList();
+                  //                 Navigator.of(context).pop();
+                                  
+                  //      }
+                                  
+                  //     },
+                  //     child: Text('DELETE'),
+                  //   ),
+                  // ),
+                  //                             ]),
                       
                     ],
                   ),

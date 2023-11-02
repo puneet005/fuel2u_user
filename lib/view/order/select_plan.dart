@@ -80,156 +80,171 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                             color: ColorCode.orange, width: 2),
                                         borderRadius: BorderRadius.only(
                                             bottomRight: Radius.circular(24))),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              color: controller.selectPlan == 1
-                                                  ? ColorCode.orange
-                                                  : Colors.transparent,
-                                              child: Column(
-                                                children: [
-                                                  Checkbox(
-                                                    activeColor: ColorCode.orange,
-                      focusColor: ColorCode.orange,
-                      side: BorderSide(
-                        color: ColorCode.orange,
-                      ),
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                3)),
-                                                    value:
-                                                        controller.selectPlan == 1
-                                                            ? true
-                                                            : false,
-                                                    onChanged: (newValue) {
-                                                      controller.selectPlan = 1;
-                                                      controller.payAsGo.value = false;
-                                                      controller.update();
-                                                      // controller.setVehicle(index);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                              flex: 5,
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10.h,
-                                                    vertical: 10.h),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        controller.selectPlan = 1;
+                                                        controller.payAsGo.value = false;
+                                                        controller.update();
+                                      },
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                color: controller.selectPlan == 1
+                                                    ? ColorCode.orange
+                                                    : Colors.transparent,
                                                 child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      "Business",
-                                                      style: Heading3Medium(
-                                                        // fbold: FontWeight.w500
-                                                      ),
+                                                    Checkbox(
+                                                      activeColor: ColorCode.orange,
+                                                          focusColor: ColorCode.orange,
+                                                          side: BorderSide(
+                                                            color: ColorCode.orange,
+                                                          ),
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  3)),
+                                                      value:
+                                                          controller.selectPlan == 1
+                                                              ? true
+                                                              : false,
+                                                      onChanged: (newValue) {
+                                                        controller.selectPlan = 1;
+                                                        controller.payAsGo.value = false;
+                                                        controller.update();
+                                                        // controller.setVehicle(index);
+                                                      },
                                                     ),
-                                                    SizedBox(
-                                                      height: 5.h,
-                                                    ),
-                                                    Text(
-                                                      "Employer Promo Code: ${controller.profileData!.promocode ?? "XXXXXX"}",
-                                                      style: Heading5(
-                                                          fbold:
-                                                              FontWeight.normal),
-                                                    )
                                                   ],
                                                 ),
-                                              ))
-                                        ])),
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 5,
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.h,
+                                                      vertical: 10.h),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "Business",
+                                                        style: Heading3Medium(
+                                                          // fbold: FontWeight.w500
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5.h,
+                                                      ),
+                                                      Text(
+                                                        "Employer Promo Code: ${controller.profileData!.promocode ?? "XXXXXX"}",
+                                                        style: Heading5(
+                                                            fbold:
+                                                                FontWeight.normal),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ))
+                                          ]),
+                                    )),
                               ),
                               // Pay as you go
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                    height: Get.height / 9.5,
-                                    decoration: BoxDecoration(
-                                        // color: ColorCode.orange,
-                                        border: Border.all(
-                                            color: ColorCode.orange, width: 2),
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(24))),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              color: controller.selectPlan == 2
-                                                  ? ColorCode.orange
-                                                  : Colors.transparent,
-                                              child: Column(
-                                                children: [
-                                                  Checkbox(
-                                                    activeColor: ColorCode.orange,
-                      focusColor: ColorCode.orange,
-                      side: BorderSide(
-                        color: ColorCode.orange,
-                      ),
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                3)),
-                                                    value:
-                                                        controller.selectPlan == 2
-                                                            ? true
-                                                            : false,
-                                                    onChanged: (newValue) {
+                                child: GestureDetector(
+                                  onTap: (){
                                                       controller.selectPlan = 2;
                                                       controller.payAsGo.value = true;
                                                       controller.update();
-                                                      // controller.setVehicle(index);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                              flex: 5,
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10.h,
-                                                    vertical: 10.h),
+                                    },
+                                  child: Container(
+                                    height: Get.height / 9.5,
+                                    decoration: BoxDecoration(
+                                          // color: ColorCode.orange,
+                                          border: Border.all(
+                                              color: ColorCode.orange, width: 2),
+                                          borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(24))),
+                                    child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                color: controller.selectPlan == 2
+                                                    ? ColorCode.orange
+                                                    : Colors.transparent,
                                                 child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      "Pay as you go",
-                                                      style: Heading3Medium(),
+                                                    Checkbox(
+                                                      activeColor: ColorCode.orange,
+                                                          focusColor: ColorCode.orange,
+                                                          side: BorderSide(
+                                                            color: ColorCode.orange,
+                                                          ),
+                                                      shape: RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  3)),
+                                                      value:
+                                                          controller.selectPlan == 2
+                                                              ? true
+                                                              : false,
+                                                      onChanged: (newValue) {
+                                                        controller.selectPlan = 2;
+                                                        controller.payAsGo.value = true;
+                                                        controller.update();
+                                                        // controller.setVehicle(index);
+                                                      },
                                                     ),
-                                                    SizedBox(
-                                                      height: 5.h,
-                                                    ),
-                                                    Text(
-                                                      "Address",
-                                                      style: Heading5(
-                                                          fbold:
-                                                              FontWeight.normal),
-                                                    )
                                                   ],
                                                 ),
-                                              ))
-                                        ])),
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 5,
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.h,
+                                                      vertical: 10.h),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "Pay as you go",
+                                                        style: Heading3Medium(),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5.h,
+                                                      ),
+                                                      Text(
+                                                        "Address",
+                                                        style: Heading5(
+                                                            fbold:
+                                                                FontWeight.normal),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ))
+                                          ]),
+                                  ),
+                                ),
                               ),
                               SizedBox(
                                 height: 20.h,
@@ -344,12 +359,17 @@ class SelectPlanOnOrder extends GetView<OrderController> {
                                 ):
                                 FillBtn(
                                   ontap: () {
-                                     if(controller.profileData!.subscription != null){
-                                      controller.planId =  controller.profileData!.subscription?.planId ?? 1;
-                                      }
-                                      else{
-                                        controller.planId = 1;
-                                      }
+                                    //  if(controller.profileData!.subscription != null){
+                                    //   controller.planId =  controller.profileData!.subscription?.planId ?? 1;
+                                    //   controller.update();
+                                    //   }
+                                    //   else{
+                                    //     controller.planId = 1;
+                                    //     controller.update();
+
+                                    //   }
+                                     controller.planId = 1;
+                                        controller.update();
                                     //  controller.GetPlan(context, 1);  
                                       // controller.planId =  controller.profileData!.subscription!.planId ?? 1;                               
                                       controller.update();

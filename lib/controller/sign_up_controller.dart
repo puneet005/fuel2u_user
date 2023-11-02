@@ -194,7 +194,7 @@ void IsSignUpAllField(){
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -270,7 +270,7 @@ Future<void> SignUpApi(BuildContext context) async {
     if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -286,7 +286,7 @@ Future<void> SignUpApi(BuildContext context) async {
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -366,7 +366,7 @@ emailCrt.clear();
    if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -382,7 +382,7 @@ emailCrt.clear();
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -458,7 +458,7 @@ emailCrt.clear();
     if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -474,7 +474,7 @@ emailCrt.clear();
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -623,7 +623,7 @@ String getFormattedPhoneNumber(
     if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -639,7 +639,7 @@ String getFormattedPhoneNumber(
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -693,7 +693,7 @@ Future<void> deleteAccount(BuildContext context) async {
     if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -702,7 +702,7 @@ Future<void> deleteAccount(BuildContext context) async {
          if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -798,7 +798,7 @@ Future<void> SaveProfile(BuildContext context) async {
     if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -814,7 +814,7 @@ Future<void> SaveProfile(BuildContext context) async {
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

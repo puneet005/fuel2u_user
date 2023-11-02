@@ -131,7 +131,7 @@ class _HomeViewState extends State<HomeView> {
         PersistentBottomNavBarItem(
             icon: SvgPicture.asset( "assets/icons/fuel_icon.svg",
                   height: 25,
-                  color:  selectedIndex == 0 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.7),
+                  color:  selectedIndex == 0 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.3),
                   ),
 
             routeAndNavigatorSettings: RouteAndNavigatorSettings(onGenerateRoute: (sett) {
@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
           // icon: Image.asset( selectedIndex == 1 ?"assets/images/darktruck.png"  :"assets/images/truck.png" ,
                   //  height: 20,
                   //  width: 40,
-                   color:  selectedIndex == 1 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.7),
+                   color:  selectedIndex == 1 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.3),
                   //  color: ColorCode.ligthGray,
                     ),
                   // )
@@ -170,7 +170,7 @@ class _HomeViewState extends State<HomeView> {
           icon: SvgPicture.asset("assets/icons/location_icon.svg",
             // selectedIndex == 2 ? "assets/icons/blackrating.svg" :"assets/icons/rating.svg",
                   height: 25,
-                  color:  selectedIndex == 2 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.7),
+                  color:  selectedIndex == 2 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.3),
                   ),                
               routeAndNavigatorSettings: RouteAndNavigatorSettings(onGenerateRoute: (sett) {
                                     PersistentNavBarNavigator.pushNewScreen(
@@ -188,7 +188,7 @@ class _HomeViewState extends State<HomeView> {
           icon: SvgPicture.asset("assets/icons/black_profile_icon.svg",
             // selectedIndex == 3 ? "assets/icons/black_profile_icon.svg" : "assets/icons/profile_icon.svg",
            height: 25,
-                  color:  selectedIndex == 3 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.7),
+                  color:  selectedIndex == 3 ? ColorCode.darkGray: ColorCode.darkGray.withOpacity(0.3),
           ),        
           routeAndNavigatorSettings: RouteAndNavigatorSettings(onGenerateRoute: (sett) {
                                     PersistentNavBarNavigator.pushNewScreen(

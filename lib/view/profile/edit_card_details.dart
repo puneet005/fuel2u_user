@@ -15,6 +15,8 @@ import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
+import '../../utils/capitalization.dart';
+
 
 
 class EditCardDetails extends GetView<VehicleController> {
@@ -96,7 +98,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                         style: TextFieldStyle(),
                                         controller: controller.cardNameCtrl,                  
                                         autocorrect: true,
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.text,
                                        validator: (val){
                                            if(val!.length >2){
                                             return null;
@@ -108,6 +110,9 @@ class EditCardDetails extends GetView<VehicleController> {
                                         },
                                         onChanged: (val){
                                         },
+                                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                         decoration: InputDecoration(
                                           hintText: "Card Name",
                          hintStyle: TextStyle(
@@ -151,7 +156,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "Wrong Card Number";
+                                            return "Enter Valid Card Number";
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -237,7 +242,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "CSV";
+                                            return "Enter Security Code";
                                           }
 
                                         },
@@ -281,7 +286,7 @@ class EditCardDetails extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "Zip";
+                                            return "Enter Valid Zip Code";
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -349,31 +354,54 @@ class EditCardDetails extends GetView<VehicleController> {
                                           style: Heading3Regular(),
                                         ),
                                         actions: <Widget>[
-                                          Row(children: [
-                                          
-                                 Expanded(
-                                              flex: 2,
-                                            child: ElevatedButton(
-                                              // FlatButton widget is used to make a text to work like a button
-                                          
-                                              onPressed: () {
-                                                Navigator.of(ctx).pop();
-                                              }, // function used to perform after pressing the button
-                                              child: Text('CANCEL'),
-                                            ),
-                                          ),
-                                          SizedBox(width:  20.h,),
-                             Expanded(
-                                              flex: 2,
-                                            child: ElevatedButton(
-                                                // textColor: Colors.black,
-                                                onPressed: () async {
+                                           Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                               Expanded(
+                                                flex: 2,
+                                                 child: 
+                                                 BorderBtn(ontap: () {  
                                                   Navigator.of(ctx).pop();
-                                                   controller.DeleteCardDetailsApi(context, controller.editCardData!.id.toString());
-                                                },
-                                                child: Text('DELETE')),
-                                          ),
-                                          ],)
+                                                 }, text: 'NO',
+                                                  
+                                                 ),
+                                           
+                                               ),
+                                               SizedBox(width: 20.h,),
+                                            Expanded(
+                                                flex: 2,
+                                                child: FillBtn(ontap: () async{
+                                                  Navigator.of(ctx).pop();
+                                                  controller.DeleteCardDetailsApi(context, controller.editCardData!.id.toString());
+                                                }, text: 'CONFIRM'),
+                                          
+                                              ),
+                                             ],)
+                            //               Row(children: [
+                                          
+                            //      Expanded(
+                            //                   flex: 2,
+                            //                 child: ElevatedButton(
+                            //                   // FlatButton widget is used to make a text to work like a button
+                                          
+                            //                   onPressed: () {
+                            //                     Navigator.of(ctx).pop();
+                            //                   }, // function used to perform after pressing the button
+                            //                   child: Text('CANCEL'),
+                            //                 ),
+                            //               ),
+                            //               SizedBox(width:  20.h,),
+                            //  Expanded(
+                            //                   flex: 2,
+                            //                 child: ElevatedButton(
+                            //                     // textColor: Colors.black,
+                            //                     onPressed: () async {
+                            //                       Navigator.of(ctx).pop();
+                            //                        controller.DeleteCardDetailsApi(context, controller.editCardData!.id.toString());
+                            //                     },
+                            //                     child: Text('DELETE')),
+                            //               ),
+                            //               ],)
                                         ],
                                       ),
                                     );

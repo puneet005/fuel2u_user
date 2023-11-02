@@ -57,21 +57,28 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: '2U Fuel',
-          theme: ThemeData(brightness: Brightness.light,
-          fontFamily: 'Roboto',
-        scaffoldBackgroundColor: ColorCode.white,
-        
-        colorScheme: const ColorScheme.light(
-          primary: ColorCode.orange,
-          secondary: ColorCode.orange,
-        ),
-         visualDensity: VisualDensity.adaptivePlatformDensity,
+        return GestureDetector(
+          onTap: (){
+            if (FocusManager.instance.primaryFocus!.hasFocus) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+          },
+          child: GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: '2U Fuel',
+            theme: ThemeData(brightness: Brightness.light,
+            fontFamily: 'Roboto',
+          scaffoldBackgroundColor: ColorCode.white,
+          
+          colorScheme: const ColorScheme.light(
+            primary: ColorCode.orange,
+            secondary: ColorCode.orange,
           ),
-          initialRoute: AppPages.INITIAL,
-          getPages: AppPages.routes,
+           visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            initialRoute: AppPages.INITIAL,
+            getPages: AppPages.routes,
+          ),
         );
       }
     );

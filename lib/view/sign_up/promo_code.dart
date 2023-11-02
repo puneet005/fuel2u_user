@@ -65,55 +65,65 @@ class PromoCode extends GetView<SignUpController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                                            onTap: (){
-                                                              controller.setYesOrNo(1);
-                                                            },
-                                                            child: Container(
-                                                              height: 20,
-                                                              width: 20,
-                                                              decoration: BoxDecoration(
-                                                                shape: BoxShape.circle,
-                                                                border: Border.all(color: ColorCode.orange),
-                                                                color: controller.promodeYesOrNo.value == 1 ? ColorCode.orange : ColorCode.white,
+                              GestureDetector(
+                                onTap: (){
+                                   controller.setYesOrNo(1);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                                              onTap: (){
+                                                                controller.setYesOrNo(1);
+                                                              },
+                                                              child: Container(
+                                                                height: 20,
+                                                                width: 20,
+                                                                decoration: BoxDecoration(
+                                                                  shape: BoxShape.circle,
+                                                                  border: Border.all(color: ColorCode.orange),
+                                                                  color: controller.promodeYesOrNo.value == 1 ? ColorCode.orange : ColorCode.white,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          SizedBox(width: 10.h,),
-                             
-                                  Text(
-                                    "Yes",
-                                    style: Heading2(),
-                                  )
-                                ],
+                                                            SizedBox(width: 10.h,),
+                                                           
+                                    Text(
+                                      "Yes",
+                                      style: Heading2(),
+                                    )
+                                  ],
+                                ),
                               ),
                               SizedBox(height: 20.h,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [                                
-                                   GestureDetector(
-                                                            onTap: (){
-                                                              controller.setYesOrNo(2);                                                           
-                                                            },
-                                                            child: Container(
-                                                              height: 20,
-                                                              width: 20,
-                                                              decoration: BoxDecoration(
-                                                                shape: BoxShape.circle,
-                                                                border: Border.all(color: ColorCode.orange),
-                                                                color: controller.promodeYesOrNo.value == 2 ? ColorCode.orange : ColorCode.white,
+                             GestureDetector(
+                                onTap: (){
+                                   controller.setYesOrNo(2);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [                                
+                                     GestureDetector(
+                                                              onTap: (){
+                                                                controller.setYesOrNo(2);                                                           
+                                                              },
+                                                              child: Container(
+                                                                height: 20,
+                                                                width: 20,
+                                                                decoration: BoxDecoration(
+                                                                  shape: BoxShape.circle,
+                                                                  border: Border.all(color: ColorCode.orange),
+                                                                  color: controller.promodeYesOrNo.value == 2 ? ColorCode.orange : ColorCode.white,
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          SizedBox(width: 10.h,),
-                                  Text(
-                                    "No ",
-                                    style: Heading2(),
-                                  )
-                                ],
+                                                            SizedBox(width: 10.h,),
+                                    Text(
+                                      "No ",
+                                      style: Heading2(),
+                                    )
+                                  ],
+                                ),
                               )
                             ],
                           ),

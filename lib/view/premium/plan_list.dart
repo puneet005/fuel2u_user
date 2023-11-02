@@ -76,42 +76,47 @@ class SelectPlan extends GetView {
                                           horizontal: 10.h,
                                           vertical: 10.h,
                                         ),
-                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            GestureDetector(
-                                                              onTap: (){
-                                                                controller.changePlan(index);
-                                                              },
-                                                              child: Container(
-                                                                height: 20,
-                                                                width: 20,
-                                                                decoration: BoxDecoration(
-                                                                  shape: BoxShape.circle,
-                                                                  border: Border.all(color: ColorCode.orange),
-                                                                  color: controller.selectPlan.value == index ? ColorCode.orange : ColorCode.white,
+                                        child: GestureDetector(
+                                          onTap: (){
+                                             controller.changePlan(index);
+                                          },
+                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              GestureDetector(
+                                                                onTap: (){
+                                                                  controller.changePlan(index);
+                                                                },
+                                                                child: Container(
+                                                                  height: 20,
+                                                                  width: 20,
+                                                                  decoration: BoxDecoration(
+                                                                    shape: BoxShape.circle,
+                                                                    border: Border.all(color: ColorCode.orange),
+                                                                    color: controller.selectPlan.value == index ? ColorCode.orange : ColorCode.white,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            // Radio(
-                                                            //     value: index,
-                                                            //     groupValue: controller.selectPlan.value,
-                                                            //     onChanged: (value) {
-                                                            //         controller.changePlan(index);
-                                                            //     }),
-                                                            SizedBox(width: 10.h,),
-                                                            Text(
-                                                              controller.plansList![index].name.toString(),
-                                                              style: Heading2(color: ColorCode.darkGray),
-                                                            ),
-                                                            Spacer(),
-                                                            GestureDetector(
-                                                              onTap: (){
-                                                                controller.showPlanIndex.value = index;
-                                                                Get.toNamed(Routes.PLANDETAILS);
-                                                              },
-                                                              child: SvgPicture.asset("assets/icons/rightarrow.svg", width: 25.h,))
-                                                          ],
+                                                              // Radio(
+                                                              //     value: index,
+                                                              //     groupValue: controller.selectPlan.value,
+                                                              //     onChanged: (value) {
+                                                              //         controller.changePlan(index);
+                                                              //     }),
+                                                              SizedBox(width: 10.h,),
+                                                              Text(
+                                                                controller.plansList![index].name.toString(),
+                                                                style: Heading2(color: ColorCode.darkGray),
+                                                              ),
+                                                              Spacer(),
+                                                              GestureDetector(
+                                                                onTap: (){
+                                                                  controller.showPlanIndex.value = index;
+                                                                  Get.toNamed(Routes.PLANDETAILS);
+                                                                },
+                                                                child: SvgPicture.asset("assets/icons/rightarrow.svg", width: 25.h,))
+                                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

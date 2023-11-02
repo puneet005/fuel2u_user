@@ -52,6 +52,8 @@ class AppPages{
   AppPages._();
 
   static const INITIAL = Routes.SPLASH;
+  // static const INITIAL = Routes.ADDVEHICLE;
+
   static const HOME =  Routes.WELCOME;
   // Routes.HOME;
 

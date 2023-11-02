@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -67,10 +68,13 @@ class MakePayment extends GetView<PremiunController> {
                                         style: TextFieldStyle(),
                                         controller: controller.cardNameCtrl,                  
                                         autocorrect: true,
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.text,
                                     
                                         onChanged: (val){
                                         },
+                                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                         maxLength: 27,
                                         decoration: InputDecoration(
                                            counterText: "",
@@ -113,7 +117,7 @@ class MakePayment extends GetView<PremiunController> {
                                             return null;
                                           }
                                           else{
-                                            return "Wrong Card Number";
+                                            return "Enter Valid Card Number";
                                           }
 
                                         },
@@ -144,6 +148,7 @@ class MakePayment extends GetView<PremiunController> {
                                         controller: controller.expDataCtrl,  
                                     
                                         autocorrect: true,
+                                        
                                         keyboardType: TextInputType.number,
                                          inputFormatters: [
                          MaskedInputFormatter('##/##')
@@ -153,15 +158,17 @@ class MakePayment extends GetView<PremiunController> {
                        FocusManager.instance.primaryFocus?.nextFocus();
                                           }  
                                           controller.addCardVaild();      
-                                        },
+                                          },
                                            validator: (val){
                                            if(val!.length == 5){
                                             return null;
                                           }
                                           else{
-                                            return "Exp Data";
+                                            return "Enter Valid Exp Date";
                                           }
                                         },
+                                        
+                                        
                                         decoration: InputDecoration(
                                           hintText: "MM/YY",
                          hintStyle: TextStyle(
@@ -241,7 +248,7 @@ class MakePayment extends GetView<PremiunController> {
                                             return null;
                                           }
                                           else{
-                                            return "Zip";
+                                            return "Enter Valid Zip Code";
                                           }
                                         },
                                         decoration: InputDecoration(

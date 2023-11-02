@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/controller/vehicel_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 // import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -92,10 +93,13 @@ class AddCard extends GetView<VehicleController> {
                                         style: TextFieldStyle(),
                                         controller: controller.cardNameCtrl,                  
                                         autocorrect: true,
-                                        keyboardType: TextInputType.name,
+                                        keyboardType: TextInputType.text,
                                       
                                         onChanged: (val){
                                         },
+                                       inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                         maxLength: 27,
                                         decoration: InputDecoration(
                                            counterText: "",
@@ -147,7 +151,7 @@ class AddCard extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "Wrong Card Number";
+                                            return "Enter Valid Card Number";
                                           }
 
                                         },
@@ -193,7 +197,7 @@ class AddCard extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "Exp Date";
+                                            return "Enter Valid Exp Date";
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -233,7 +237,7 @@ class AddCard extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "CSV";
+                                            return "Enter Security Code";
                                           }
 
                                         },
@@ -275,7 +279,7 @@ class AddCard extends GetView<VehicleController> {
                                             return null;
                                           }
                                           else{
-                                            return "Zip";
+                                            return "Enter Valid Zip Code";
                                           }
                                         },
                                         decoration: InputDecoration(

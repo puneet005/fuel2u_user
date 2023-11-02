@@ -25,23 +25,14 @@ class _NearYourTruckState extends State<NearYourTruck> {
    bool loadingis=  true;
   @override
   void initState() {
-    // TODO: implement initState
+    if(mounted){
     getLocation();
+    }
     super.initState();
-    Future.delayed(Duration.zero,(){
-      setState(() {
-        loadingis = true;
-      });
-    });
    
 }
 
-// @override
-// void didChangeDependencies() {
-//   getLocation();
-//   super.didChangeDependencies();
-  
-// }
+
 
 Future<void> getLocation() async {
      bool res = 
@@ -73,10 +64,7 @@ Future<void> getLocation() async {
     });
      }
   }
-
-
 //  GoogleMapController? mapController;
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -186,20 +174,13 @@ Future<void> getLocation() async {
     );
   }
 
-
-double calculateDistance(lat1, lon1, lat2, lon2){
-  var p = 0.017453292519943295;
-  var a = 0.5 - cos((lat2 - lat1) * p)/2 + 
-        cos(lat1 * p) * cos(lat2 * p) * 
-        (1 - cos((lon2 - lon1) * p))/2;
-  return 12742 * asin(sqrt(a));
-}
 @override
 void dispose() {
   // if(controller.socket!.connected){
   // if(controller.socket != null){
+    if (controller.socket != null) {
   controller.socket!.disconnected;
-  // }
+  }
   // }
   // else{
   //    controller.socket!.disconnected;

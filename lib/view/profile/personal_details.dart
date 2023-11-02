@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fuel2u_user/controller/sign_up_controller.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/border_button_ui.dart';
@@ -93,6 +94,9 @@ class PersonalDetails extends GetView<SignUpController> {
                                        onChanged: (value){
                                         controller.EditFormValid();
                                       },
+                                     inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                       decoration: const InputDecoration(
                                         hintText: "First Name",
                                          hintStyle: TextStyle(
@@ -124,6 +128,9 @@ class PersonalDetails extends GetView<SignUpController> {
                                       controller: controller.lastnameCrt,
                                       autocorrect: true,
                                       keyboardType: TextInputType.name,
+                                     inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                                       validator: (val) {
                                         if (val == null || val.isEmpty) {
                                           return "Enter Last Name";
@@ -212,7 +219,7 @@ class PersonalDetails extends GetView<SignUpController> {
                                       },
                                       validator: (val){
                                          if(val == null || val.isEmpty){
-                            return "Enter Contact Email";
+                            return "Enter Email";
                           }
                               if (val.isValidEmail()) {
                         return null;
@@ -269,55 +276,62 @@ class PersonalDetails extends GetView<SignUpController> {
                                           style: Heading3Regular(),
                                         ),
                                         actions: <Widget>[
-                                           Row(
-                                            children: [
-                                          
-                                          Expanded(
-                                            flex: 2,
-                                            child: ElevatedButton(
-                                              // FlatButton widget is used to make a text to work like a button
-                                          
-                                              onPressed: () {
-                                                Navigator.of(ctx).pop();
-                                              }, // function used to perform after pressing the button
-                                              child: Text('NO'),
-                                            ),
-                                          ),
-                                          SizedBox(width: 20.h,),
-                                         Expanded(
-                                            flex: 2,
-                                            child: ElevatedButton(
-                                                // textColor: Colors.black,
-                                                onPressed: () async {
+                                          Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                               Expanded(
+                                                flex: 2,
+                                                 child: 
+                                                 BorderBtn(ontap: () {  
+                                                  Navigator.of(ctx).pop();
+                                                 }, text: 'NO',
+                                                  
+                                                 ),
+                                           
+                                               ),
+                                               SizedBox(width: 20.h,),
+                                            Expanded(
+                                                flex: 2,
+                                                child: FillBtn(ontap: () async{
                                                   Navigator.of(ctx).pop();
                                                   controller.deleteAccount(context);
-                                                  // logOutcontroller.SignOutApi(
-                                                  //     context);
-                                                },
-                                                child: Text('CONFIRM'),
+                                                }, text: 'CONFIRM'),
+                                          
+                                              ),
+                                             ],)
+                                        //    Row(
+                                        //     children: [
+                                          
+                                        //   Expanded(
+                                        //     flex: 2,
+                                        //     child: ElevatedButton(
+                                        //       // FlatButton widget is used to make a text to work like a button
+                                          
+                                        //       onPressed: () {
+                                        //         Navigator.of(ctx).pop();
+                                        //       }, // function used to perform after pressing the button
+                                        //       child: Text('NO'),
+                                        //     ),
+                                        //   ),
+                                        //   SizedBox(width: 20.h,),
+                                        //  Expanded(
+                                        //     flex: 2,
+                                        //     child: ElevatedButton(
+                                        //         // textColor: Colors.black,
+                                        //         onPressed: () async {
+                                        //           Navigator.of(ctx).pop();
+                                        //           controller.deleteAccount(context);
+                                        //           // logOutcontroller.SignOutApi(
+                                        //           //     context);
+                                        //         },
+                                        //         child: Text('CONFIRM'),
                                                 
-                                                ),
-                                          ),
+                                        //         ),
+                                        //   ),
                                                   
-                                            ],
-                                          )
-                                          // ElevatedButton(
-                                          //   // FlatButton widget is used to make a text to work like a button
-
-                                          //   onPressed: () {
-                                          //     Navigator.of(ctx).pop();
-                                          //   }, // function used to perform after pressing the button
-                                          //   child: Text('NO'),
-                                          // ),
-                                          // ElevatedButton(
-                                          //     // textColor: Colors.black,
-                                          //     onPressed: () async {
-                                          //       Navigator.of(ctx).pop();
-                                          //       controller.deleteAccount(context);
-                                          //       // logOutcontroller.SignOutApi(
-                                          //       //     context);
-                                          //     },
-                                          //     child: Text('YES')),
+                                        //     ],
+                                        //   )
+                                          
                                         ],
                                       ),
                                     );

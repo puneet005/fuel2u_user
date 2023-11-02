@@ -19,6 +19,7 @@ import 'package:fuel2u_user/widgets/logo_rigth_icon.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../../widgets/border_button_ui.dart';
 import '../../widgets/dialog_box_ui.dart';
 
 class ProfileView extends GetView<OrderController> {
@@ -300,10 +301,19 @@ class ProfileView extends GetView<OrderController> {
                                 ),
                                 Spacer(),
                           
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.h,
-                                  ),
+                               
+                                SizedBox(
+                                  height: 10.h,
+                                )
+                              ])));
+                    }),
+              ),
+            )),
+            bottomNavigationBar:  Padding(
+                    padding:  EdgeInsets.symmetric(
+                        horizontal: 20.h, vertical: 10
+                      ),
+                  
                                   child: FillBtn(
                                       ontap: () {
                                       
@@ -315,7 +325,8 @@ class ProfileView extends GetView<OrderController> {
                                               style: Heading1(),
                                             ),
                                             content: Text(
-                                              "Are your sure to logout your account ?",
+                                              "Are you sure you want to log out of your account?",
+                                              textAlign: TextAlign.center,
                                               style: Heading3Regular(),
                                             ),
                                             actions: <Widget>[
@@ -324,28 +335,25 @@ class ProfileView extends GetView<OrderController> {
                                               children: [
                                                Expanded(
                                                 flex: 2,
-                                                 child: ElevatedButton(
-                                                  // FlatButton widget is used to make a text to work like a button
-                                               
-                                                  onPressed: () {
-                                                    Navigator.of(ctx).pop();
-                                                  }, // function used to perform after pressing the button
-                                                  child: Text('CANCEL'),
-                                                                                         ),
+                                                 child: 
+                                                 BorderBtn(ontap: () {  
+                                                  Navigator.of(ctx).pop();
+                                                 }, text: 'CANCEL',
+                                                  
+                                                 ),
+                                           
                                                ),
                                                SizedBox(width: 20.h,),
                                             Expanded(
                                                 flex: 2,
-                                                child: ElevatedButton(
-                                                    // textColor: Colors.black,
-                                                    onPressed: () async {
-                                                         SignUpController logOutcontroller =
+                                                child: FillBtn(ontap: (){
+                                                     SignUpController logOutcontroller =
                                             Get.find<SignUpController>();
                                                       Navigator.of(ctx).pop();
                                                       logOutcontroller.SignOutApi(
                                                           context);
-                                                    },
-                                                    child: Text('LOGOUT')),
+                                                }, text: 'LOG OUT'),
+                                          
                                               ),
                                              ],)
                                             ],
@@ -354,13 +362,6 @@ class ProfileView extends GetView<OrderController> {
                                        
                                       },
                                       text: "Log out"),
-                                ),
-                                SizedBox(
-                                  height: 10.h,
-                                )
-                              ])));
-                    }),
-              ),
-            )));
+                                ),);
   }
 }

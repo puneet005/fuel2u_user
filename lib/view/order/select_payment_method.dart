@@ -68,13 +68,17 @@ class SelectPaymentMethod extends GetView<OrderController>{
                     ],
                     ),
                     SizedBox(height: 30.h,),
-                      controller.cardLoading.value
-                                ? ListView(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: List.generate(
-                                        2, (index) => ShimmerLoading()),
-                                  ):
+                      controller.cardLoading.value?Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
+                                ):
+                                // ? ListView(
+                                //     shrinkWrap: true,
+                                //     physics: NeverScrollableScrollPhysics(),
+                                //     children: List.generate(
+                                //         2, (index) => ShimmerLoading()),
+                                //   ):
                     controller.cardDetails!.isEmpty || controller.cardDetails == null ?  Center(
                                                 child: Text(
                                                   "No Card Saved!!",
@@ -88,8 +92,8 @@ class SelectPaymentMethod extends GetView<OrderController>{
                          Padding(
                           padding: const EdgeInsets.all(8.0),
                       child:  Container(
-          height: Get.height / 9,
-          decoration:  BoxDecoration(
+                        height: Get.height / 9,
+                        decoration:  BoxDecoration(
                       // color: ColorCode.orange,
                       border:Border.all(
                         color: ColorCode.orange,
@@ -98,61 +102,69 @@ class SelectPaymentMethod extends GetView<OrderController>{
                        borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(24)
                        )
-                    ),
-          child:  Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              
-              Expanded(
-                flex: 1,
-                child:  Container(                  
-                  color: controller.selectPaymentMethod == index ?  ColorCode.orange : Colors.transparent,
-                  child: Column(children: [
-                    Checkbox(
-                      activeColor: ColorCode.orange,
-                      focusColor: ColorCode.orange,
-                      side: BorderSide(
-                        color: ColorCode.orange,
-                      ),
-                      
-                       shape: RoundedRectangleBorder(
-               borderRadius: BorderRadius.circular(3) 
-                       
-                      ),
-                          value: controller.selectPaymentMethod == index ? true : false,
-                          onChanged: (newValue) {
-                            controller.selectedCardDetails = controller.cardDetails![index];
-                            controller.selectPaymentMethod = index;
-                            controller.update();
-                            // controller.setVehicle(index);                           
+                                        ),
+                        child: GestureDetector(
+                          onTap: (){
+                             controller.selectedCardDetails = controller.cardDetails![index];
+                              controller.selectPaymentMethod = index;
+                              controller.update();
                           },
-                          ),
-                  ],),
-                ),),
-                Expanded(
-                  flex: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("${controller.cardDetails![index].metadata!.name}", style: Heading4Medium(),),
-                            Image.asset("assets/icons/edit_icon.png"),
-                            // Icon(Icons.edit_square, color: Colors.grey[400],)
-                          ],
+                          child:  Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    
+                                    Expanded(
+                                      flex: 1,
+                                      child:  Container(                  
+                                        color: controller.selectPaymentMethod == index ?  ColorCode.orange : Colors.transparent,
+                                        child: Column(children: [
+                                          Checkbox(
+                        activeColor: ColorCode.orange,
+                        focusColor: ColorCode.orange,
+                        side: BorderSide(
+                          color: ColorCode.orange,
                         ),
-                        SizedBox(height: 5.h,),
-                        Text("Card ending in ${controller.cardDetails![index].card!.last4}", style: Heading5(fbold:  FontWeight.normal),)
-                    ],
-                                  ),
-                  ))
-                            
-                  ])  ),
+                        
+                         shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.circular(3) 
+                         
+                        ),
+                            value: controller.selectPaymentMethod == index ? true : false,
+                            onChanged: (newValue) {
+                              controller.selectedCardDetails = controller.cardDetails![index];
+                              controller.selectPaymentMethod = index;
+                              controller.update();
+                              // controller.setVehicle(index);                           
+                            },
+                            ),
+                                        ],),
+                                      ),),
+                                      Expanded(
+                                        flex: 5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
+                                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${controller.cardDetails![index].metadata!.name}", style: Heading4Medium(),),
+                              // Image.asset("assets/icons/edit_icon.png"),
+                              // Icon(Icons.edit_square, color: Colors.grey[400],)
+                            ],
+                          ),
+                          SizedBox(height: 5.h,),
+                          Text("Card ending in ${controller.cardDetails![index].card!.last4}", style: Heading5(fbold:  FontWeight.normal),)
+                                          ],
+                                    ),
+                                        ))
+                              
+                                        ]),
+                        ),
+                      ),
                         ),),
                       )
                     )

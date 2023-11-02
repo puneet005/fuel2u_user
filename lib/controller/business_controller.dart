@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fuel2u_user/controller/order_controller.dart';
 import 'package:fuel2u_user/model/business_model.dart';
 import 'package:fuel2u_user/model/state_list_model.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
@@ -56,7 +57,7 @@ class BusinessController extends GetxController {
   // Add Vehicle Screen
 
   //  Pref
-  final isLoading = true.obs;
+  bool isLoading = true;
   SessionManager pref = SessionManager();
   List<StateListModelData>? stateList;
   BusinessModelData businessData = BusinessModelData();
@@ -156,15 +157,15 @@ update();
         StateListModel res =
             StateListModel.fromJson(json.decode(response.body));
         stateList = res.data!;
-        isLoading.value = false;
+        isLoading = false;
         update();
       } else {
-        isLoading.value = false;
+        isLoading = false;
         update();
         // hideLoader(loader);
       }
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
       log(e.toString());
 
@@ -177,7 +178,7 @@ update();
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -207,22 +208,22 @@ update();
        token = oneTimeToken;
       }
       var map = <String, dynamic>{};
-      map['employer_name'] = employerNameCtrl.text.tr;
-      map['delivery_address'] = deliveryAddressCtrl.text.tr;
-      map['delivery_city'] = cityCtrl.text.tr;
+      map['employer_name'] = employerNameCtrl.text.trim();
+      map['delivery_address'] = deliveryAddressCtrl.text.trim();
+      map['delivery_city'] = cityCtrl.text.trim();
       map['delivery_state_id'] = stateValue!.id;
-      map['delivery_zipcode'] = zipCodeCtrl.text.tr;
-      map['delivery_instructions'] = deliveryInstructionsCtrl.text.tr;
-      map['promocode'] = promoCodeCtrl.text.tr;
-      // map['delivery_day']= .text.tr;
-      map['contact_name'] = contactNameCtrl.text.tr;
-      map['contact_email'] = contactEmailCtrl.text.tr;
+      map['delivery_zipcode'] = zipCodeCtrl.text.trim();
+      map['delivery_instructions'] = deliveryInstructionsCtrl.text.trim();
+      map['promocode'] = promoCodeCtrl.text.trim();
+      // map['delivery_day']= .text.trim();
+      map['contact_name'] = contactNameCtrl.text.trim();
+      map['contact_email'] = contactEmailCtrl.text.trim();
       map['contact_phone_number'] = "${mobileNo.removeAllWhitespace}";
       map['same_as_delivery'] = deliveryAddSame.value ? 1 : 0;
-      map['billing_city'] = billingCityCtrl.text.tr;
-      map['billing_address'] = billingAddressCtrl.text.tr;
+      map['billing_city'] = billingCityCtrl.text.trim();
+      map['billing_address'] = billingAddressCtrl.text.trim();
       map['billing_state_id'] = billStateValue!.id;
-      map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
+      map['billing_zipcode'] = billingZipCodeCtrl.text.trim();
       map['delivery_latitude'] = addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
       map['delivery_longitude'] =addLanlng != null ? addLanlng!.longitude : currentPosition!.longitude;
   
@@ -270,7 +271,7 @@ update();
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -289,9 +290,10 @@ update();
 
 // Business Details fatch Api
 BusinessModelData? editBusinessData;
-  Future<void> BusinessInfoApi(BusinessController controller) async {
+  Future<void>  BusinessInfoApi() async {
+      // OrderController Ordercontroller = Get.put(OrderController());
     // try {
-      isLoading.value = true;
+      isLoading = true;
       // update();
       String? token = await pref.getAccessToken();
       if(token == null || token == ""){
@@ -310,7 +312,12 @@ BusinessModelData? editBusinessData;
         BusinessModel res = BusinessModel.fromJson(json.decode(response.body));
         editBusinessData = res.data;
         update();
+
+
+        print('lokesh::${res.data}');
         if (res.data != null) {
+      
+
           http.Response response =
               await http.get(Uri.parse(ApiUrls.states), headers: {
             HttpHeaders.contentTypeHeader: 'application/json',
@@ -360,20 +367,31 @@ BusinessModelData? editBusinessData;
               deliveryAddSame.value = true;
               update();
             }
-            isLoading.value = false;
+            isLoading = false;
             update();
           } else {
-            
-            isLoading.value = false;
+            if(res.status == false){
+              isLoading = false;
+              update();
+            }
+            isLoading = false;
             update();
 
             // hideLoader(loader);
           }
+        } else{
+          log("comming here");
+        isLoading = false;        
+        GetStateList().then((value) {
+         
+        });
+      
         }
       } else {
+        log("else");
+        isLoading = false;        
         GetStateList().then((value) {
-  isLoading.value = false;
-        update();
+         
         });
       
         // return false;
@@ -409,21 +427,21 @@ BusinessModelData? editBusinessData;
       }
       var map = <String, dynamic>{};
       map['id'] = id;
-      map['employer_name'] = employerNameCtrl.text.tr;
-      map['delivery_address'] = deliveryAddressCtrl.text.tr;
-      map['delivery_city'] = cityCtrl.text.tr;
+      map['employer_name'] = employerNameCtrl.text.trim();
+      map['delivery_address'] = deliveryAddressCtrl.text.trim();
+      map['delivery_city'] = cityCtrl.text.trim();
       map['delivery_state_id'] = stateValue!.id;
-      map['delivery_zipcode'] = zipCodeCtrl.text.tr;
-      map['delivery_instructions'] = deliveryInstructionsCtrl.text.tr;
-      map['promocode'] = promoCodeCtrl.text.tr;    
-      map['contact_name'] = contactNameCtrl.text.tr;
-      map['contact_email'] = contactEmailCtrl.text.tr;
+      map['delivery_zipcode'] = zipCodeCtrl.text.trim();
+      map['delivery_instructions'] = deliveryInstructionsCtrl.text.trim();
+      map['promocode'] = promoCodeCtrl.text.trim();    
+      map['contact_name'] = contactNameCtrl.text.trim();
+      map['contact_email'] = contactEmailCtrl.text.trim();
       map['contact_phone_number'] = "${mobileNo.removeAllWhitespace}";
       map['same_as_delivery'] = deliveryAddSame.value ? 1 : 0;
-      map['billing_address'] = billingAddressCtrl.text.tr;
-      map['billing_city'] = billingCityCtrl.text.tr;
+      map['billing_address'] = billingAddressCtrl.text.trim();
+      map['billing_city'] = billingCityCtrl.text.trim();
       map['billing_state_id'] = billStateValue!.id;
-      map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
+      map['billing_zipcode'] = billingZipCodeCtrl.text.trim();
  map['delivery_latitude'] = addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
       map['delivery_longitude'] =addLanlng != null ? addLanlng!.longitude : currentPosition!.longitude;
       log(ApiUrls.updateBusiness);
@@ -475,7 +493,7 @@ BusinessModelData? editBusinessData;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -506,22 +524,22 @@ BusinessModelData? editBusinessData;
        token = oneTimeToken;
       }
       var map = <String, dynamic>{};
-      map['employer_name'] = employerNameCtrl.text.tr;
-      map['delivery_address'] = deliveryAddressCtrl.text.tr;
-      map['delivery_city'] = cityCtrl.text.tr;
+      map['employer_name'] = employerNameCtrl.text.trim();
+      map['delivery_address'] = deliveryAddressCtrl.text.trim();
+      map['delivery_city'] = cityCtrl.text.trim();
       map['delivery_state_id'] = stateValue!.id;
-      map['delivery_zipcode'] = zipCodeCtrl.text.tr;
-      map['delivery_instructions'] = deliveryInstructionsCtrl.text.tr;
-      map['promocode'] = promoCodeCtrl.text.tr;
-      // map['delivery_day']= .text.tr;
-      map['contact_name'] = contactNameCtrl.text.tr;
-      map['contact_email'] = contactEmailCtrl.text.tr;
+      map['delivery_zipcode'] = zipCodeCtrl.text.trim();
+      map['delivery_instructions'] = deliveryInstructionsCtrl.text.trim();
+      map['promocode'] = promoCodeCtrl.text.trim();
+      // map['delivery_day']= .text.trim();
+      map['contact_name'] = contactNameCtrl.text.trim();
+      map['contact_email'] = contactEmailCtrl.text.trim();
       map['contact_phone_number'] = "${mobileNo.removeAllWhitespace}";
       map['same_as_delivery'] = deliveryAddSame.value ? 1 : 0;
-      map['billing_address'] = billingAddressCtrl.text.tr;
-      map['billing_city'] = billingCityCtrl.text.tr;
+      map['billing_address'] = billingAddressCtrl.text.trim();
+      map['billing_city'] = billingCityCtrl.text.trim();
       map['billing_state_id'] = billStateValue!.id;
-      map['billing_zipcode'] = billingZipCodeCtrl.text.tr;
+      map['billing_zipcode'] = billingZipCodeCtrl.text.trim();
       map['delivery_latitude'] = addLanlng != null ? addLanlng!.latitude:currentPosition!.latitude;
       map['delivery_longitude'] =addLanlng != null ? addLanlng!.longitude : currentPosition!.longitude;
       log(ApiUrls.business);
@@ -575,7 +593,7 @@ BusinessModelData? editBusinessData;
        if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

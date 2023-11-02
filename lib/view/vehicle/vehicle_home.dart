@@ -68,13 +68,17 @@ class _VehicleHomeState extends State<VehicleHome> {
                           SizedBox(
                             height: 20.h,
                           ),
-                          controller.vehicleListLoading.value
-                              ? ListView(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  children: List.generate(
-                                      5, (index) => ShimmerLoading()),
+                          controller.vehicleListLoading.value ?Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorCode.orange,
+                                  ),
                                 )
+                              // ? ListView(
+                              //     shrinkWrap: true,
+                              //     physics: NeverScrollableScrollPhysics(),
+                              //     children: List.generate(
+                              //         5, (index) => ShimmerLoading()),
+                              //   )
                               : VehileList(controller.vehicleList!)
                         ]))),
               );
@@ -192,7 +196,7 @@ class _VehicleHomeState extends State<VehicleHome> {
                                                             .toString(),
                                                     height: 35.h,
                                                     width: 60.h,
-                                                    fit: BoxFit.fill,
+                                                    fit: BoxFit.contain,
                                                     loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent? loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -232,7 +236,6 @@ class _VehicleHomeState extends State<VehicleHome> {
                                                 ))
                                           ],
                                         ),
-
                                         Row(
                                           // mainAxisAlignment: MainAxisAlignment.end,
                                           children: [

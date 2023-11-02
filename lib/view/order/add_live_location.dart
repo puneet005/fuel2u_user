@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fuel2u_user/main.dart';
 import 'package:fuel2u_user/routes/app_pages.dart';
+import 'package:fuel2u_user/utils/capitalization.dart';
 import 'package:fuel2u_user/utils/color.dart';
 import 'package:fuel2u_user/utils/ui_hepler.dart';
 import 'package:fuel2u_user/widgets/fill_button_ui.dart';
@@ -162,11 +163,14 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                     style: TextFieldStyle(),
                     controller: controller.streetAddressCtrl,
                     autocorrect: true,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.text,
                     onChanged: (val){
                       controller.addressFormCheck();
 
                     },
+                   inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     // validator: (val) {},
                     decoration: InputDecoration(
                       hintText: "Street Address",
@@ -180,19 +184,42 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                     ),
                     onTap: () async {
                        await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>    PlacePicker(
+                          builder: (_) =>    PlacePicker(
                                 apiKey: googleMKey,              
                                 onPlacePicked: (result) { 
-                                  print(result.adrAddress.toString()); 
-                                  print(result.addressComponents!.toString()); 
-                                  print(result.formattedAddress);                                
+                                  // print(result.adrAddress.toString()); 
+                                  // print(result.addressComponents!.toString()); 
+                                  // print(result.formattedAddress);                                
+                                  // var add =  result.formattedAddress!.split(",");
+                                  // print(add.length);
+                                  // controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  // controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
+                                  // controller.cityCtrl.text = add[add.length - 3];                                                 
+                                  // controller.update();
+                                  // Navigator.of(context).pop();
+                                    if(result.formattedAddress!.contains(",")) {                         
                                   var add =  result.formattedAddress!.split(",");
                                   print(add.length);
-                                  controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
-                                  controller.streetAddressCtrl.text  =  add.length >= 4 ? add[0] : add[0]+","+add[1];
-                                  controller.cityCtrl.text = add[add.length - 3];                                                 
+                                   controller.addLanlng = LatLng(result.geometry!.location.lat, result.geometry!.location.lng);
+                                  if(add.isNotEmpty){                                
+                                  
+                                  if(add.length == 1){
+                                    controller.streetAddressCtrl.text  =  add[0];
+                                     controller.cityCtrl.text = add[0];
+                                  }
+                                  else{
+                                  controller.streetAddressCtrl.text  =  add.length <= 4 ? add[0] : add[0]+","+add[1];
+                                  controller.cityCtrl.text = add.length <= 2 ? add[add.length - 1] :  add[add.length - 3];                                                 
+                                  }
+                                  }
+                                  }
+                                  else{
+                                    controller.streetAddressCtrl.text  =  result.formattedAddress!.toString();
+                                    // controller.cityCtrl.text =  result.formattedAddress!.toString();
+                                  }
+                                  // controller.streetAddressCtrl.text  =  result.formattedAddress.toString() ?? "";
                                   controller.update();
-                                  Navigator.of(context).pop();
+                                  Future.delayed(Duration(seconds: 0), ()=>  Navigator.of(_).pop());
                                 },
                                 initialPosition: LatLng(controller.currentPositionForAddress!.latitude, controller.currentPositionForAddress!.longitude),
                                 useCurrentLocation: true,
@@ -209,13 +236,16 @@ class _AddLiveLocationonOrderState extends State<AddLiveLocationonOrder> {
                     style: TextFieldStyle(),
                     controller: controller.cityCtrl,
                     autocorrect: true,
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.text,
                     // validator: (val) {},
                      onChanged: (val){
                       controller.addressFormCheck();
 
                     },
                     maxLength: 27,
+                   inputFormatters: [
+    TextCapitalizationFormatter(TextCapitalization.sentences),
+  ],
                     decoration: InputDecoration(
                        counterText: "",
                       hintText: "City",

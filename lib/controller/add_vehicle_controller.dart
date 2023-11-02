@@ -29,7 +29,7 @@ import 'login_controller.dart';
 class AddVehicleController extends GetxController {
   final nameCtrl = TextEditingController();
   final licensePlateNoCtrl = TextEditingController();
-  
+  final vehicleKey  = GlobalKey<FormState>();
   final allFiledTrue = false.obs;
   final isLoading = true.obs;
       SessionManager pref = SessionManager();
@@ -68,7 +68,7 @@ update();
  void checkAllFieldDone(){
   log(licensePlateNoCtrl.value.text.toString());
     if(
-      licensePlateNoCtrl.value.text.isEmpty || 
+      licensePlateNoCtrl.value.text.trim().isEmpty || 
       stateCodeValue == null || 
       makeValue == null  || 
       carModelValue == null ||
@@ -186,7 +186,7 @@ final editLoading = false.obs;
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -457,7 +457,7 @@ Future<bool> GetStateList() async {
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -475,7 +475,7 @@ Future<bool> GetStateList() async {
     }
   } else{
      hideLoader(loader);
-      ToastUi("No Internet Please Try After Sometime", 
+      ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -570,7 +570,7 @@ Future<void> updateVehicleApi(VehicleListModelData vehicledata) async{
      if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           // hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -700,7 +700,7 @@ hideLoader(loader);
       if (e is SocketException) {
         if ((e as SocketException).osError!.errorCode == 8)
           hideLoader(loader);
-     ToastUi("No Internet Please Try After Sometime", 
+     ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  
@@ -724,7 +724,7 @@ hideLoader(loader);
     }
 } else{
   hideLoader(loader);
-      ToastUi("No Internet Please Try After Sometime", 
+      ToastUi("No Internet. Please Try Again When You Have a Connection.", 
      bgColor: ColorCode.red,
      textColor: ColorCode.white,
      );  

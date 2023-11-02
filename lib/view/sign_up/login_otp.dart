@@ -114,6 +114,9 @@ controlller.getotpNotVaild();
                       // Get.offAndToNamed(Routes.HOME);
                   }, text: "LOG IN"
               ): FillBtn(ontap: (){
+                ToastUi('Please Enter Validation Code', bgColor: ColorCode.red, 
+                textColor: ColorCode.white,
+                );
 
               }, text: "LOG IN",
               Bgcolor: ColorCode.ligthGray,)),
